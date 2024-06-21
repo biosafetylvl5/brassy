@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API &#8212; Yarn 0.0.1a documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=8c8a9e14"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="CLI" href="cli.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-yarn">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-yarn" title="Link to this heading">¶</a></h1>
+<p>This module provides functionality to generate release notes from YAML files.
+It reads YAML files, parses their content, and formats the parsed data into release notes in .rst format.
+The release notes can be written to an output file.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.add_header_footer">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">add_header_footer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rich_open</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#add_header_footer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.add_header_footer" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a header and/or footer to the given content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>str</em>) – The content to which the header and/or footer will be added.</p></li>
+<li><p><strong>rich_open</strong> (<em>function</em>) – A function used to open files.</p></li>
+<li><p><strong>header_file</strong> (<em>str</em><em>, </em><em>optional</em>) – The file containing the header content. Defaults to None.</p></li>
+<li><p><strong>footer_file</strong> (<em>str</em><em>, </em><em>optional</em>) – The file containing the footer content. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The content with the header and/or footer added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.build_release_notes">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">build_release_notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rich_open</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#build_release_notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.build_release_notes" title="Link to this definition">¶</a></dt>
+<dd><p>Build release notes from YAML data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – Parsed content of YAML files.</p></li>
+<li><p><strong>version</strong> (<em>str</em><em>, </em><em>optional</em>) – Version number of the release, by default ‘1.1’.</p></li>
+<li><p><strong>release_date</strong> (<em>str</em><em>, </em><em>optional</em>) – Release date, by default None, which uses today’s date.</p></li>
+<li><p><strong>header_file</strong> (<em>str</em><em>, </em><em>optional</em>) – A header file to prepend to the release notes.</p></li>
+<li><p><strong>footer_file</strong> (<em>str</em><em>, </em><em>optional</em>) – A footer file to suffix to the release notes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted release notes in .rst format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.create_blank_template_yaml_file">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">create_blank_template_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#create_blank_template_yaml_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.create_blank_template_yaml_file" title="Link to this definition">¶</a></dt>
+<dd><p>Create a blank YAML file with default categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>str</em>) – Path to the output YAML file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.exit_on_invalid_arguments">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">exit_on_invalid_arguments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#exit_on_invalid_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.exit_on_invalid_arguments" title="Link to this definition">¶</a></dt>
+<dd><p>Validate the argparse arguments.</p>
+<p>This function validates the provided argparse arguments to ensure
+that the required input files/folders and output file are provided.
+If arguments are invalid, it prints an error message and exits the program.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<em>argparse.Namespace</em>) – Parsed arguments.</p></li>
+<li><p><strong>parser</strong> (<em>argparse.ArgumentParser</em>) – The ArgumentParser object used to parse the command-line arguments.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.exit_on_invalid_yaml">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">exit_on_invalid_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#exit_on_invalid_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.exit_on_invalid_yaml" title="Link to this definition">¶</a></dt>
+<dd><p>Check if the YAML content follows the correct schema.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>dict</em>) – Parsed content of the YAML file.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – Path to the YAML file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the YAML content does not follow the correct schema.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.find_duplicate_titles">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">find_duplicate_titles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#find_duplicate_titles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.find_duplicate_titles" title="Link to this definition">¶</a></dt>
+<dd><p>Check if there are any duplicate titles in dictionaries of lists of dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – A dictionary containing lists of dictionaries with items
+indexed by “title”.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if there are duplicate “title” values, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.format_release_notes">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">format_release_notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#format_release_notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.format_release_notes" title="Link to this definition">¶</a></dt>
+<dd><p>Format the parsed YAML data into release notes in .rst format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – Parsed content of YAML files.</p></li>
+<li><p><strong>version</strong> (<em>str</em><em>, </em><em>optional</em>) – Version number of the release, by default ‘1.1’.</p></li>
+<li><p><strong>release_date</strong> (<em>str</em><em>, </em><em>optional</em>) – Release date, by default None, which uses today’s date.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted release notes in .rst format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.get_current_git_branch">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">get_current_git_branch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#get_current_git_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.get_current_git_branch" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current git branch name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the current git branch.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.get_parser">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.get_parser" title="Link to this definition">¶</a></dt>
+<dd><p>Returns an ArgumentParser object with predefined arguments for generating release notes from YAML files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The ArgumentParser object with predefined arguments.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>argparse.ArgumentParser</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.get_rich_opener">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">get_rich_opener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#get_rich_opener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.get_rich_opener" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the appropriate opener function for rich progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>no_format</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, returns the opener function without any formatting.
+If False, returns the opener function with formatting. Defaults to False.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The opener function for rich progress bar.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.get_yaml_files_from_input">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">get_yaml_files_from_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#get_yaml_files_from_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.get_yaml_files_from_input" title="Link to this definition">¶</a></dt>
+<dd><p>Get a list of YAML files from the given input files or folders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_files_or_folders</strong> (<em>list</em>) – List of paths to input files or folders.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of paths to YAML files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If a file is not a YAML file or if no YAML files are found in a directory.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.get_yaml_template_path">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">get_yaml_template_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#get_yaml_template_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.get_yaml_template_path" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the path of the YAML template file based on the given file path argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path_arg</strong> (<em>str</em>) – The file path argument provided by the user.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path of the YAML template file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.parse_arguments">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">parse_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#parse_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.parse_arguments" title="Link to this definition">¶</a></dt>
+<dd><p>Parse command line arguments for input folder and output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed arguments containing input_folder and output_file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>argparse.Namespace</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.read_yaml_files">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">read_yaml_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rich_open</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#read_yaml_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.read_yaml_files" title="Link to this definition">¶</a></dt>
+<dd><p>Read and parse the given list of YAML files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_files</strong> (<em>list</em>) – List of paths to the YAML files.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parsed content of all YAML files categorized by type of change.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">read_yaml_files</span><span class="p">([</span><span class="s2">&quot;file1.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.yaml&quot;</span><span class="p">])</span>
+<span class="go">{&#39;bug-fix&#39;: [</span>
+<span class="go">    {&#39;title&#39;: &#39;fixed explosions&#39;,</span>
+<span class="go">      &#39;description&#39;: &#39;This fixed the explosion mechanism&#39;},</span>
+<span class="go">    {&#39;title&#39;: &#39;fixed cats not being cute&#39;,</span>
+<span class="go">      &#39;description&#39;: &#39;This made the cats WAY cuter&#39;}</span>
+<span class="go">    ]</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.run_from_CLI">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">run_from_CLI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#run_from_CLI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.run_from_CLI" title="Link to this definition">¶</a></dt>
+<dd><p>Main function to generate release notes from YAML files and write to an output file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.setup_console">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">setup_console</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#setup_console"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.setup_console" title="Link to this definition">¶</a></dt>
+<dd><p>Set up and return the console for printing messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>no_format</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to disable formatting. Defaults to False.</p></li>
+<li><p><strong>quiet</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to suppress console output. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The configured rich console object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Console</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yarn.write_output_file">
+<span class="sig-prename descclassname"><span class="pre">yarn.</span></span><span class="sig-name descname"><span class="pre">write_output_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/yarn.html#write_output_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yarn.write_output_file" title="Link to this definition">¶</a></dt>
+<dd><p>Write the formatted release notes to the output file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_file</strong> (<em>str</em>) – Path to the output .rst file.</p></li>
+<li><p><strong>content</strong> (<em>str</em>) – Formatted release notes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Yarn</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.add_header_footer"><code class="docutils literal notranslate"><span class="pre">add_header_footer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.build_release_notes"><code class="docutils literal notranslate"><span class="pre">build_release_notes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.create_blank_template_yaml_file"><code class="docutils literal notranslate"><span class="pre">create_blank_template_yaml_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.exit_on_invalid_arguments"><code class="docutils literal notranslate"><span class="pre">exit_on_invalid_arguments()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.exit_on_invalid_yaml"><code class="docutils literal notranslate"><span class="pre">exit_on_invalid_yaml()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.find_duplicate_titles"><code class="docutils literal notranslate"><span class="pre">find_duplicate_titles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.format_release_notes"><code class="docutils literal notranslate"><span class="pre">format_release_notes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.get_current_git_branch"><code class="docutils literal notranslate"><span class="pre">get_current_git_branch()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.get_parser"><code class="docutils literal notranslate"><span class="pre">get_parser()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.get_rich_opener"><code class="docutils literal notranslate"><span class="pre">get_rich_opener()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.get_yaml_files_from_input"><code class="docutils literal notranslate"><span class="pre">get_yaml_files_from_input()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.get_yaml_template_path"><code class="docutils literal notranslate"><span class="pre">get_yaml_template_path()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.parse_arguments"><code class="docutils literal notranslate"><span class="pre">parse_arguments()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.read_yaml_files"><code class="docutils literal notranslate"><span class="pre">read_yaml_files()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.run_from_CLI"><code class="docutils literal notranslate"><span class="pre">run_from_CLI()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.setup_console"><code class="docutils literal notranslate"><span class="pre">setup_console()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#yarn.write_output_file"><code class="docutils literal notranslate"><span class="pre">write_output_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="cli.html" title="previous chapter">CLI</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
