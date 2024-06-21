@@ -23,6 +23,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",  # For Google and NumPy style docstrings
     "sphinx.ext.viewcode",
+    "sphinxcontrib.runcmd",
 ]
 templates_path = ["_templates"]
 exclude_patterns = []
