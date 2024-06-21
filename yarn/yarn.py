@@ -87,7 +87,7 @@ def get_parser():
         required=False,
     )
     parser.add_argument(
-        "-r",
+        "-d",
         "--release-date",
         type=str,
         help="Date of the release. Default is current system time.",
@@ -435,7 +435,7 @@ def add_header_footer(content, rich_open, header_file=None, footer_file=None):
     if header_file:
         content = getFile(header_file) + "\n" + content
     if footer_file:
-        content = content + "\n" + getFile(header_file)
+        content = content + "\n" + getFile(footer_file)
     return content
 
 
@@ -480,7 +480,9 @@ def build_release_notes(
         exit(1)
     data = read_yaml_files(yaml_files, rich_open)
     content = format_release_notes(data, version=version)
-    content = add_header_footer(content, header_file, footer_file)
+    content = add_header_footer(
+        content, rich_open, header_file=header_file, footer_file=footer_file
+    )
     write_output_file(output_file, content)
     console.print(f"[green]Wrote release notes to {output_file}")
     return content
