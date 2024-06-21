@@ -2,18 +2,6 @@
 This module provides functionality to generate release notes from YAML files.
 It reads YAML files, parses their content, and formats the parsed data into release notes in .rst format.
 The release notes can be written to an output file.
-
-The module includes the following functions:
-- get_rich_opener: Returns a function to open a rich progress bar.
-- parse_arguments: Parses command line arguments for input folder and output file.
-- exit_on_invalid_arguments: Validates the provided command line arguments.
-- get_yaml_template_path: Returns the path to the YAML template file.
-- create_blank_template_yaml_file: Creates a blank YAML file with default categories.
-- find_duplicate_titles: Checks if there are any duplicate titles in dictionaries of lists of dictionaries.
-- exit_on_invalid_yaml: Checks if the YAML content follows the correct schema.
-- read_yaml_files: Reads and parses the given list of YAML files.
-- format_release_notes: Formats the parsed YAML data into release notes in .rst format.
-- get_yaml_files_from_input: Gets a list of YAML files from the given input files or folders.
 """
 
 import argparse
@@ -44,20 +32,28 @@ default_description = "NO DESCRIPTION"
 
 
 def get_rich_opener(no_format=False):
+    """
+    Returns the appropriate opener function for rich progress bar.
+
+    Args:
+        no_format (bool, optional): If True, returns the opener function without any formatting.
+            If False, returns the opener function with formatting. Defaults to False.
+
+    Returns:
+        function: The opener function for rich progress bar.
+    """
     if no_format:
         return rich.progress.Progress().open
     else:
         return rich.progress.open
 
 
-def parse_arguments():
+def get_parser():
     """
-    Parse command line arguments for input folder and output file.
+    Returns an ArgumentParser object with predefined arguments for generating release notes from YAML files.
 
-    Returns
-    -------
-    argparse.Namespace
-        Parsed arguments containing input_folder and output_file.
+    Returns:
+        argparse.ArgumentParser: The ArgumentParser object with predefined arguments.
     """
     parser = argparse.ArgumentParser(
         description="Generate release notes from YAML files."
@@ -123,7 +119,19 @@ def parse_arguments():
         "-nr", "--no-rich", action="store_true", help="Disable rich text output"
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
+    return parser
 
+
+def parse_arguments():
+    """
+    Parse command line arguments for input folder and output file.
+
+    Returns
+    -------
+    argparse.Namespace
+        Parsed arguments containing input_folder and output_file.
+    """
+    parser = get_parser()
     return parser.parse_args(), parser
 
 
@@ -156,6 +164,16 @@ def exit_on_invalid_arguments(args, parser, console):
 
 
 def get_yaml_template_path(file_path_arg):
+    """
+    Returns the path of the YAML template file based on the given file path argument.
+
+    Args:
+        file_path_arg (str): The file path argument provided by the user.
+
+    Returns:
+        str: The path of the YAML template file.
+
+    """
     if file_path_arg is None:
         filepath = os.getcwd()
         filename = f"{get_current_git_branch()}.yaml"
@@ -397,6 +415,19 @@ def get_current_git_branch():
 
 
 def add_header_footer(content, rich_open, header_file=None, footer_file=None):
+    """
+    Adds a header and/or footer to the given content.
+
+    Args:
+        content (str): The content to which the header and/or footer will be added.
+        rich_open (function): A function used to open files.
+        header_file (str, optional): The file containing the header content. Defaults to None.
+        footer_file (str, optional): The file containing the footer content. Defaults to None.
+
+    Returns:
+        str: The content with the header and/or footer added.
+    """
+
     def getFile(file):
         with rich_open(file, "r", description=f"Reading {file}") as file:
             return file.read()
@@ -456,6 +487,16 @@ def build_release_notes(
 
 
 def setup_console(no_format=False, quiet=False):
+    """
+    Set up and return the console for printing messages.
+
+    Args:
+        no_format (bool, optional): Whether to disable formatting. Defaults to False.
+        quiet (bool, optional): Whether to suppress console output. Defaults to False.
+
+    Returns:
+        Console: The configured rich console object.
+    """
     console = Console(quiet=quiet, no_color=no_format)
     return console
 
