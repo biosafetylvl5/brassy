@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CLI &#8212; Yarn 0.0.1a documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
+    <script src="_static/documentation_options.js?v=8c8a9e14"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Welcome to Yarn’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="cli">
+<h1>CLI<a class="headerlink" href="#cli" title="Link to this heading">¶</a></h1>
+<section id="example-usage">
+<h2>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
+<section id="create-yaml-template">
+<h3>Create YAML template<a class="headerlink" href="#create-yaml-template" title="Link to this heading">¶</a></h3>
+<p>Yarn can create blank yaml templates for release notes. By default, yarn will name the file after your current git
+branch name. You can also specify a name manually, and <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> will be appended if you do not end your file name with
+<code class="docutils literal notranslate"><span class="pre">.yml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yaml</span></code>. You can do this with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>--write-yaml-template<span class="w"> </span>release-note.yaml
+</pre></div>
+</div>
+<p>By default, the yaml template will be populated with the following fields:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bug-fix
+feature
+enhancement
+deprecation
+removal
+security
+performance
+documentation
+maintenance
+other
+</pre></div>
+</div>
+<p>For example, the section for <code class="docutils literal notranslate"><span class="pre">bug-fix</span></code> will look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bug-fix</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-release-notes">
+<h3>Generate release notes<a class="headerlink" href="#generate-release-notes" title="Link to this heading">¶</a></h3>
+<p>Once you have filled out your yaml template, you can generate release notes with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<span class="w"> </span>release-note.yaml
+</pre></div>
+</div>
+<p>For example, if release-note.yaml contains the following:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bug-fix</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Fixed</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">bug&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;This</span><span class="nv"> </span><span class="s">bug</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">really</span><span class="nv"> </span><span class="s">annoying&quot;</span>
+</pre></div>
+</div>
+<p>The output will be:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-06-21)</span>
+<span class="gh">******************************</span>
+
+ <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
+
+<span class="gh">Bug-fix</span>
+<span class="gh">=======</span>
+
+<span class="gh">Fixed a bug</span>
+<span class="gh">-----------</span>
+
+This bug was really annoying
+</pre></div>
+</div>
+</section>
+<section id="specifying-version">
+<h3>Specifying Version<a class="headerlink" href="#specifying-version" title="Link to this heading">¶</a></h3>
+<p>You can specify the version of the release notes by using the <code class="docutils literal notranslate"><span class="pre">-v</span></code> or <code class="docutils literal notranslate"><span class="pre">--version</span></code> flag.
+For example, using the previous yaml file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<span class="w"> </span>release-note.yaml<span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>.0.0
+</pre></div>
+</div>
+<p>Which would output:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2024-06-21)</span>
+<span class="gh">**************************</span>
+
+ <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
+
+<span class="gh">Bug-fix</span>
+<span class="gh">=======</span>
+
+<span class="gh">Fixed a bug</span>
+<span class="gh">-----------</span>
+
+This bug was really annoying
+</pre></div>
+</div>
+</section>
+<section id="specifying-date">
+<h3>Specifying Date<a class="headerlink" href="#specifying-date" title="Link to this heading">¶</a></h3>
+<p>You can specify the date of the release notes by using the <code class="docutils literal notranslate"><span class="pre">-d</span></code> or <code class="docutils literal notranslate"><span class="pre">--release-date</span></code> flag.</p>
+<p>For example, using the previous yaml file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<span class="w"> </span>release-note.yaml<span class="w"> </span>-d<span class="w"> </span><span class="m">3000</span>-30-30
+</pre></div>
+</div>
+<p>Which would output:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-06-21)</span>
+<span class="gh">******************************</span>
+
+ <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
+
+<span class="gh">Bug-fix</span>
+<span class="gh">=======</span>
+
+<span class="gh">Fixed a bug</span>
+<span class="gh">-----------</span>
+
+This bug was really annoying
+</pre></div>
+</div>
+</section>
+<section id="adding-headers-and-or-footers">
+<h3>Adding Headers and/or Footers<a class="headerlink" href="#adding-headers-and-or-footers" title="Link to this heading">¶</a></h3>
+<p>You can add headers and/or footers to your release notes by using the
+<code class="docutils literal notranslate"><span class="pre">-p</span></code> or <code class="docutils literal notranslate"><span class="pre">--prefix-file</span></code> and <code class="docutils literal notranslate"><span class="pre">-s</span></code> or <code class="docutils literal notranslate"><span class="pre">--suffix-file</span></code> flags.</p>
+<p>For example, for the following files:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">header.txt</span></code></dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">###############################################</span>
+<span class="n">This</span> <span class="n">software</span> <span class="ow">is</span> <span class="n">released</span> <span class="n">via</span> <span class="n">the</span> <span class="n">FAKE</span> <span class="n">license</span><span class="o">.</span>
+<span class="c1">###############################################</span>
+</pre></div>
+</div>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">footer.txt</span></code></dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+------------------------------
+Thank you for using our software! We appreciate your support and feedback.
+
+For more information, visit our website: www.example.com
+
+Follow us on social media:
+- Twitter: @example
+- Facebook: /example
+- Instagram: @example
+
+If you have any questions or need assistance, please contact our support team at support@example.com.
+------------------------------
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>Using the previous yaml file,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<span class="w"> </span>release-note.yaml<span class="w"> </span>-p<span class="w"> </span>header.txt<span class="w"> </span>-s<span class="w"> </span>footer.txt
+</pre></div>
+</div>
+<p>Would output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>###############################################
+This software is released via the FAKE license.
+###############################################
+
+Version [UNKNOWN] (2024-06-21)
+******************************
+
+ * *Bug-fix*: Fixed a bug
+
+Bug-fix
+=======
+
+Fixed a bug
+-----------
+
+This bug was really annoying
+
+
+------------------------------
+Thank you for using our software! We appreciate your support and feedback.
+
+For more information, visit our website: www.example.com
+
+Follow us on social media:
+- Twitter: @example
+- Facebook: /example
+- Instagram: @example
+
+If you have any questions or need assistance, please contact our support team at support@example.com.
+------------------------------
+</pre></div>
+</div>
+</section>
+<section id="controlling-cli-output">
+<h3>Controlling CLI Output<a class="headerlink" href="#controlling-cli-output" title="Link to this heading">¶</a></h3>
+<p>You can turn off fancy formatting (colors, bold, etc.) by using the <code class="docutils literal notranslate"><span class="pre">--no-color</span></code>/<code class="docutils literal notranslate"><span class="pre">-nc</span></code> flag.</p>
+<p>You can also turn off ALL non-error outputs by using the <code class="docutils literal notranslate"><span class="pre">--quiet</span></code>/<code class="docutils literal notranslate"><span class="pre">-q</span></code> flag.</p>
+</section>
+<section id="help">
+<h3>Help!<a class="headerlink" href="#help" title="Link to this heading">¶</a></h3>
+<p>When in doubt, you can always run the help command to see what options are available:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>yarn<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>Which outputs:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: yarn [-h] [-t [WRITE_YAML_TEMPLATE]] [-v VERSION] [-d RELEASE_DATE]
+            [-nc] [-p PREFIX_FILE] [-s SUFFIX_FILE] [-o OUTPUT_FILE] [-nr]
+            [-q]
+            [input_files_or_folders ...]
+
+Generate release notes from YAML files. Entries are sorted by order in yaml
+files, and by order of yaml files provided via the command line.
+
+Positional Arguments:
+  input_files_or_folders
+                        The folder(s) containing YAML files and/or YAML files.
+                        Folders will be searched recursively.
+
+Optional Arguments:
+  -h, --help            show this help message and exit
+  -t, --write-yaml-template [WRITE_YAML_TEMPLATE]
+                        Write template YAML to provided file. If folder
+                        provided, place template in folder with current git
+                        branch name as file name.
+  -v, --version VERSION
+                        Version number of the release. Default is &#39;[UNKNOWN]&#39;.
+  -d, --release-date RELEASE_DATE
+                        Date of the release. Default is current system time.
+  -nc, --no-color       Disable text formatting for CLI output.
+  -p, --prefix-file PREFIX_FILE
+                        A header file to prepend to the release notes.
+  -s, --suffix-file SUFFIX_FILE
+                        A footer file to suffix to the release notes.
+  -o, --output-file OUTPUT_FILE
+                        The output file for release notes.
+  -nr, --no-rich        Disable rich text output
+  -q, --quiet           Only output errors
+</pre></div>
+</div>
+</section>
+</section>
+<section id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Link to this heading">¶</a></h2>
+<p><p>Generate release notes from YAML files. Entries are sorted by order in yaml files, and by order of yaml files provided via the command line.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[38;5;208mUsage:[0m [38;5;244msphinx-build[0m [[36m-h[0m] [[36m-t[0m [38;5;36m[WRITE_YAML_TEMPLATE][0m] [[36m-v[0m [38;5;36mVERSION[0m] [[36m-d[0m [38;5;36mRELEASE_DATE[0m] [[36m-nc[0m] [[36m-p[0m [38;5;36mPREFIX_FILE[0m]
+                    [[36m-s[0m [38;5;36mSUFFIX_FILE[0m] [[36m-o[0m [38;5;36mOUTPUT_FILE[0m] [[36m-nr[0m] [[36m-q[0m]
+                    [[36minput_files_or_folders[0m ...]
+</pre></div>
+</div>
+<section id="positional-arguments">
+<h3>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Link to this heading">¶</a></h3>
+<dl class="option-list">
+<dt><kbd>input_files_or_folders</kbd></dt>
+<dd><p>The folder(s) containing YAML files and/or YAML files. Folders will be searched recursively.</p>
+</dd>
+</dl>
+</section>
+<section id="named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Link to this heading">¶</a></h3>
+<dl class="option-list">
+<dt><kbd>-t, --write-yaml-template</kbd></dt>
+<dd><p>Write template YAML to provided file. If folder provided, place template in folder with current git branch name as file name.</p>
+</dd>
+<dt><kbd>-v, --version</kbd></dt>
+<dd><p>Version number of the release. Default is ‘[UNKNOWN]’.</p>
+<p>Default: “[UNKNOWN]”</p>
+</dd>
+<dt><kbd>-d, --release-date</kbd></dt>
+<dd><p>Date of the release. Default is current system time.</p>
+</dd>
+<dt><kbd>-nc, --no-color</kbd></dt>
+<dd><p>Disable text formatting for CLI output.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-p, --prefix-file</kbd></dt>
+<dd><p>A header file to prepend to the release notes.</p>
+</dd>
+<dt><kbd>-s, --suffix-file</kbd></dt>
+<dd><p>A footer file to suffix to the release notes.</p>
+</dd>
+<dt><kbd>-o, --output-file</kbd></dt>
+<dd><p>The output file for release notes.</p>
+</dd>
+<dt><kbd>-nr, --no-rich</kbd></dt>
+<dd><p>Disable rich text output</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-q, --quiet</kbd></dt>
+<dd><p>Only output errors</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Yarn</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CLI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-usage">Example usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Yarn’s documentation!</a></li>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="_sources/cli.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -31,8 +31,64 @@
 
           <div class="body" role="main">
             
-  <section id="module-yarn">
-<span id="api"></span><h1>API<a class="headerlink" href="#module-yarn" title="Link to this heading">¶</a></h1>
+  <section id="api">
+<h1>API<a class="headerlink" href="#api" title="Link to this heading">¶</a></h1>
+<section id="cli-arguments">
+<h2>CLI Arguments<a class="headerlink" href="#cli-arguments" title="Link to this heading">¶</a></h2>
+<p><p>Generate release notes from YAML files. Entries are sorted by order in yaml files, and by order of yaml files provided via the command line.</p>
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[38;5;208mUsage:[0m [38;5;244msphinx-build[0m [[36m-h[0m] [[36m-t[0m [38;5;36m[WRITE_YAML_TEMPLATE][0m] [[36m-v[0m [38;5;36mVERSION[0m] [[36m-d[0m [38;5;36mRELEASE_DATE[0m] [[36m-nc[0m] [[36m-p[0m [38;5;36mPREFIX_FILE[0m]
+                    [[36m-s[0m [38;5;36mSUFFIX_FILE[0m] [[36m-o[0m [38;5;36mOUTPUT_FILE[0m] [[36m-nr[0m] [[36m-q[0m]
+                    [[36minput_files_or_folders[0m ...]
+</pre></div>
+</div>
+<section id="positional-arguments">
+<h3>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Link to this heading">¶</a></h3>
+<dl class="option-list">
+<dt><kbd>input_files_or_folders</kbd></dt>
+<dd><p>The folder(s) containing YAML files and/or YAML files. Folders will be searched recursively.</p>
+</dd>
+</dl>
+</section>
+<section id="named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Link to this heading">¶</a></h3>
+<dl class="option-list">
+<dt><kbd>-t, --write-yaml-template</kbd></dt>
+<dd><p>Write template YAML to provided file. If folder provided, place template in folder with current git branch name as file name.</p>
+</dd>
+<dt><kbd>-v, --version</kbd></dt>
+<dd><p>Version number of the release. Default is ‘[UNKNOWN]’.</p>
+<p>Default: “[UNKNOWN]”</p>
+</dd>
+<dt><kbd>-d, --release-date</kbd></dt>
+<dd><p>Date of the release. Default is current system time.</p>
+</dd>
+<dt><kbd>-nc, --no-color</kbd></dt>
+<dd><p>Disable text formatting for CLI output.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-p, --prefix-file</kbd></dt>
+<dd><p>A header file to prepend to the release notes.</p>
+</dd>
+<dt><kbd>-s, --suffix-file</kbd></dt>
+<dd><p>A footer file to suffix to the release notes.</p>
+</dd>
+<dt><kbd>-o, --output-file</kbd></dt>
+<dd><p>The output file for release notes.</p>
+</dd>
+<dt><kbd>-nr, --no-rich</kbd></dt>
+<dd><p>Disable rich text output</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>-q, --quiet</kbd></dt>
+<dd><p>Only output errors</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="module-yarn">
+<span id="code-docstrings"></span><h2>Code Docstrings<a class="headerlink" href="#module-yarn" title="Link to this heading">¶</a></h2>
 <p>This module provides functionality to generate release notes from YAML files.
 It reads YAML files, parses their content, and formats the parsed data into release notes in .rst format.
 The release notes can be written to an output file.</p>
@@ -331,6 +387,7 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 </dd></dl>
 
 </section>
+</section>
 
 
           </div>
@@ -352,23 +409,8 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cli.html">CLI</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.add_header_footer"><code class="docutils literal notranslate"><span class="pre">add_header_footer()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.build_release_notes"><code class="docutils literal notranslate"><span class="pre">build_release_notes()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.create_blank_template_yaml_file"><code class="docutils literal notranslate"><span class="pre">create_blank_template_yaml_file()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.exit_on_invalid_arguments"><code class="docutils literal notranslate"><span class="pre">exit_on_invalid_arguments()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.exit_on_invalid_yaml"><code class="docutils literal notranslate"><span class="pre">exit_on_invalid_yaml()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.find_duplicate_titles"><code class="docutils literal notranslate"><span class="pre">find_duplicate_titles()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.format_release_notes"><code class="docutils literal notranslate"><span class="pre">format_release_notes()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.get_current_git_branch"><code class="docutils literal notranslate"><span class="pre">get_current_git_branch()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.get_parser"><code class="docutils literal notranslate"><span class="pre">get_parser()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.get_rich_opener"><code class="docutils literal notranslate"><span class="pre">get_rich_opener()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.get_yaml_files_from_input"><code class="docutils literal notranslate"><span class="pre">get_yaml_files_from_input()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.get_yaml_template_path"><code class="docutils literal notranslate"><span class="pre">get_yaml_template_path()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.parse_arguments"><code class="docutils literal notranslate"><span class="pre">parse_arguments()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.read_yaml_files"><code class="docutils literal notranslate"><span class="pre">read_yaml_files()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.run_from_CLI"><code class="docutils literal notranslate"><span class="pre">run_from_CLI()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.setup_console"><code class="docutils literal notranslate"><span class="pre">setup_console()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#yarn.write_output_file"><code class="docutils literal notranslate"><span class="pre">write_output_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cli-arguments">CLI Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-yarn">Code Docstrings</a></li>
 </ul>
 </li>
 </ul>
