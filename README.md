@@ -1,4 +1,4 @@
-# Yarn: A YAML to Release Note generator :yarn:
+# Yarn: Yet Another Release Note generator :yarn:
 
 There's only one [file](yarn/yarn.py).
 
