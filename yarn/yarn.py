@@ -524,7 +524,7 @@ def run_from_CLI():
             header_file=args.prefix_file,
             footer_file=args.suffix_file,
         )
-    if not ("write_yaml_template" in args) or args.input_files_or_folders:
+    if not ("write_yaml_template" in args) and not args.input_files_or_folders:
         parser.print_help()
 
 
