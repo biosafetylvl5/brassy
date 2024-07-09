@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to brass's documentation!
-================================
+=================================
 
 .. automodule:: brass
    :no-index:
@@ -12,7 +12,7 @@ Welcome to brass's documentation!
 .. toctree::
    :maxdepth: 2
 
-   cli
+   getting-started
    api
 
 Indices and tables

@@ -22,6 +22,12 @@ examples:
 	 brass -o new-release-note-date release-note.yaml -d 3000-30-30; \
 	 brass -o new-release-note-header-footer release-note.yaml -p header.txt -s footer.txt
 
+pages:
+	@echo "Building github pages docs"
+	@make html
+	@rm -rf ./../docs
+	@cp -r ./build/html ./../docs
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile

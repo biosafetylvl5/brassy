@@ -1,5 +1,5 @@
-CLI
-===
+Getting Started
+===============
 
 Example usage
 -------------
@@ -119,4 +119,3 @@ When in doubt, you can always run the help command to see what options are avail
 Which outputs:
 
 .. runcmd:: brass --help
-
