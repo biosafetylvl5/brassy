@@ -1,12 +1,12 @@
-.. Yarn documentation master file, created by
+.. brass documentation master file, created by
    sphinx-quickstart on Fri Jun 21 11:21:05 2024.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Yarn's documentation!
+Welcome to brass's documentation!
 ================================
 
-.. automodule:: yarn
+.. automodule:: brass
    :no-index:
 
 .. toctree::

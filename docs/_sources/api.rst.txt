@@ -5,13 +5,13 @@ CLI Arguments
 -------------
 
 .. argparse::
-    :filename: ../yarn/yarn.py
+    :filename: ../brass/brass.py
     :func: get_parser
 
 Code Docstrings
 ---------------
 
-.. automodule:: yarn
+.. automodule:: brass
    :members:
    :undoc-members:
    :private-members:

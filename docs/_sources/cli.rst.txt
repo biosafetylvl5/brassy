@@ -7,17 +7,17 @@ Example usage
 Create YAML template
 ^^^^^^^^^^^^^^^^^^^^
 
-Yarn can create blank yaml templates for release notes. By default, yarn will name the file after your current git
+brass can create blank yaml templates for release notes. By default, brass will name the file after your current git
 branch name. You can also specify a name manually, and ``.yaml`` will be appended if you do not end your file name with
 ``.yml`` or ``.yaml``. You can do this with the following command:
 
 .. code-block:: bash
 
-    yarn --write-yaml-template release-note.yaml
+    brass --write-yaml-template release-note.yaml
 
 By default, the yaml template will be populated with the following fields:
 
-.. runcmd:: python3 -c "from yarn import yarn; print('\n'.join(yarn.default_categories))"
+.. runcmd:: python3 -c "from brass import brass; print('\n'.join(brass.default_categories))"
 
 For example, the section for ``bug-fix`` will look like this:
 
@@ -34,7 +34,7 @@ Once you have filled out your yaml template, you can generate release notes with
 
 .. code-block:: bash
 
-    yarn -o new-release-note.rst release-note.yaml
+    brass -o new-release-note.rst release-note.yaml
 
 For example, if release-note.yaml contains the following:
 
@@ -54,7 +54,7 @@ For example, using the previous yaml file:
 
 .. code-block:: bash
 
-    yarn -o new-release-note.rst release-note.yaml -v 1.0.0
+    brass -o new-release-note.rst release-note.yaml -v 1.0.0
 
 Which would output:
 
@@ -70,7 +70,7 @@ For example, using the previous yaml file:
 
 .. code-block:: bash
 
-    yarn -o new-release-note.rst release-note.yaml -d 3000-30-30
+    brass -o new-release-note.rst release-note.yaml -d 3000-30-30
 
 Which would output:
 
@@ -94,7 +94,7 @@ Using the previous yaml file,
 
 .. code-block:: bash
 
-    yarn -o new-release-note.rst release-note.yaml -p header.txt -s footer.txt
+    brass -o new-release-note.rst release-note.yaml -p header.txt -s footer.txt
 
 Would output:
 
@@ -114,15 +114,15 @@ When in doubt, you can always run the help command to see what options are avail
 
 .. code-block:: bash
 
-    yarn --help
+    brass --help
 
 Which outputs:
 
-.. runcmd:: yarn --help
+.. runcmd:: brass --help
 
 Arguments
 ---------
 
 .. argparse::
-    :filename: ../yarn/yarn.py
+    :filename: ../brass/brass.py
     :func: get_parser
