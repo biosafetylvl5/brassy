@@ -1,0 +1,37 @@
+[tool.poetry]
+# required ones
+name = "brass"                                          # geoips package available at the root of the project
+version = "0.0.1a"                                        # 0.0.0 will be auto-updated with poetry dynamic versioning!
+description = "Build Release Assembler for Sane Software"
+authors = ["Gwyn Uttmark <biosafetylevel5@gmail.com>"]
+
+readme = "README.md"
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[tool.poetry.dependencies] # must download to run
+pygit2 = "*"
+rich = "*"
+rich-argparse = "*"
+
+# Doc group
+sphinx = { version = "*", optional = true }
+sphinxcontrib-runcmd = { version = "*", optional = true }
+sphinxcontrib-napoleon = { version = "*", optional = true }
+
+[tool.poetry.extras]
+doc = [
+    "sphinx",                    # Required for building documentation, v7.2 errors
+    "sphinxcontrib-runcmd",      # Required for running shell commands in documentation
+    "sphinxcontrib-napoleon",    # Required for Google-style docstrings
+]
+
+[tool.poetry.scripts]
+spam-cli = "brass.brass:run_from_cli"
+
+[tool.poetry.urls]
+Homepage = "https://github.com/biosafetylvl5/brass"
+Issues = "https://github.com/biosafetylvl5/brass/issues"
