@@ -1,18 +1,19 @@
 [tool.poetry]
-# required ones
-name = "brass"                                          # geoips package available at the root of the project
-version = "0.0.1a"                                        # 0.0.0 will be auto-updated with poetry dynamic versioning!
-description = "Build Release Assembler for Sane Software"
+name = "brassy"
+version = "0.0.1-4"
+description = "Builds release notes from yaml files for sane software development"
 authors = ["Gwyn Uttmark <biosafetylevel5@gmail.com>"]
 
+packages = [{include="brassy", from="src"}]
+
 readme = "README.md"
-requires-python = ">=3.6"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 
 [tool.poetry.dependencies] # must download to run
+python = ">=3.8"
 pygit2 = "*"
 rich = "*"
 rich-argparse = "*"
@@ -30,8 +31,8 @@ doc = [
 ]
 
 [tool.poetry.scripts]
-spam-cli = "brass.brass:run_from_cli"
+brassy = "brassy.brassy:run_from_CLI"
 
 [tool.poetry.urls]
-Homepage = "https://github.com/biosafetylvl5/brass"
-Issues = "https://github.com/biosafetylvl5/brass/issues"
+Homepage = "https://github.com/biosafetylvl5/brassy"
+Issues = "https://github.com/biosafetylvl5/brassy/issues"

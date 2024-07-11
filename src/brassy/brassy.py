@@ -79,8 +79,8 @@ def get_parser():
         + "Folders will be searched recursively.",
     )
     parser.add_argument(
-        "-v",
-        "--version",
+        "-r",
+        "--release-version",
         type=str,
         default="[UNKNOWN]",
         help="Version number of the release. Default is '[UNKNOWN]'.",
@@ -252,12 +252,22 @@ def exit_on_invalid_yaml(content, file_path):
                     f"Invalid YAML content in file {file_path}. "
                     + "Entry in category '{category}' must be a dictionary."
                 )
-            if not set(entry.keys()) == {"title", "description"}:
+            if not all([k in ["title", "description", "files"] for k in entry.keys()]):
                 raise ValueError(
                     f"Invalid YAML content in file {file_path}. "
-                    + "Entry in category '{category}' must only have "
-                    + "'title' and 'description' keys."
+                    + f"Entry in category '{category}' must only have "
+                    + "'title', 'files' and/or 'description' keys."
                 )
+            for file_entry in entry["files"]:
+                for change in file_entry.keys():
+                    validChanges = ["deleted", "moved", "added", "modified"]
+                    if not change in validChanges:
+                        raise ValueError(
+                            f"Invalid YAML content in file {file_path}. "
+                            + f"Entry in category '{category}' must only have ["
+                            + " ".join(validChanges)
+                            + f"] in 'files' key. Got {change}."
+                        )
 
 
 def read_yaml_files(input_files, rich_open):
@@ -303,6 +313,19 @@ def read_yaml_files(input_files, rich_open):
     return data
 
 
+def format_files_changed_entry(detailed, entry):
+    files_changed = "::\n\n"
+    for change_type in entry["files"]:
+        files_changed += "\n".join(
+            [
+                f"    {change}: {file}\n"
+                for change, files in change_type.items()
+                for file in files
+            ]
+        )
+    return files_changed + "\n"
+
+
 def format_release_notes(data, version, release_date=None):
     """
     Format the parsed YAML data into release notes in .rst format.
@@ -343,6 +366,9 @@ def format_release_notes(data, version, release_date=None):
 
             detailed += f"{title}\n" + "-" * len(title) + "\n\n"
             detailed += f"{description}\n\n"
+
+            if "files" in entry:
+                detailed += format_files_changed_entry(detailed, entry)
 
     return header + summary + "\n" + detailed[:-1]
 
