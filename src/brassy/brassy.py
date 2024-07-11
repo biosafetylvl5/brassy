@@ -85,6 +85,7 @@ def get_parser():
         default="[UNKNOWN]",
         help="Version number of the release. Default is '[UNKNOWN]'.",
         required=False,
+        dest="version",
     )
     parser.add_argument(
         "-d",
@@ -223,7 +224,7 @@ def find_duplicate_titles(data):
     return not len(set(titles)) == len(titles)
 
 
-def exit_on_invalid_yaml(content, file_path):
+def value_error_on_invalid_yaml(content, file_path):
     """
     Check if the YAML content follows the correct schema.
 
@@ -258,16 +259,22 @@ def exit_on_invalid_yaml(content, file_path):
                     + f"Entry in category '{category}' must only have "
                     + "'title', 'files' and/or 'description' keys."
                 )
-            for file_entry in entry["files"]:
-                for change in file_entry.keys():
-                    validChanges = ["deleted", "moved", "added", "modified"]
-                    if not change in validChanges:
-                        raise ValueError(
-                            f"Invalid YAML content in file {file_path}. "
-                            + f"Entry in category '{category}' must only have ["
-                            + " ".join(validChanges)
-                            + f"] in 'files' key. Got {change}."
-                        )
+            if "files" in entry.keys():
+                for file_entry in entry["files"]:
+                    for change in file_entry.keys():
+                        validChanges = ["deleted", "moved", "added", "modified"]
+                        if not change in validChanges:
+                            raise ValueError(
+                                f"Invalid YAML content in file {file_path}. "
+                                + f"Entry in category '{category}' must only have ["
+                                + " ".join(validChanges)
+                                + f"] in 'files' key. Got {change}."
+                            )
+            else:
+                raise ValueError(
+                    f"Invalid YAML content in file {file_path}. "
+                    + f"Entry in category '{category}' must have 'files' key."
+                )
 
 
 def read_yaml_files(input_files, rich_open):
@@ -299,7 +306,7 @@ def read_yaml_files(input_files, rich_open):
     for file_path in input_files:
         with rich_open(file_path, "r", description=f"Reading {file_path}") as file:
             content = yaml.safe_load(file)
-            exit_on_invalid_yaml(content, file_path)
+            value_error_on_invalid_yaml(content, file_path)
             for category, entries in content.items():
                 entries = [
                     entry
@@ -504,7 +511,11 @@ def build_release_notes(
     except ValueError as e:
         console.print(f"[red]{e}")
         exit(1)
-    data = read_yaml_files(yaml_files, rich_open)
+    try:
+        data = read_yaml_files(yaml_files, rich_open)
+    except ValueError as e:
+        console.print(f"[red]{e}")
+        exit(1)
     content = format_release_notes(data, version=version)
     content = add_header_footer(
         content, rich_open, header_file=header_file, footer_file=footer_file

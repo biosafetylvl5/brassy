@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to brass's documentation!
-=================================
+Welcome to brassy's documentation!
+==================================
 
-.. automodule:: brass
+.. automodule:: brassy
    :no-index:
 
 .. toctree::

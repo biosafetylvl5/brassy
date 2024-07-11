@@ -49,12 +49,12 @@ The output will be:
 Specifying Version
 ^^^^^^^^^^^^^^^^^^
 
-You can specify the version of the release notes by using the ``-v`` or ``--version`` flag.
+You can specify the version of the release notes by using the ``-r`` or ``--release-version`` flag.
 For example, using the previous yaml file:
 
 .. code-block:: bash
 
-    brassy -o new-release-note.rst release-note.yaml -v 1.0.0
+    brassy -o new-release-note.rst release-note.yaml -r 1.0.0
 
 Which would output:
 

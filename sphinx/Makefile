@@ -18,7 +18,7 @@ examples:
 	@echo "Building examples"
 	@cd ./source/examples/basic-usage; \
 	 brassy -o new-release-note release-note.yaml; \
-	 brassy -o new-release-note-v1 release-note.yaml -v 1.0.0; \
+	 brassy -o new-release-note-v1 release-note.yaml -r 1.0.0; \
 	 brassy -o new-release-note-date release-note.yaml -d 3000-30-30; \
 	 brassy -o new-release-note-header-footer release-note.yaml -p header.txt -s footer.txt
 
@@ -27,6 +27,7 @@ pages:
 	@make html
 	@rm -rf ./../docs
 	@cp -r ./build/html ./../docs
+	@touch ./../docs/.nojecyll # This is to prevent github from rendering the docs strangely
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).

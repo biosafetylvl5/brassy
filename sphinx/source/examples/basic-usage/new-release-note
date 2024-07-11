@@ -1,4 +1,4 @@
-Version [UNKNOWN] (2024-07-09)
+Version [UNKNOWN] (2024-07-11)
 ******************************
 
  * *Bug-fix*: Fixed a bug
@@ -10,3 +10,40 @@ Fixed a bug
 -----------
 
 This bug was really annoying
+
+::
+
+    modified: t
+
+    modified: e
+
+    modified: s
+
+    modified: t
+
+    modified: .
+
+    modified: p
+
+    modified: y
+    added: o
+
+    added: l
+
+    added: d
+
+    added: /
+
+    added: t
+
+    added: e
+
+    added: s
+
+    added: t
+
+    added: .
+
+    added: p
+
+    added: y

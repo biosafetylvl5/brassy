@@ -5,13 +5,13 @@ CLI Arguments
 -------------
 
 .. argparse::
-    :filename: ../brass/brass.py
+    :filename: ../src/brassy/brassy.py
     :func: get_parser
 
 Code Docstrings
 ---------------
 
-.. automodule:: brass
+.. automodule:: brassy
    :members:
    :undoc-members:
    :private-members:
