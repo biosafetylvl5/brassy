@@ -7,17 +7,17 @@ Example usage
 Create YAML template
 ^^^^^^^^^^^^^^^^^^^^
 
-brass can create blank yaml templates for release notes. By default, brass will name the file after your current git
+brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
 branch name. You can also specify a name manually, and ``.yaml`` will be appended if you do not end your file name with
 ``.yml`` or ``.yaml``. You can do this with the following command:
 
 .. code-block:: bash
 
-    brass --write-yaml-template release-note.yaml
+    brassy --write-yaml-template release-note.yaml
 
 By default, the yaml template will be populated with the following fields:
 
-.. runcmd:: python3 -c "from brass import brass; print('\n'.join(brass.default_categories))"
+.. runcmd:: python3 -c "from brassy import brass; print('\n'.join(brass.default_categories))"
 
 For example, the section for ``bug-fix`` will look like this:
 
@@ -34,7 +34,7 @@ Once you have filled out your yaml template, you can generate release notes with
 
 .. code-block:: bash
 
-    brass -o new-release-note.rst release-note.yaml
+    brassy -o new-release-note.rst release-note.yaml
 
 For example, if release-note.yaml contains the following:
 
@@ -54,7 +54,7 @@ For example, using the previous yaml file:
 
 .. code-block:: bash
 
-    brass -o new-release-note.rst release-note.yaml -v 1.0.0
+    brassy -o new-release-note.rst release-note.yaml -v 1.0.0
 
 Which would output:
 
@@ -70,7 +70,7 @@ For example, using the previous yaml file:
 
 .. code-block:: bash
 
-    brass -o new-release-note.rst release-note.yaml -d 3000-30-30
+    brassy -o new-release-note.rst release-note.yaml -d 3000-30-30
 
 Which would output:
 
@@ -94,7 +94,7 @@ Using the previous yaml file,
 
 .. code-block:: bash
 
-    brass -o new-release-note.rst release-note.yaml -p header.txt -s footer.txt
+    brassy -o new-release-note.rst release-note.yaml -p header.txt -s footer.txt
 
 Would output:
 
@@ -114,8 +114,8 @@ When in doubt, you can always run the help command to see what options are avail
 
 .. code-block:: bash
 
-    brass --help
+    brassy --help
 
 Which outputs:
 
-.. runcmd:: brass --help
+.. runcmd:: brassy --help

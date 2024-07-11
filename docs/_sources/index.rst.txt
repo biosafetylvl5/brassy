@@ -1,4 +1,4 @@
-.. brass documentation master file, created by
+.. brassy documentation master file, created by
    sphinx-quickstart on Fri Jun 21 11:21:05 2024.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.

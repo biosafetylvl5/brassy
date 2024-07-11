@@ -17,10 +17,10 @@ help:
 examples:
 	@echo "Building examples"
 	@cd ./source/examples/basic-usage; \
-	 brass -o new-release-note release-note.yaml; \
-	 brass -o new-release-note-v1 release-note.yaml -v 1.0.0; \
-	 brass -o new-release-note-date release-note.yaml -d 3000-30-30; \
-	 brass -o new-release-note-header-footer release-note.yaml -p header.txt -s footer.txt
+	 brassy -o new-release-note release-note.yaml; \
+	 brassy -o new-release-note-v1 release-note.yaml -v 1.0.0; \
+	 brassy -o new-release-note-date release-note.yaml -d 3000-30-30; \
+	 brassy -o new-release-note-header-footer release-note.yaml -p header.txt -s footer.txt
 
 pages:
 	@echo "Building github pages docs"
