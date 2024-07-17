@@ -7,7 +7,7 @@ Example usage
 Create YAML template
 ^^^^^^^^^^^^^^^^^^^^
 
-brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
+Brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
 branch name. You can also specify a name manually, and ``.yaml`` will be appended if you do not end your file name with
 ``.yml`` or ``.yaml``. You can do this with the following command:
 
@@ -26,6 +26,18 @@ For example, the section for ``bug-fix`` will look like this:
     bug-fix:
       - title: ""
         description: ""
+
+You can do anything that is valid yaml in these fields. For example:
+
+.. code-block:: yaml
+
+    bug-fix:
+      - title: ""
+        description: |
+            - Fixed a bug where the program would crash when the user thought of elephants.
+            - Fixed a bug where the program would ``segfault``
+              when the user looked at the button.
+
 
 Generate release notes
 ^^^^^^^^^^^^^^^^^^^^^^

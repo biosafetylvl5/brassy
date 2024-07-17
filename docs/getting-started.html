@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Getting Started &#8212; brass 0.0.1a documentation</title>
+    <title>Getting Started &#8212; brassy 0.0.1a documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
     <script src="_static/documentation_options.js?v=8c8a9e14"></script>
@@ -38,7 +38,7 @@
 <h2>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
 <section id="create-yaml-template">
 <h3>Create YAML template<a class="headerlink" href="#create-yaml-template" title="Link to this heading">¶</a></h3>
-<p>brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
+<p>Brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
 branch name. You can also specify a name manually, and <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> will be appended if you do not end your file name with
 <code class="docutils literal notranslate"><span class="pre">.yml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yaml</span></code>. You can do this with the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brassy<span class="w"> </span>--write-yaml-template<span class="w"> </span>release-note.yaml
@@ -54,6 +54,15 @@ ModuleNotFoundError: No module named &#39;brassy&#39;
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bug-fix</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>You can do anything that is valid yaml in these fields. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bug-fix</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">- Fixed a bug where the program would crash when the user thought of elephants.</span>
+<span class="w">        </span><span class="no">- Fixed a bug where the program would ``segfault``</span>
+<span class="w">          </span><span class="no">when the user looked at the button.</span>
 </pre></div>
 </div>
 </section>
@@ -73,7 +82,7 @@ ModuleNotFoundError: No module named &#39;brassy&#39;
 </pre></div>
 </div>
 <p>The output will be:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-07-11)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-07-17)</span>
 <span class="gh">******************************</span>
 
  <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
@@ -133,7 +142,7 @@ For example, using the previous yaml file:</p>
 </pre></div>
 </div>
 <p>Which would output:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2024-07-11)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2024-07-17)</span>
 <span class="gh">**************************</span>
 
  <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
@@ -193,7 +202,7 @@ This bug was really annoying
 </pre></div>
 </div>
 <p>Which would output:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-07-11)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-07-17)</span>
 <span class="gh">******************************</span>
 
  <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
@@ -283,7 +292,7 @@ If you have any questions or need assistance, please contact our support team at
 This software is released via the FAKE license.
 ###############################################
 
-Version [UNKNOWN] (2024-07-11)
+Version [UNKNOWN] (2024-07-17)
 ******************************
 
  * *Bug-fix*: Fixed a bug
@@ -406,7 +415,7 @@ Optional Arguments:
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">brass</a></h1>
+<h1 class="logo"><a href="index.html">brassy</a></h1>
 
 
 
