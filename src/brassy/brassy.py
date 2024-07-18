@@ -15,20 +15,20 @@ from rich.console import Console
 from rich_argparse import RichHelpFormatter
 
 default_categories = [
-    "bug-fix",
-    "feature",
+    "bug fix",
     "enhancement",
     "deprecation",
     "removal",
-    "security",
     "performance",
     "documentation",
-    "maintenance",
-    "other",
+    "continuous integration",
 ]
 
 default_title = "NO TITLE"
 default_description = "NO DESCRIPTION"
+
+valid_fields = ["title", "description", "files", "related issue"]
+valid_changes = ["deleted", "moved", "added", "modified"]
 
 
 def get_rich_opener(no_format=False):
@@ -194,7 +194,15 @@ def create_blank_template_yaml_file(file_path_arg, console):
         Path to the output YAML file.
     """
     default_yaml = {
-        category: [{"title": "", "description": ""}] for category in default_categories
+        category: [
+            {
+                "title": "",
+                "description": "",
+                "files": {change: [""] for change in valid_changes},
+                "related issue": {"number": 0, "repo_url": ""},
+            }
+        ]
+        for category in default_categories
     }
     try:
         yaml_template_path = get_yaml_template_path(file_path_arg)
@@ -240,6 +248,7 @@ def value_error_on_invalid_yaml(content, file_path):
     ValueError
         If the YAML content does not follow the correct schema.
     """
+
     for category, entries in content.items():
         if not isinstance(entries, list):
             raise ValueError(
@@ -253,21 +262,22 @@ def value_error_on_invalid_yaml(content, file_path):
                     f"Invalid YAML content in file {file_path}. "
                     + "Entry in category '{category}' must be a dictionary."
                 )
-            if not all([k in ["title", "description", "files"] for k in entry.keys()]):
+            if not all([k in valid_fields for k in entry.keys()]):
                 raise ValueError(
                     f"Invalid YAML content in file {file_path}. "
                     + f"Entry in category '{category}' must only have "
-                    + "'title', 'files' and/or 'description' keys."
+                    + ", ".join(valid_fields[:-1])
+                    + f"and/or {valid_fields[-1]}"
+                    + +"keys."
                 )
             if "files" in entry.keys():
                 for file_entry in entry["files"]:
                     for change in file_entry.keys():
-                        validChanges = ["deleted", "moved", "added", "modified"]
-                        if not change in validChanges:
+                        if not change in valid_changes:
                             raise ValueError(
                                 f"Invalid YAML content in file {file_path}. "
                                 + f"Entry in category '{category}' must only have ["
-                                + " ".join(validChanges)
+                                + " ".join(valid_changes)
                                 + f"] in 'files' key. Got {change}."
                             )
             else:
@@ -311,7 +321,7 @@ def read_yaml_files(input_files, rich_open):
                 entries = [
                     entry
                     for entry in entries
-                    if not (entry["title"] == "" and entry["description"] == "")
+                    if not (entry["title"] == "" or entry["description"] == "")
                 ]
                 if category not in data and len(entries) > 0:
                     data[category] = []
@@ -323,14 +333,14 @@ def read_yaml_files(input_files, rich_open):
 def format_files_changed_entry(detailed, entry):
     files_changed = "::\n\n"
     for change_type in entry["files"]:
-        files_changed += "\n".join(
+        files_changed += "".join(
             [
                 f"    {change}: {file}\n"
                 for change, files in change_type.items()
                 for file in files
             ]
         )
-    return files_changed + "\n"
+    return files_changed
 
 
 def format_release_notes(data, version, release_date=None):
@@ -376,6 +386,7 @@ def format_release_notes(data, version, release_date=None):
 
             if "files" in entry:
                 detailed += format_files_changed_entry(detailed, entry)
+            detailed += "\n"
 
     return header + summary + "\n" + detailed[:-1]
 
