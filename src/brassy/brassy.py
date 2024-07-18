@@ -27,7 +27,7 @@ default_categories = [
 default_title = "NO TITLE"
 default_description = "NO DESCRIPTION"
 
-valid_fields = ["title", "description", "files", "related issue"]
+valid_fields = ["title", "description", "files", "related-issue"]
 valid_changes = ["deleted", "moved", "added", "modified"]
 
 
@@ -199,7 +199,7 @@ def create_blank_template_yaml_file(file_path_arg, console):
                 "title": "",
                 "description": "",
                 "files": {change: [""] for change in valid_changes},
-                "related issue": {"number": 0, "repo_url": ""},
+                "related-issue": {"number": 0, "repo_url": ""},
             }
         ]
         for category in default_categories
@@ -267,19 +267,26 @@ def value_error_on_invalid_yaml(content, file_path):
                     f"Invalid YAML content in file {file_path}. "
                     + f"Entry in category '{category}' must only have "
                     + ", ".join(valid_fields[:-1])
-                    + f"and/or {valid_fields[-1]}"
-                    + +"keys."
+                    + f" and/or {valid_fields[-1]} "
+                    + "keys."
                 )
             if "files" in entry.keys():
-                for file_entry in entry["files"]:
-                    for change in file_entry.keys():
-                        if not change in valid_changes:
-                            raise ValueError(
-                                f"Invalid YAML content in file {file_path}. "
-                                + f"Entry in category '{category}' must only have ["
-                                + " ".join(valid_changes)
-                                + f"] in 'files' key. Got {change}."
-                            )
+                for change in entry["files"]:
+                    if isinstance(change, dict):
+                        raise TypeError(
+                            f"Invalid YAML content in file {file_path}. "
+                            + f"Entry in category '{category}' must only have "
+                            + "strings representing the type of change."
+                            + f" Got {change}."
+                        )
+                    if not change in valid_changes:
+                        raise ValueError(
+                            f"Invalid YAML content in file {file_path}. "
+                            + f"Entry in category '{category}' must only have ("
+                            + ", ".join(valid_changes)
+                            + f") in 'files' key. Got {change}."
+                        )
+                print(change)
             else:
                 raise ValueError(
                     f"Invalid YAML content in file {file_path}. "
@@ -334,11 +341,7 @@ def format_files_changed_entry(detailed, entry):
     files_changed = "::\n\n"
     for change_type in entry["files"]:
         files_changed += "".join(
-            [
-                f"    {change}: {file}\n"
-                for change, files in change_type.items()
-                for file in files
-            ]
+            [f"    {change_type}: {file}\n" for file in entry["files"][change_type]]
         )
     return files_changed
 
@@ -524,7 +527,7 @@ def build_release_notes(
         exit(1)
     try:
         data = read_yaml_files(yaml_files, rich_open)
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         console.print(f"[red]{e}")
         exit(1)
     content = format_release_notes(data, version=version)
