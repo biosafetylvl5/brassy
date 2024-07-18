@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "brassy"
-version = "0.0.1-10"
+version = "0.0.1-11"
 description = "Builds release notes from yaml files for sane software development"
 authors = ["Gwyn Uttmark <biosafetylevel5@gmail.com>"]
 
