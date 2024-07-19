@@ -253,7 +253,7 @@ def value_error_on_invalid_yaml(content, file_path):
         if not isinstance(entries, list):
             raise ValueError(
                 f"Invalid YAML content in file {file_path}. "
-                + "Entries for category '{category}' must be a list."
+                + f"Entries for category '{category}' must be a list."
             )
 
         for entry in entries:
