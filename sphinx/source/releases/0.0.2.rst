@@ -1,0 +1,85 @@
+Version 0.0.2 (2024-08-09)
+**************************
+
+ * *Enhancement*: Added --output-to-console
+ * *Enhancement*: Enable building without writing to file
+ * *Enhancement*: Add --get-changed-files
+ * *Bug fix*: Empty file change lines removed from output
+ * *Bug fix*: Fixed quiet not being quiet.
+
+Enhancement
+===========
+
+Added --output-to-console
+-------------------------
+
+--output-to-console now writes generated release notes to the console.
+This is disabled by default.'
+
+
+::
+
+    modified: src/brassy/brassy.py
+
+Enable building without writing to file
+---------------------------------------
+
+Previously, if no output file was specified, brassy quit with an "Invalid Arguments"
+error. Now brassy will build the release notes and print a message saying no
+file was written because no output file was passed. This is helpful for verifying
+the build process works without having to write to a temporary file.
+
+
+::
+
+    modified: src/brassy/brassy.py
+
+Add --get-changed-files
+-----------------------
+
+Running brassy with --get-changed-files now outputs the files that have been
+modified, added, deleted or moved in the current branch as compared to the main
+branch. It runs on the current directory by default,
+but it accepts a path as an argument.
+
+For example, the output looks like this:
+
+::
+
+    brassy --get-changed-files
+
+        added: test
+        modified: test2
+        deleted: test3
+        moved: test4
+
+It prints with indents for easy copy-and-pasting into your yaml files.
+
+
+::
+
+    modified: src/brassy/brassy.py
+
+Bug fix
+=======
+
+Empty file change lines removed from output
+-------------------------------------------
+
+In the files section, if (eg.) "modified:" was left blank,
+a blank "modified:" would be generated in resulting release notes.
+Those stray blank entries are now removed from the output.
+
+
+::
+
+    modified: src/brassy/brassy.py
+
+Fixed quiet not being quiet.
+----------------------------
+
+When running with --quiet, non-error output would be outputted. Fixed.
+
+::
+
+    modified: src/brassy/brassy.py

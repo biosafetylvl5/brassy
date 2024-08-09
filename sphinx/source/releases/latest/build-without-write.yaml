@@ -1,0 +1,13 @@
+enhancement:
+- description: |
+    Previously, if no output file was specified, brassy quit with an "Invalid Arguments"
+    error. Now brassy will build the release notes and print a message saying no
+    file was written because no output file was passed. This is helpful for verifying
+    the build process works without having to write to a temporary file.
+  files:
+    modified:
+    - 'src/brassy/brassy.py'
+  related-issue:
+    number: 0
+    repo_url: ''
+  title: 'Enable building without writing to file'

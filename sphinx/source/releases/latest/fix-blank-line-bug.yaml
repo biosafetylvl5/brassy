@@ -1,0 +1,12 @@
+bug fix:
+- description: |
+    In the files section, if (eg.) "modified:" was left blank,
+    a blank "modified:" would be generated in resulting release notes.
+    Those stray blank entries are now removed from the output.
+  files:
+    modified:
+    - 'src/brassy/brassy.py'
+  related-issue:
+    number: 0
+    repo_url: ''
+  title: 'Empty file change lines removed from output'

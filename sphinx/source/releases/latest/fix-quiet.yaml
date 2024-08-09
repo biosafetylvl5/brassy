@@ -1,0 +1,9 @@
+bug fix:
+- description: 'When running with --quiet, non-error output would be outputted. Fixed.'
+  files:
+    modified:
+    - 'src/brassy/brassy.py'
+  related-issue:
+    number: 0
+    repo_url: ''
+  title: 'Fixed quiet not being quiet.'

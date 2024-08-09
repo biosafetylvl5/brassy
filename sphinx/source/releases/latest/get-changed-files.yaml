@@ -1,0 +1,27 @@
+enhancement:
+- description: |
+    Running brassy with --get-changed-files now outputs the files that have been
+    modified, added, deleted or moved in the current branch as compared to the main
+    branch. It runs on the current directory by default,
+    but it accepts a path as an argument.
+
+    For example, the output looks like this:
+
+    ::
+
+        brassy --get-changed-files
+
+            added: test
+            modified: test2
+            deleted: test3
+            moved: test4
+
+    It prints with indents for easy copy-and-pasting into your yaml files.
+  files:
+    modified:
+    - 'src/brassy/brassy.py'
+  related-issue:
+    number: 0
+    repo_url: ''
+  title: 'Add --get-changed-files'
+
