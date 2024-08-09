@@ -14,6 +14,7 @@ Welcome to brassy's documentation!
 
    getting-started
    api
+   ./releases/index
 
 Indices and tables
 ==================

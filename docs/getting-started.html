@@ -45,9 +45,13 @@ branch name. You can also specify a name manually, and <code class="docutils lit
 </pre></div>
 </div>
 <p>By default, the yaml template will be populated with the following fields:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Traceback (most recent call last):
-  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
-ModuleNotFoundError: No module named &#39;brassy&#39;
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bug fix
+enhancement
+deprecation
+removal
+performance
+documentation
+continuous integration
 </pre></div>
 </div>
 <p>For example, the section for <code class="docutils literal notranslate"><span class="pre">bug-fix</span></code> will look like this:</p>
@@ -66,9 +70,43 @@ ModuleNotFoundError: No module named &#39;brassy&#39;
 </pre></div>
 </div>
 </section>
+<section id="adding-changed-files">
+<h3>Adding changed files<a class="headerlink" href="#adding-changed-files" title="Link to this heading">¶</a></h3>
+<p>To add what files have been changed as part of your edit you must edit the
+<code class="docutils literal notranslate"><span class="pre">files</span></code> section. For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">enhancement</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">--output-to-console now writes generated release notes to the console.</span>
+<span class="w">        </span><span class="no">This is disabled by default.</span>
+<span class="w">    </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">modified</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;src/brassy/brassy.py&#39;</span>
+</pre></div>
+</div>
+<section id="generating-the-changed-files-via-git">
+<h4>Generating the changed files via <code class="docutils literal notranslate"><span class="pre">git</span></code><a class="headerlink" href="#generating-the-changed-files-via-git" title="Link to this heading">¶</a></h4>
+<p>You can run <code class="docutils literal notranslate"><span class="pre">brassy</span></code> with <code class="docutils literal notranslate"><span class="pre">--get-changed-files</span></code> (or <code class="docutils literal notranslate"><span class="pre">-c</span></code>)
+to output the files that have been
+modified, added, deleted or moved in the current branch as compared to the main
+branch. It runs on the current directory by default,
+but it accepts a path as an argument.</p>
+<p>For example, the output looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brassy</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">changed</span><span class="o">-</span><span class="n">files</span>
+
+    <span class="n">added</span><span class="p">:</span> <span class="n">test</span>
+    <span class="n">modified</span><span class="p">:</span> <span class="n">test2</span>
+    <span class="n">deleted</span><span class="p">:</span> <span class="n">test3</span>
+    <span class="n">moved</span><span class="p">:</span> <span class="n">test4</span>
+</pre></div>
+</div>
+<p>It prints with indents for easy copy-and-pasting into your yaml files.</p>
+</section>
+</section>
+</section>
 <section id="generate-release-notes">
-<h3>Generate release notes<a class="headerlink" href="#generate-release-notes" title="Link to this heading">¶</a></h3>
-<p>Once you have filled out your yaml template, you can generate release notes with the following command:</p>
+<h2>Generate release notes<a class="headerlink" href="#generate-release-notes" title="Link to this heading">¶</a></h2>
+<p>Once you have filled out your yaml template,
+you can generate release notes with the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brassy<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<span class="w"> </span>release-note.yaml
 </pre></div>
 </div>
@@ -117,7 +155,6 @@ This bug was really annoying
 <span class="s">    added: y</span>
 </pre></div>
 </div>
-</section>
 <section id="specifying-version">
 <h3>Specifying Version<a class="headerlink" href="#specifying-version" title="Link to this heading">¶</a></h3>
 <p>You can specify the version of the release notes by using the <code class="docutils literal notranslate"><span class="pre">-r</span></code> or <code class="docutils literal notranslate"><span class="pre">--release-version</span></code> flag.
@@ -370,9 +407,11 @@ Optional Arguments:
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-usage">Example usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-release-notes">Generate release notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases/index.html">Release Notes</a></li>
 </ul>
 
 <div class="relations">

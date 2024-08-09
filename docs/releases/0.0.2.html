@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Version 0.0.2 (2024-08-09) &#8212; brassy 0.0.1a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=12dfc556" />
+    <script src="../_static/documentation_options.js?v=8c8a9e14"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Release Notes" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="version-0-0-2-2024-08-09">
+<h1>Version 0.0.2 (2024-08-09)<a class="headerlink" href="#version-0-0-2-2024-08-09" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>Enhancement</em>: Added –output-to-console</p></li>
+<li><p><em>Enhancement</em>: Enable building without writing to file</p></li>
+<li><p><em>Enhancement</em>: Add –get-changed-files</p></li>
+<li><p><em>Bug fix</em>: Empty file change lines removed from output</p></li>
+<li><p><em>Bug fix</em>: Fixed quiet not being quiet.</p></li>
+</ul>
+</div></blockquote>
+<section id="enhancement">
+<h2>Enhancement<a class="headerlink" href="#enhancement" title="Link to this heading">¶</a></h2>
+<section id="added-output-to-console">
+<h3>Added –output-to-console<a class="headerlink" href="#added-output-to-console" title="Link to this heading">¶</a></h3>
+<p>–output-to-console now writes generated release notes to the console.
+This is disabled by default.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="enable-building-without-writing-to-file">
+<h3>Enable building without writing to file<a class="headerlink" href="#enable-building-without-writing-to-file" title="Link to this heading">¶</a></h3>
+<p>Previously, if no output file was specified, brassy quit with an “Invalid Arguments”
+error. Now brassy will build the release notes and print a message saying no
+file was written because no output file was passed. This is helpful for verifying
+the build process works without having to write to a temporary file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="add-get-changed-files">
+<h3>Add –get-changed-files<a class="headerlink" href="#add-get-changed-files" title="Link to this heading">¶</a></h3>
+<p>Running brassy with –get-changed-files now outputs the files that have been
+modified, added, deleted or moved in the current branch as compared to the main
+branch. It runs on the current directory by default,
+but it accepts a path as an argument.</p>
+<p>For example, the output looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brassy</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">changed</span><span class="o">-</span><span class="n">files</span>
+
+    <span class="n">added</span><span class="p">:</span> <span class="n">test</span>
+    <span class="n">modified</span><span class="p">:</span> <span class="n">test2</span>
+    <span class="n">deleted</span><span class="p">:</span> <span class="n">test3</span>
+    <span class="n">moved</span><span class="p">:</span> <span class="n">test4</span>
+</pre></div>
+</div>
+<p>It prints with indents for easy copy-and-pasting into your yaml files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="bug-fix">
+<h2>Bug fix<a class="headerlink" href="#bug-fix" title="Link to this heading">¶</a></h2>
+<section id="empty-file-change-lines-removed-from-output">
+<h3>Empty file change lines removed from output<a class="headerlink" href="#empty-file-change-lines-removed-from-output" title="Link to this heading">¶</a></h3>
+<p>In the files section, if (eg.) “modified:” was left blank,
+a blank “modified:” would be generated in resulting release notes.
+Those stray blank entries are now removed from the output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="fixed-quiet-not-being-quiet">
+<h3>Fixed quiet not being quiet.<a class="headerlink" href="#fixed-quiet-not-being-quiet" title="Link to this heading">¶</a></h3>
+<p>When running with –quiet, non-error output would be outputted. Fixed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">brassy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Release Notes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#version-0-0-2">Version 0.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#version-0-0-1">Version 0.0.1</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Release Notes</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Release Notes</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+      |
+      <a href="../_sources/releases/0.0.2.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

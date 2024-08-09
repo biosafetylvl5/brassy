@@ -17,7 +17,7 @@ branch name. You can also specify a name manually, and ``.yaml`` will be appende
 
 By default, the yaml template will be populated with the following fields:
 
-.. runcmd:: python3 -c "from brassy import brass; print('\n'.join(brass.default_categories))"
+.. runcmd:: python3 -c "from brassy import brassy; print('\n'.join(brassy.default_categories))"
 
 For example, the section for ``bug-fix`` will look like this:
 
