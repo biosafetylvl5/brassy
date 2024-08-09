@@ -38,7 +38,6 @@ You can do anything that is valid yaml in these fields. For example:
             - Fixed a bug where the program would ``segfault``
               when the user looked at the button.
 
-
 Generate release notes
 ^^^^^^^^^^^^^^^^^^^^^^
 
