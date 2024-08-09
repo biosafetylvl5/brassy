@@ -14,7 +14,7 @@ Added --output-to-console
 -------------------------
 
 --output-to-console now writes generated release notes to the console.
-This is disabled by default.'
+This is disabled by default.
 
 
 ::

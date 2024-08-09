@@ -1,7 +1,7 @@
 enhancement:
 - description: |
     --output-to-console now writes generated release notes to the console.
-    This is disabled by default.'
+    This is disabled by default.
   files:
     modified:
     - 'src/brassy/brassy.py'
