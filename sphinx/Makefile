@@ -26,8 +26,9 @@ pages:
 	@echo "Building github pages docs"
 	@make html
 	@rm -rf ./../docs
-	@cp -r ./build/html ./../docs
-	@touch ./../docs/.nojecyll # This is to prevent github from rendering the docs strangely
+	@mv -r ./build/html ./../docs
+	@rm -rf ./build
+	@touch ./../docs/.nojekyll # This is to prevent github from rendering the docs strangely
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
