@@ -72,6 +72,15 @@ def get_parser():
         default=argparse.SUPPRESS,
     )
     parser.add_argument(
+        "-c",
+        "--get-changed-files",
+        type=str,
+        help="Print git tracked file changes against main."
+        + " If directory provided, use that directories checked-out branch.",
+        nargs="?",
+        default=argparse.SUPPRESS,
+    )
+    parser.add_argument(
         "input_files_or_folders",
         type=str,
         nargs="*",
@@ -117,6 +126,12 @@ def get_parser():
         "-o", "--output-file", type=str, help="The output file for release notes."
     )
     parser.add_argument(
+        "--output-to-console",
+        action="store_true",
+        default=False,
+        help="Write generated release notes to console.",
+    )
+    parser.add_argument(
         "-nr", "--no-rich", action="store_true", help="Disable rich text output"
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
@@ -152,7 +167,7 @@ def exit_on_invalid_arguments(args, parser, console):
     parser : argparse.ArgumentParser
         The ArgumentParser object used to parse the command-line arguments.
     """
-    if bool(args.output_file) == bool(args.input_files_or_folders):
+    if bool(args.input_files_or_folders) or "get_changed_files" in args:
         return
 
     if "write_yaml_template" in args:
@@ -215,6 +230,69 @@ def create_blank_template_yaml_file(file_path_arg, console):
         exit(1)
     with open(yaml_template_path, "w") as file:
         yaml.dump(default_yaml, file)
+
+
+def get_git_status(repo_path="."):
+    """
+    Retrieves the status of files in the given Git repository.
+
+    Parameters:
+    repo_path (str): The path to the Git repository. Defaults to the current directory.
+
+    Returns:
+    dict: A dictionary with keys 'added', 'modified', 'deleted', and 'renamed',
+          each containing a list of file paths that match the respective status.
+    """
+
+    # Open the repository
+    repo = pygit2.Repository(".")
+
+    # Get the current branch reference
+    current_branch = repo.head
+
+    # Get the main branch reference
+    main_branch = repo.branches["main"]
+
+    # Get the commit objects
+    current_commit = repo[current_branch.target]
+    main_commit = repo[main_branch.target]
+
+    # Get the diff between the current commit and the main branch commit
+    diff = repo.diff(main_commit, current_commit)
+
+    # Prepare dictionaries to store file statuses
+    status = {
+        "added": [],
+        "modified": [],
+        "deleted": [],
+        "moved": [],
+    }
+
+    # Process the diff
+    for delta in diff.deltas:
+        if delta.status == pygit2.GIT_DELTA_ADDED:
+            status["added"].append(delta.new_file.path)
+        elif delta.status == pygit2.GIT_DELTA_MODIFIED:
+            status["modified"].append(delta.new_file.path)
+        elif delta.status == pygit2.GIT_DELTA_DELETED:
+            status["deleted"].append(delta.old_file.path)
+        elif delta.status == pygit2.GIT_DELTA_RENAMED:
+            status["moved"].append((delta.old_file.path, delta.new_file.path))
+
+    return {
+        "added": status["added"],
+        "modified": status["modified"],
+        "deleted": status["deleted"],
+        "moved": status["moved"],
+    }
+
+
+def print_out_git_changed_files(console, repo_path="."):
+    status = get_git_status(repo_path=".")
+    for entry in status:
+        console.print(f"    {entry}:")
+        for file in status[entry]:
+            console.print(f"      - '{file}'")
 
 
 def find_duplicate_titles(data):
@@ -286,7 +364,6 @@ def value_error_on_invalid_yaml(content, file_path):
                             + ", ".join(valid_changes)
                             + f") in 'files' key. Got {change}."
                         )
-                print(change)
             else:
                 raise ValueError(
                     f"Invalid YAML content in file {file_path}. "
@@ -341,7 +418,10 @@ def format_files_changed_entry(detailed, entry):
     files_changed = "::\n\n"
     for change_type in entry["files"]:
         files_changed += "".join(
-            [f"    {change_type}: {file}\n" for file in entry["files"][change_type]]
+            [
+                f"    {change_type}: {file}\n"
+                for file in filter(lambda x: not x == "", entry["files"][change_type])
+            ]
         )
     return files_changed
 
@@ -488,7 +568,6 @@ def add_header_footer(content, rich_open, header_file=None, footer_file=None):
 
 def build_release_notes(
     input_files_or_folders,
-    output_file,
     console,
     rich_open,
     version=None,
@@ -534,8 +613,6 @@ def build_release_notes(
     content = add_header_footer(
         content, rich_open, header_file=header_file, footer_file=footer_file
     )
-    write_output_file(output_file, content)
-    console.print(f"[green]Wrote release notes to {output_file}")
     return content
 
 
@@ -550,7 +627,7 @@ def setup_console(no_format=False, quiet=False):
     Returns:
         Console: The configured rich console object.
     """
-    console = Console(quiet=quiet, no_color=no_format)
+    console = Console(quiet=quiet, no_color=(no_format or quiet))
     return console
 
 
@@ -561,15 +638,16 @@ def run_from_CLI():
     args, parser = parse_arguments()
 
     console = setup_console(args.no_rich, args.quiet)
-    rich_open = get_rich_opener(args.no_rich)
+    rich_open = get_rich_opener(args.no_rich or args.quiet)
 
     exit_on_invalid_arguments(args, parser, console)
     if "write_yaml_template" in args:
         create_blank_template_yaml_file(args.write_yaml_template, console)
-    if args.input_files_or_folders:
-        build_release_notes(
+    elif "get_changed_files" in args:
+        print_out_git_changed_files(console, repo_path=args.get_changed_files)
+    elif args.input_files_or_folders:
+        content = build_release_notes(
             args.input_files_or_folders,
-            args.output_file,
             console,
             rich_open,
             version=args.version,
@@ -577,7 +655,19 @@ def run_from_CLI():
             header_file=args.prefix_file,
             footer_file=args.suffix_file,
         )
-    if not ("write_yaml_template" in args) and not args.input_files_or_folders:
+        if args.output_file:
+            write_output_file(args.output_file, content)
+            if not args.quiet:
+                console.print(f"[green]Wrote release notes to {args.output_file}")
+        else:
+            if not args.quiet:
+                console.print(
+                    f"[green]Release notes built successfully. No output file provided."
+                )
+        if args.output_to_console:
+            console.print(content)
+
+    else:
         parser.print_help()
 
 
