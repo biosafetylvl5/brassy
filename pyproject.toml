@@ -17,7 +17,7 @@ python = ">=3.8"
 pygit2 = "*"
 rich = "*"
 rich-argparse = "*"
-yaml = "*"
+pyyaml = "*"
 
 # Doc group
 sphinx = { version = "*", optional = true }
