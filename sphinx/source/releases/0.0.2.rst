@@ -16,7 +16,6 @@ Added --output-to-console
 --output-to-console now writes generated release notes to the console.
 This is disabled by default.
 
-
 ::
 
     modified: src/brassy/brassy.py
@@ -28,7 +27,6 @@ Previously, if no output file was specified, brassy quit with an "Invalid Argume
 error. Now brassy will build the release notes and print a message saying no
 file was written because no output file was passed. This is helpful for verifying
 the build process works without having to write to a temporary file.
-
 
 ::
 
@@ -55,7 +53,6 @@ For example, the output looks like this:
 
 It prints with indents for easy copy-and-pasting into your yaml files.
 
-
 ::
 
     modified: src/brassy/brassy.py
@@ -69,7 +66,6 @@ Empty file change lines removed from output
 In the files section, if (eg.) "modified:" was left blank,
 a blank "modified:" would be generated in resulting release notes.
 Those stray blank entries are now removed from the output.
-
 
 ::
 

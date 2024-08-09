@@ -38,10 +38,49 @@ You can do anything that is valid yaml in these fields. For example:
             - Fixed a bug where the program would ``segfault``
               when the user looked at the button.
 
-Generate release notes
-^^^^^^^^^^^^^^^^^^^^^^
+Adding changed files
+^^^^^^^^^^^^^^^^^^^^
 
-Once you have filled out your yaml template, you can generate release notes with the following command:
+To add what files have been changed as part of your edit you must edit the
+``files`` section. For example:
+
+.. code-block:: yaml
+
+    enhancement:
+        - description: |
+            --output-to-console now writes generated release notes to the console.
+            This is disabled by default.
+        files:
+            modified:
+            - 'src/brassy/brassy.py'
+
+Generating the changed files via ``git``
+""""""""""""""""""""""""""""""""""""""""
+
+You can run ``brassy`` with ``--get-changed-files`` (or ``-c``)
+to output the files that have been
+modified, added, deleted or moved in the current branch as compared to the main
+branch. It runs on the current directory by default,
+but it accepts a path as an argument.
+
+For example, the output looks like this:
+
+::
+
+    brassy --get-changed-files
+
+        added: test
+        modified: test2
+        deleted: test3
+        moved: test4
+
+It prints with indents for easy copy-and-pasting into your yaml files.
+
+Generate release notes
+----------------------
+
+Once you have filled out your yaml template,
+you can generate release notes with the following command:
 
 .. code-block:: bash
 
