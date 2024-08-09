@@ -1,6 +1,6 @@
 bug-fix:
   - title: "Fixed a bug"
-    description: "This bug was really annoying"
+  - description: "This bug was really annoying"
     files:
       modified: "test.py"
       added: "old/test.py"
