@@ -9,9 +9,9 @@
 
 import sys, os
 
-sys.path.insert(0, os.path.abspath("../../brass"))
+sys.path.insert(0, os.path.abspath("../../brassy"))
 
-project = "brass"
+project = "brassy"
 author = "Gwyn Uttmark"
 release = "0.0.1a"
 

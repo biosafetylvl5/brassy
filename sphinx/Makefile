@@ -24,9 +24,10 @@ examples:
 
 pages:
 	@echo "Building github pages docs"
+	@make clean
 	@make html
 	@rm -rf ./../docs
-	@mv -r ./build/html ./../docs
+	@mv ./build/html ./../docs
 	@rm -rf ./build
 	@touch ./../docs/.nojekyll # This is to prevent github from rendering the docs strangely
 

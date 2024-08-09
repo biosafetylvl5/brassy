@@ -1,0 +1,11 @@
+bug-fix:
+- description: |
+    Give me the burgers plz. Chick-Fil-A gonna have some competition.
+
+    bURgerZ!!
+  title: 'I want In-N-Out'
+  files:
+    - modified:
+      - "geoips/burgers/beef.py"
+      - "geoips/burgers/pickles.py"
+      - "geoips/burgers/ketchup.py"
