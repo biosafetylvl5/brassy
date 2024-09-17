@@ -3,7 +3,7 @@ bug fix:
   files:
     modified:
       - 'src/brassy/brassy.py'
-zsh:1: command not found: :wq
+  related-issue:
     number: 1
     repo_url: ''
   title: 'Print pretty error on blank yaml.'
