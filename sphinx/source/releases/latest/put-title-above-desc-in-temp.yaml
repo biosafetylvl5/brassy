@@ -1,0 +1,9 @@
+enhancement:
+- title: 'Put title at top of template'
+  description: 'Title is now at top of template because users were mixing up description and title. This change is backwards compatible, and no updates to yaml files are needed.'
+  files:
+    modified:
+      - 'src/brassy/brassy.py'
+  related-issue:
+    number: 5
+    repo_url: ''
