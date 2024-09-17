@@ -230,7 +230,7 @@ def create_blank_template_yaml_file(file_path_arg, console):
         )
         exit(1)
     with open(yaml_template_path, "w") as file:
-        yaml.dump(default_yaml, file)
+        yaml.dump(default_yaml, file, sort_keys=False, default_flow_style=False)
 
 
 def get_git_status(repo_path="."):
