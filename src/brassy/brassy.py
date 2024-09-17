@@ -12,6 +12,7 @@ from datetime import datetime
 
 import pygit2
 from rich.console import Console
+from rich.traceback import install as install_rich_tracebacks
 from rich_argparse import RichHelpFormatter
 
 default_categories = [
@@ -326,7 +327,8 @@ def value_error_on_invalid_yaml(content, file_path):
     ValueError
         If the YAML content does not follow the correct schema.
     """
-
+    if content is None:
+        raise ValueError(f"No valid brassy-related YAML. Please populate {file_path}")
     for category, entries in content.items():
         if not isinstance(entries, list):
             raise ValueError(
@@ -627,6 +629,8 @@ def setup_console(no_format=False, quiet=False):
     Returns:
         Console: The configured rich console object.
     """
+    if not no_format:
+        install_rich_tracebacks()
     console = Console(quiet=quiet, no_color=(no_format or quiet))
     return console
 

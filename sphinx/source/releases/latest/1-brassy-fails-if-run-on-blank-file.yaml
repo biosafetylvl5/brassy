@@ -1,0 +1,9 @@
+bug fix:
+- description: 'Now prints "No valid YAML content in file. Please populate example.yaml" when run on blank yaml file.'
+  files:
+    modified:
+      - 'src/brassy/brassy.py'
+zsh:1: command not found: :wq
+    number: 1
+    repo_url: ''
+  title: 'Print pretty error on blank yaml.'
