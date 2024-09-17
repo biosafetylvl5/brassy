@@ -111,21 +111,26 @@ you can generate release notes with the following command:</p>
 </pre></div>
 </div>
 <p>For example, if release-note.yaml contains the following:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bug-fix</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Fixed</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">bug&quot;</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;This</span><span class="nv"> </span><span class="s">bug</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">really</span><span class="nv"> </span><span class="s">annoying&quot;</span>
-<span class="w">    </span><span class="nt">files</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">modified</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;test.py&quot;</span>
-<span class="w">      </span><span class="nt">added</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;old/test.py&quot;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">bug fix</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;This</span><span class="nv"> </span><span class="s">bug</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">really</span><span class="nv"> </span><span class="s">annoying&quot;</span>
+<span class="w">  </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">added</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;new-test.py&quot;</span>
+<span class="w">    </span><span class="nt">deleted</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;old/test.py&quot;</span>
+<span class="w">  </span><span class="nt">related-issue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+<span class="w">  </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Fixed</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">bug&quot;</span>
 </pre></div>
 </div>
 <p>The output will be:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-08-09)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-09-17)</span>
 <span class="gh">******************************</span>
 
- <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
+ <span class="m">*</span> <span class="ge">*Bug fix*</span>: Fixed a bug
 
-<span class="gh">Bug-fix</span>
+<span class="gh">Bug fix</span>
 <span class="gh">=======</span>
 
 <span class="gh">Fixed a bug</span>
@@ -135,24 +140,8 @@ This bug was really annoying
 
 <span class="se">::</span>
 
-<span class="s">    modified: t</span>
-<span class="s">    modified: e</span>
-<span class="s">    modified: s</span>
-<span class="s">    modified: t</span>
-<span class="s">    modified: .</span>
-<span class="s">    modified: p</span>
-<span class="s">    modified: y</span>
-<span class="s">    added: o</span>
-<span class="s">    added: l</span>
-<span class="s">    added: d</span>
-<span class="s">    added: /</span>
-<span class="s">    added: t</span>
-<span class="s">    added: e</span>
-<span class="s">    added: s</span>
-<span class="s">    added: t</span>
-<span class="s">    added: .</span>
-<span class="s">    added: p</span>
-<span class="s">    added: y</span>
+<span class="s">    added: new-test.py</span>
+<span class="s">    deleted: old/test.py</span>
 </pre></div>
 </div>
 <section id="specifying-version">
@@ -163,12 +152,12 @@ For example, using the previous yaml file:</p>
 </pre></div>
 </div>
 <p>Which would output:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2024-08-09)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2024-09-17)</span>
 <span class="gh">**************************</span>
 
- <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
+ <span class="m">*</span> <span class="ge">*Bug fix*</span>: Fixed a bug
 
-<span class="gh">Bug-fix</span>
+<span class="gh">Bug fix</span>
 <span class="gh">=======</span>
 
 <span class="gh">Fixed a bug</span>
@@ -178,24 +167,8 @@ This bug was really annoying
 
 <span class="se">::</span>
 
-<span class="s">    modified: t</span>
-<span class="s">    modified: e</span>
-<span class="s">    modified: s</span>
-<span class="s">    modified: t</span>
-<span class="s">    modified: .</span>
-<span class="s">    modified: p</span>
-<span class="s">    modified: y</span>
-<span class="s">    added: o</span>
-<span class="s">    added: l</span>
-<span class="s">    added: d</span>
-<span class="s">    added: /</span>
-<span class="s">    added: t</span>
-<span class="s">    added: e</span>
-<span class="s">    added: s</span>
-<span class="s">    added: t</span>
-<span class="s">    added: .</span>
-<span class="s">    added: p</span>
-<span class="s">    added: y</span>
+<span class="s">    added: new-test.py</span>
+<span class="s">    deleted: old/test.py</span>
 </pre></div>
 </div>
 </section>
@@ -207,12 +180,12 @@ This bug was really annoying
 </pre></div>
 </div>
 <p>Which would output:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-08-09)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2024-09-17)</span>
 <span class="gh">******************************</span>
 
- <span class="m">*</span> <span class="ge">*Bug-fix*</span>: Fixed a bug
+ <span class="m">*</span> <span class="ge">*Bug fix*</span>: Fixed a bug
 
-<span class="gh">Bug-fix</span>
+<span class="gh">Bug fix</span>
 <span class="gh">=======</span>
 
 <span class="gh">Fixed a bug</span>
@@ -222,24 +195,8 @@ This bug was really annoying
 
 <span class="se">::</span>
 
-<span class="s">    modified: t</span>
-<span class="s">    modified: e</span>
-<span class="s">    modified: s</span>
-<span class="s">    modified: t</span>
-<span class="s">    modified: .</span>
-<span class="s">    modified: p</span>
-<span class="s">    modified: y</span>
-<span class="s">    added: o</span>
-<span class="s">    added: l</span>
-<span class="s">    added: d</span>
-<span class="s">    added: /</span>
-<span class="s">    added: t</span>
-<span class="s">    added: e</span>
-<span class="s">    added: s</span>
-<span class="s">    added: t</span>
-<span class="s">    added: .</span>
-<span class="s">    added: p</span>
-<span class="s">    added: y</span>
+<span class="s">    added: new-test.py</span>
+<span class="s">    deleted: old/test.py</span>
 </pre></div>
 </div>
 </section>
@@ -281,12 +238,12 @@ If you have any questions or need assistance, please contact our support team at
 This software is released via the FAKE license.
 ###############################################
 
-Version [UNKNOWN] (2024-08-09)
+Version [UNKNOWN] (2024-09-17)
 ******************************
 
- * *Bug-fix*: Fixed a bug
+ * *Bug fix*: Fixed a bug
 
-Bug-fix
+Bug fix
 =======
 
 Fixed a bug
@@ -296,24 +253,8 @@ This bug was really annoying
 
 ::
 
-    modified: t
-    modified: e
-    modified: s
-    modified: t
-    modified: .
-    modified: p
-    modified: y
-    added: o
-    added: l
-    added: d
-    added: /
-    added: t
-    added: e
-    added: s
-    added: t
-    added: .
-    added: p
-    added: y
+    added: new-test.py
+    deleted: old/test.py
 
 
 ------------------------------
@@ -357,7 +298,7 @@ Positional Arguments:
                         The folder(s) containing YAML files and/or YAML files.
                         Folders will be searched recursively.
 
-Optional Arguments:
+Options:
   -h, --help            show this help message and exit
   -t, --write-yaml-template [WRITE_YAML_TEMPLATE]
                         Write template YAML to provided file. If folder

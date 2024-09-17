@@ -1,6 +1,11 @@
-bug-fix:
-  - title: "Fixed a bug"
-  - description: "This bug was really annoying"
-    files:
-      modified: "test.py"
-      added: "old/test.py"
+bug fix:
+- description: "This bug was really annoying"
+  files:
+    added:
+    - "new-test.py"
+    deleted:
+    - "old/test.py"
+  related-issue:
+    number: 0
+    repo_url: ''
+  title: "Fixed a bug"

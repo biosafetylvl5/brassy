@@ -1,9 +1,9 @@
-Version [UNKNOWN] (2024-08-09)
+Version [UNKNOWN] (2024-09-17)
 ******************************
 
- * *Bug-fix*: Fixed a bug
+ * *Bug fix*: Fixed a bug
 
-Bug-fix
+Bug fix
 =======
 
 Fixed a bug
@@ -13,21 +13,5 @@ This bug was really annoying
 
 ::
 
-    modified: t
-    modified: e
-    modified: s
-    modified: t
-    modified: .
-    modified: p
-    modified: y
-    added: o
-    added: l
-    added: d
-    added: /
-    added: t
-    added: e
-    added: s
-    added: t
-    added: .
-    added: p
-    added: y
+    added: new-test.py
+    deleted: old/test.py
