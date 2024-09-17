@@ -1,105 +1,22 @@
-bug fix:
-- description: ''
-  files:
-    added:
-    - ''
-    deleted:
-    - ''
-    modified:
-    - ''
-    moved:
-    - ''
-  related-issue:
-    number: 0
-    repo_url: ''
-  title: ''
-continuous integration:
-- description: ''
-  files:
-    added:
-    - ''
-    deleted:
-    - ''
-    modified:
-    - ''
-    moved:
-    - ''
-  related-issue:
-    number: 0
-    repo_url: ''
-  title: ''
-deprecation:
-- description: ''
-  files:
-    added:
-    - ''
-    deleted:
-    - ''
-    modified:
-    - ''
-    moved:
-    - ''
-  related-issue:
-    number: 0
-    repo_url: ''
-  title: ''
 documentation:
-- description: ''
+- description: 'Fix docs rendering of yaml examples by updating old yaml files.'
   files:
-    added:
-    - ''
-    deleted:
-    - ''
     modified:
-    - ''
-    moved:
-    - ''
+      - 'docs/api.html'
+      - 'docs/genindex.html'
+      - 'docs/getting-started.html'
+      - 'docs/index.html'
+      - 'docs/objects.inv'
+      - 'docs/searchindex.js'
+      - 'pyproject.toml'
+      - 'sphinx/source/examples/basic-usage/new-release-note'
+      - 'sphinx/source/examples/basic-usage/new-release-note-date'
+      - 'sphinx/source/examples/basic-usage/new-release-note-header-footer'
+      - 'sphinx/source/examples/basic-usage/new-release-note-v1'
+      - 'sphinx/source/examples/basic-usage/release-note.yaml'
+    deleted:
+      - 'docs/py-modindex.html'
   related-issue:
     number: 0
     repo_url: ''
-  title: ''
-enhancement:
-- description: ''
-  files:
-    added:
-    - ''
-    deleted:
-    - ''
-    modified:
-    - ''
-    moved:
-    - ''
-  related-issue:
-    number: 0
-    repo_url: ''
-  title: ''
-performance:
-- description: ''
-  files:
-    added:
-    - ''
-    deleted:
-    - ''
-    modified:
-    - ''
-    moved:
-    - ''
-  related-issue:
-    number: 0
-    repo_url: ''
-  title: ''
-removal:
-- description: ''
-  files:
-    added:
-    - ''
-    deleted:
-    - ''
-    modified:
-    - ''
-    moved:
-    - ''
-  related-issue:
-    number: 0
-    repo_url: ''
-  title: ''
+  title: 'Fix docs rendering of examples.'
