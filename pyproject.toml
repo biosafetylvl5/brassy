@@ -18,6 +18,8 @@ pygit2 = "*"
 rich = "*"
 rich-argparse = "*"
 pyyaml = "*"
+platformdirs = "*"
+pydantic = "*"
 
 # Doc group
 sphinx = { version = "*", optional = true }
