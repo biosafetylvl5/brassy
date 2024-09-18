@@ -172,8 +172,7 @@ def exit_on_invalid_arguments(args, parser, console):
         return
 
     if "write_yaml_template" in args:
-        if args.write_yaml_template is not None:
-            return
+        return
 
     console.print("[bold red]Invalid arguments.\n")
     parser.print_help()
