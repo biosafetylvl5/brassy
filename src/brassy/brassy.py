@@ -172,8 +172,7 @@ def exit_on_invalid_arguments(args, parser, console):
         return
 
     if "write_yaml_template" in args:
-        if args.write_yaml_template is not None:
-            return
+        return
 
     console.print("[bold red]Invalid arguments.\n")
     parser.print_help()
@@ -216,6 +215,8 @@ def create_blank_template_yaml_file(file_path_arg, console):
                 "description": "",
                 "files": {change: [""] for change in valid_changes},
                 "related-issue": {"number": 0, "repo_url": ""},
+                # in time, extract from the first and last commit
+                "date": {"start": None, "finish": None},
             }
         ]
         for category in default_categories
