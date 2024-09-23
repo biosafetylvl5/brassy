@@ -15,21 +15,9 @@ from rich.console import Console
 from rich.traceback import install as install_rich_tracebacks
 from rich_argparse import RichHelpFormatter
 
-default_categories = [
-    "bug fix",
-    "enhancement",
-    "deprecation",
-    "removal",
-    "performance",
-    "documentation",
-    "continuous integration",
-]
+import brassy.settings
 
-default_title = "NO TITLE"
-default_description = "NO DESCRIPTION"
-
-valid_fields = ["title", "description", "files", "related-issue"]
-valid_changes = ["deleted", "moved", "added", "modified"]
+Settings = brassy.settings.get_settings("brassy")
 
 
 def get_rich_opener(no_format=False):
@@ -108,7 +96,7 @@ def get_parser():
         "-nc",
         "--no-color",
         action="store_true",
-        default=False,
+        default=Settings.use_color,
         help="Disable text formatting for CLI output.",
     )
     parser.add_argument(
@@ -214,11 +202,11 @@ def create_blank_template_yaml_file(file_path_arg, console):
             {
                 "title": "",
                 "description": "",
-                "files": {change: [""] for change in valid_changes},
+                "files": {change: [""] for change in Settings.valid_changes},
                 "related-issue": {"number": 0, "repo_url": ""},
             }
         ]
-        for category in default_categories
+        for category in Settings.change_categories
     }
     try:
         yaml_template_path = get_yaml_template_path(file_path_arg)
@@ -342,12 +330,12 @@ def value_error_on_invalid_yaml(content, file_path):
                     f"Invalid YAML content in file {file_path}. "
                     + "Entry in category '{category}' must be a dictionary."
                 )
-            if not all([k in valid_fields for k in entry.keys()]):
+            if not all([k in Settings.valid_fields for k in entry.keys()]):
                 raise ValueError(
                     f"Invalid YAML content in file {file_path}. "
                     + f"Entry in category '{category}' must only have "
-                    + ", ".join(valid_fields[:-1])
-                    + f" and/or {valid_fields[-1]} "
+                    + ", ".join(Settings.valid_fields[:-1])
+                    + f" and/or {Settings.valid_fields[-1]} "
                     + "keys."
                 )
             if "files" in entry.keys():
@@ -359,11 +347,11 @@ def value_error_on_invalid_yaml(content, file_path):
                             + "strings representing the type of change."
                             + f" Got {change}."
                         )
-                    if not change in valid_changes:
+                    if not change in Settings.valid_changes:
                         raise ValueError(
                             f"Invalid YAML content in file {file_path}. "
                             + f"Entry in category '{category}' must only have ("
-                            + ", ".join(valid_changes)
+                            + ", ".join(Settings.valid_changes)
                             + f") in 'files' key. Got {change}."
                         )
             else:
@@ -460,9 +448,9 @@ def format_release_notes(data, version, release_date=None):
             title = entry["title"]
             description = entry["description"]
             if title == "":
-                title = default_title
+                title = Settings.default_title
             if description == "":
-                description = default_description
+                description = Settings.default_description
 
             summary += f" * *{category.capitalize()}*: {title}\n"
 
