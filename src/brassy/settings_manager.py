@@ -125,7 +125,7 @@ def create_config_file(config_file):
         yaml.dump(default_settings.dict(), f)
 
 
-def read_config_file(config_file):
+def read_config_file(config_file, create_file_if_not_exist=False):
     """
     Read and parse a YAML configuration file.
 
@@ -133,6 +133,8 @@ def read_config_file(config_file):
     ----------
     config_file : str
         Path to the configuration file.
+    create_file_if_not_exist : bool
+        Creates file if it doesn't exist
 
     Returns
     -------
@@ -143,8 +145,11 @@ def read_config_file(config_file):
         with open(config_file, "rt") as f:
             return yaml.safe_load(f)
     except FileNotFoundError:
-        create_config_file(config_file)
-        return read_config_file(config_file)
+        if not create_file_if_not_exist:
+            return Settings().dict()
+        else:
+            create_config_file(config_file)
+            return read_config_file(config_file)
 
 
 def merge_and_validate_config_files(config_files):
@@ -169,7 +174,7 @@ def merge_and_validate_config_files(config_files):
     """
     settings = {}
     for config_file in config_files:
-        file_settings = read_config_file(config_file)
+        file_settings = read_config_file(config_file, create_file_if_not_exist=False)
         try:
             Settings(**file_settings)
         except ValidationError as e:
