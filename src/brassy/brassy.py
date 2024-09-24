@@ -208,20 +208,41 @@ def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
 
 def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
     """
-    Create a blank YAML file with default categories.
+    Creates a blank YAML template file with a predefined structure.
+
+    This function generates a YAML file at the specified path with a default
+    template. It handles special characters required for YAML compatibility and writes
+    the file to disk.
 
     Parameters
     ----------
-    file_path : str
-        Path to the output YAML file.
+    file_path_arg : str
+        The file path of the YAML template as passed via the CLI.
+    console : rich.console.Console
+        A Rich Console object used for displaying messages and errors to the user.
+    working_dir : str, optional
+        The working directory path. Defaults to the current directory ".".
+
+    Raises
+    ------
+    SystemExit
+        If a Git repo is not found in the current working directory and no file path
+        is provided, the program exits with an error message.
+
+    Notes
+    -----
+    This function performs a string replacement to insert a "|" due to an issue with
+    YAML's handling of pipe symbols. For more details, see:
+    https://github.com/yaml/pyyaml/pull/822
     """
+    pipe_replace_string = "REPLACE_ME_WITH_PIPE"
     default_yaml = {
         category: [
             {
                 "title": "",
-                "description": "",
+                "description": pipe_replace_string,
                 "files": {change: [""] for change in Settings.valid_changes},
-                "related-issue": {"number": "null", "repo_url": ""},
+                "related-issue": {"number": None, "repo_url": ""},
                 # in time, extract from the first and last commit
                 "date": {"start": None, "finish": None},
             }
@@ -238,7 +259,11 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
         )
         exit(1)
     with open(yaml_template_path, "w") as file:
-        yaml.dump(default_yaml, file, sort_keys=False, default_flow_style=False)
+        yaml_text = yaml.safe_dump(
+            default_yaml, sort_keys=False, default_flow_style=False
+        )
+        yaml_text = yaml_text.replace(pipe_replace_string, "|")
+        file.write(yaml_text)
 
 
 def get_git_status(repo_path="."):
