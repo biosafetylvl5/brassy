@@ -137,7 +137,7 @@ def get_parser():
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
     parser.add_argument(
-        "-p", "--prune", action="store_true", help="Prune provided files, do not build"
+        "-pr", "--prune", action="store_true", help="Prune provided files, do not build"
     )
     parser.add_argument(
         "--init", action="store_true", help="Initialize brassy", default=False
@@ -201,7 +201,9 @@ def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
         return os.path.join(working_dir, filename)
     if not (file_path_arg.endswith(".yaml") or file_path_arg.endswith(".yml")):
         return os.path.join(working_dir, file_path_arg + ".yaml")
-    return os.join(working_dir, file_path_arg)
+    if "/" in file_path_arg or "\\" in file_path_arg:
+        return file_path_arg
+    return os.path.join(working_dir, file_path_arg)
 
 
 def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
@@ -219,7 +221,7 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
                 "title": "",
                 "description": "",
                 "files": {change: [""] for change in Settings.valid_changes},
-                "related-issue": {"number": 0, "repo_url": ""},
+                "related-issue": {"number": "null", "repo_url": ""},
                 # in time, extract from the first and last commit
                 "date": {"start": None, "finish": None},
             }
@@ -574,6 +576,23 @@ def add_header_footer(content, rich_open, header_file=None, footer_file=None):
     return content
 
 
+def get_file_list_from_cli_input(input_files_or_folders, console, working_dir="."):
+    try:
+        yaml_files = get_yaml_files_from_input(
+            [
+                get_yaml_template_path(path, working_dir=working_dir)
+                for path in input_files_or_folders
+            ]
+        )
+    except FileNotFoundError as e:
+        console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
+        exit(1)
+    except ValueError as e:
+        console.print(f"[red]{e}")
+        exit(1)
+    return yaml_files
+
+
 def build_release_notes(
     input_files_or_folders,
     console,
@@ -605,16 +624,9 @@ def build_release_notes(
     str
         Formatted release notes in .rst format.
     """
-    try:
-        yaml_files = get_yaml_files_from_input(
-            [os.path.join(working_dir, path) for path in input_files_or_folders]
-        )
-    except FileNotFoundError as e:
-        console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
-        exit(1)
-    except ValueError as e:
-        console.print(f"[red]{e}")
-        exit(1)
+    yaml_files = get_file_list_from_cli_input(
+        input_files_or_folders, console, working_dir=working_dir
+    )
     try:
         data = read_yaml_files(yaml_files, rich_open)
     except (ValueError, TypeError) as e:
@@ -644,6 +656,46 @@ def setup_console(no_format=False, quiet=False):
     return console
 
 
+def prune_empty(data, prune_lists=True, key=""):
+    nulls = (None, "", {}, [])
+    if isinstance(data, dict):
+        pruned = {k: prune_empty(v, key=k) for k, v in data.items()}
+        pruned = {k: v for k, v in pruned.items() if v not in nulls}
+        return pruned if pruned else None
+    elif isinstance(data, list):
+        pruned = [prune_empty(item) for item in data]
+        pruned = [item for item in pruned if item not in nulls]
+        return pruned if pruned else None
+    elif data == 0 and key == "number":
+        return None
+    else:
+        return data
+
+
+def prune_yaml_file(yaml_file_path, console):
+    with open(yaml_file_path, "r+") as file:
+        content = yaml.safe_load(file)
+        file.seek(0)
+        file.write(
+            yaml.dump(
+                prune_empty(content, prune_lists=False),
+                sort_keys=False,
+                default_flow_style=False,
+            )
+        )
+        file.truncate()
+    console.print(f"Pruned {yaml_file_path}")
+
+
+def direct_pruning_of_files(input_files_or_folders, console, working_dir):
+    yaml_files = get_file_list_from_cli_input(
+        input_files_or_folders, console, working_dir=working_dir
+    )
+    for yaml_file in yaml_files:
+
+        prune_yaml_file(yaml_file, console)
+
+
 def init():
     conf_files = [
         settings_manager.get_site_config_file_path("brassy"),
@@ -671,8 +723,7 @@ def run_from_CLI():
         init()
         exit(0)
     elif args.prune:
-        pass
-        # prune lol
+        direct_pruning_of_files(args.input_files_or_folders, console, args.yaml_dir)
     elif "write_yaml_template" in args:
         create_blank_template_yaml_file(
             args.write_yaml_template,
