@@ -12,12 +12,13 @@ from datetime import datetime
 
 import pygit2
 from rich.console import Console
+from rich.prompt import Confirm
 from rich.traceback import install as install_rich_tracebacks
 from rich_argparse import RichHelpFormatter
 
-import brassy.settings
+import brassy.settings_manager as settings_manager
 
-Settings = brassy.settings.get_settings("brassy")
+Settings = settings_manager.get_settings("brassy")
 
 
 def get_rich_opener(no_format=False):
@@ -114,6 +115,17 @@ def get_parser():
     parser.add_argument(
         "-o", "--output-file", type=str, help="The output file for release notes."
     )
+    if Settings.default_yaml_path:
+        yaml_path = os.path.join(".", Settings.default_yaml_path)
+    else:
+        yaml_path = "."
+    parser.add_argument(
+        "-yd",
+        "--yaml-dir",
+        type=str,
+        help="Directory to write yaml files to",
+        default=yaml_path,
+    )
     parser.add_argument(
         "--output-to-console",
         action="store_true",
@@ -124,6 +136,9 @@ def get_parser():
         "-nr", "--no-rich", action="store_true", help="Disable rich text output"
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
+    parser.add_argument(
+        "--init", action="store_true", help="Initialize brassy", default=False
+    )
     return parser
 
 
@@ -156,7 +171,7 @@ def exit_on_invalid_arguments(args, parser, console):
     parser : argparse.ArgumentParser
         The ArgumentParser object used to parse the command-line arguments.
     """
-    if bool(args.input_files_or_folders) or "get_changed_files" in args:
+    if bool(args.input_files_or_folders) or "get_changed_files" in args or args.init:
         return
 
     if "write_yaml_template" in args:
@@ -167,7 +182,7 @@ def exit_on_invalid_arguments(args, parser, console):
     exit(1)
 
 
-def get_yaml_template_path(file_path_arg):
+def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
     """
     Returns the path of the YAML template file based on the given file path argument.
 
@@ -179,15 +194,14 @@ def get_yaml_template_path(file_path_arg):
 
     """
     if file_path_arg is None:
-        filepath = os.getcwd()
         filename = f"{get_current_git_branch()}.yaml"
-        return os.path.join(filepath, filename)
+        return os.path.join(working_dir, filename)
     if not (file_path_arg.endswith(".yaml") or file_path_arg.endswith(".yml")):
-        return file_path_arg + ".yaml"
-    return file_path_arg
+        return os.path.join(working_dir, file_path_arg + ".yaml")
+    return os.join(working_dir, file_path_arg)
 
 
-def create_blank_template_yaml_file(file_path_arg, console):
+def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
     """
     Create a blank YAML file with default categories.
 
@@ -210,7 +224,7 @@ def create_blank_template_yaml_file(file_path_arg, console):
         for category in Settings.change_categories
     }
     try:
-        yaml_template_path = get_yaml_template_path(file_path_arg)
+        yaml_template_path = get_yaml_template_path(file_path_arg, working_dir)
     except pygit2.GitError:
         console.print(
             "[bold red]Could not find a git repo. Please run in a "
@@ -565,6 +579,7 @@ def build_release_notes(
     release_date=None,
     header_file=None,
     footer_file=None,
+    working_dir=".",
 ):
     """
     Build release notes from YAML data.
@@ -588,7 +603,9 @@ def build_release_notes(
         Formatted release notes in .rst format.
     """
     try:
-        yaml_files = get_yaml_files_from_input(input_files_or_folders)
+        yaml_files = get_yaml_files_from_input(
+            [os.path.join(working_dir, path) for path in input_files_or_folders]
+        )
     except FileNotFoundError as e:
         console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
         exit(1)
@@ -624,6 +641,19 @@ def setup_console(no_format=False, quiet=False):
     return console
 
 
+def init():
+    conf_files = [
+        settings_manager.get_site_config_file_path("brassy"),
+        settings_manager.get_user_config_file_path("brassy"),
+    ]
+    for conf_file in conf_files:
+        settings_manager.create_config_file(conf_file)
+    if Confirm.ask("Do you want to create a project config file?"):
+        settings_manager.create_config_file(
+            settings_manager.get_project_config_file_path("brassy")
+        )
+
+
 def run_from_CLI():
     """
     Main function to generate release notes from YAML files and write to an output file.
@@ -634,8 +664,16 @@ def run_from_CLI():
     rich_open = get_rich_opener(args.no_rich or args.quiet)
 
     exit_on_invalid_arguments(args, parser, console)
+
+    if args.init:
+        init()
+        exit(0)
     if "write_yaml_template" in args:
-        create_blank_template_yaml_file(args.write_yaml_template, console)
+        create_blank_template_yaml_file(
+            args.write_yaml_template,
+            console,
+            working_dir=args.yaml_dir,
+        )
     elif "get_changed_files" in args:
         print_out_git_changed_files(console, repo_path=args.get_changed_files)
     elif args.input_files_or_folders:
@@ -647,6 +685,7 @@ def run_from_CLI():
             release_date=args.release_date,
             header_file=args.prefix_file,
             footer_file=args.suffix_file,
+            working_dir=args.yaml_dir,
         )
         if args.output_file:
             write_output_file(args.output_file, content)

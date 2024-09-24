@@ -1,12 +1,12 @@
 import pathlib
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
 
 class Settings(BaseModel):
     use_color: bool = True
-    default_yaml_path: pathlib.Path = "docs/source/releases/latest"
+    default_yaml_path: Optional[pathlib.Path] = None
     change_categories: List[str] = [
         "bug fix",
         "enhancement",
