@@ -124,6 +124,9 @@ def get_parser():
         "-nr", "--no-rich", action="store_true", help="Disable rich text output"
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
+    parser.add_argument(
+        "-p", "--prune", action="store_true", help="Prune provided files, do not build"
+    )
     return parser
 
 
@@ -634,7 +637,10 @@ def run_from_CLI():
     rich_open = get_rich_opener(args.no_rich or args.quiet)
 
     exit_on_invalid_arguments(args, parser, console)
-    if "write_yaml_template" in args:
+    if args.prune:
+        pass
+        # prune lol
+    elif "write_yaml_template" in args:
         create_blank_template_yaml_file(args.write_yaml_template, console)
     elif "get_changed_files" in args:
         print_out_git_changed_files(console, repo_path=args.get_changed_files)
