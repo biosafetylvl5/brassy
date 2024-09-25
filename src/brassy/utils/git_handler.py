@@ -1,3 +1,6 @@
+import pygit2
+
+
 def get_git_status(repo_path="."):
     """
     Retrieves the status of files in the given Git repository.
@@ -11,7 +14,7 @@ def get_git_status(repo_path="."):
     """
 
     # Open the repository
-    repo = pygit2.Repository(".")
+    repo = pygit2.Repository(repo_path)
 
     # Get the current branch reference
     current_branch = repo.head
@@ -53,17 +56,17 @@ def get_git_status(repo_path="."):
     }
 
 
-def print_out_git_changed_files(console, repo_path="."):
-    status = get_git_status(repo_path=".")
+def print_out_git_changed_files(print_function, repo_path="."):
+    status = get_git_status(repo_path=repo_path)
     for entry in status:
-        console.print(f"    {entry}:")
+        print_function(f"    {entry}:")
         for file in status[entry]:
-            console.print(f"      - '{file}'")
+            print_function(f"      - '{file}'")
 
 
 def get_current_git_branch():
     """
-    Get the current git branch name.
+    Get the current dirs git branch name.
 
     Returns
     -------
