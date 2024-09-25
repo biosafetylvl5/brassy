@@ -1,3 +1,11 @@
+import yaml
+
+import brassy
+import brassy.utils
+import brassy.utils.CLI
+import brassy.utils.file_handler
+
+
 def prune_empty(data, prune_lists=True, key=""):
     """
     Recursively remove empty values from a nested dictionary or list.
@@ -111,7 +119,7 @@ def direct_pruning_of_files(input_files_or_folders, console, working_dir):
     Pruned configs/config1.yaml
     Pruned configs/config2.yaml
     """
-    yaml_files = get_file_list_from_cli_input(
+    yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
         input_files_or_folders, console, working_dir=working_dir
     )
     for yaml_file in yaml_files:
