@@ -1,3 +1,6 @@
+import brassy
+
+
 def init():
     """
     Initialize configuration files for the application.
@@ -15,12 +18,14 @@ def init():
     Do you want to create a project config file? [y/N]: y
     """
     conf_files = [
-        settings_manager.get_site_config_file_path("brassy"),
-        settings_manager.get_user_config_file_path("brassy"),
+        brassy.utils.settings_manager.get_site_config_file_path("brassy"),
+        brassy.utils.settings_manager.get_user_config_file_path("brassy"),
     ]
     for conf_file in conf_files:
-        settings_manager.create_config_file(conf_file)
-    if Confirm.ask("Do you want to create a project config file?"):
-        settings_manager.create_config_file(
-            settings_manager.get_project_config_file_path("brassy")
+        brassy.utils.settings_manager.create_config_file(conf_file)
+    if brassy.utils.messages.boolean_prompt(
+        "Do you want to create a project config file?"
+    ):
+        brassy.utils.settings_manager.create_config_file(
+            brassy.utils.settings_manager.get_project_config_file_path("brassy")
         )

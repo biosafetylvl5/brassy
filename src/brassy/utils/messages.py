@@ -70,7 +70,7 @@ def setup_console(no_format=False, quiet=False):
 
 def get_boolean_prompt_function(format=True):
     if format:
-        return Confirm
+        return Confirm.ask
     else:
 
         def bool_prompt(question):
