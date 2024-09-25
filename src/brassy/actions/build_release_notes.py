@@ -1,3 +1,10 @@
+import datetime
+
+import brassy
+
+Settings = brassy.Settings
+
+
 def add_header_footer(content, rich_open, header_file=None, footer_file=None):
     """
     Adds a header and/or footer to the given content.
@@ -129,11 +136,11 @@ def build_release_notes(
     str
         Formatted release notes in .rst format.
     """
-    yaml_files = get_file_list_from_cli_input(
+    yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
         input_files_or_folders, console, working_dir=working_dir
     )
     try:
-        data = read_yaml_files(yaml_files, rich_open)
+        data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
     except (ValueError, TypeError) as e:
         console.print(f"[red]{e}")
         exit(1)
