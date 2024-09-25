@@ -228,6 +228,8 @@ def run_from_CLI():
     """
     args, parser = parse_arguments()
 
+    messages.setup_messages(format=not args.no_rich, quiet=args.quiet)
+
     console = messages.RichConsole
     printer = messages.print
     rich_open = messages.open

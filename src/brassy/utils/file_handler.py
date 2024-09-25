@@ -18,7 +18,6 @@ def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
         str: The path of the YAML template file.
 
     """
-    print(file_path_arg, type(file_path_arg))
     if file_path_arg is None:
         filename = f"{git_handler.get_current_git_branch()}.yaml"
         return os.path.join(working_dir, filename)
@@ -105,48 +104,9 @@ def value_error_on_invalid_yaml(content, file_path):
     """
     if content is None:
         raise ValueError(f"No valid brassy-related YAML. Please populate {file_path}")
-    for category, entries in content.items():
-        if not isinstance(entries, list):
-            raise ValueError(
-                f"Invalid YAML content in file {file_path}. "
-                + f"Entries for category '{category}' must be a list."
-            )
+    from brassy.templates.release_yaml_template import ReleaseNote
 
-        for entry in entries:
-            if not isinstance(entry, dict):
-                raise ValueError(
-                    f"Invalid YAML content in file {file_path}. "
-                    + "Entry in category '{category}' must be a dictionary."
-                )
-            if not all([k in Settings.valid_fields for k in entry.keys()]):
-                raise ValueError(
-                    f"Invalid YAML content in file {file_path}. "
-                    + f"Entry in category '{category}' must only have "
-                    + ", ".join(Settings.valid_fields[:-1])
-                    + f" and/or {Settings.valid_fields[-1]} "
-                    + "keys."
-                )
-            if "files" in entry.keys():
-                for change in entry["files"]:
-                    if isinstance(change, dict):
-                        raise TypeError(
-                            f"Invalid YAML content in file {file_path}. "
-                            + f"Entry in category '{category}' must only have "
-                            + "strings representing the type of change."
-                            + f" Got {change}."
-                        )
-                    if not change in Settings.valid_changes:
-                        raise ValueError(
-                            f"Invalid YAML content in file {file_path}. "
-                            + f"Entry in category '{category}' must only have ("
-                            + ", ".join(Settings.valid_changes)
-                            + f") in 'files' key. Got {change}."
-                        )
-            else:
-                raise ValueError(
-                    f"Invalid YAML content in file {file_path}. "
-                    + f"Entry in category '{category}' must have 'files' key."
-                )
+    ReleaseNote(**content)
 
 
 def read_yaml_files(input_files, rich_open):
