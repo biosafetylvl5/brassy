@@ -5,7 +5,13 @@ import argparse
 import os
 
 from rich_argparse import RichHelpFormatter
+import brassy.actions
+import brassy.actions.build_release_notes
+import brassy.actions.prune_yaml
+import brassy.utils.file_handler
+import brassy.utils.git_handler
 from brassy.utils.settings_manager import get_settings
+import brassy.utils.messages as messages
 
 Settings = get_settings("brassy")
 
@@ -200,7 +206,9 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
     try:
         yaml_files = get_yaml_files_from_input(
             [
-                get_yaml_template_path(path, working_dir=working_dir)
+                brassy.utils.file_handler.get_yaml_template_path(
+                    path, working_dir=working_dir
+                )
                 for path in input_files_or_folders
             ]
         )
@@ -219,25 +227,29 @@ def run_from_CLI():
     """
     args, parser = parse_arguments()
 
-    console = setup_console(args.no_rich, args.quiet)
-    rich_open = get_rich_opener(args.no_rich or args.quiet)
+    console = messages.RichConsole
+    rich_open = messages.open
 
     exit_on_invalid_arguments(args, parser, console)
     if args.init:
-        init()
+        brassy.actions.init()
         exit(0)
     elif args.prune:
-        direct_pruning_of_files(args.input_files_or_folders, console, args.yaml_dir)
+        brassy.actions.prune_yaml.direct_pruning_of_files(
+            args.input_files_or_folders, console, args.yaml_dir
+        )
     elif "write_yaml_template" in args:
-        create_blank_template_yaml_file(
+        brassy.utils.file_handler.create_blank_template_yaml_file(
             args.write_yaml_template,
             console,
             working_dir=args.yaml_dir,
         )
     elif "get_changed_files" in args:
-        print_out_git_changed_files(console, repo_path=args.get_changed_files)
+        brassy.utils.git_handler.print_out_git_changed_files(
+            console, repo_path=args.get_changed_files
+        )
     elif args.input_files_or_folders:
-        content = build_release_notes(
+        content = brassy.actions.build_release_notes.build_release_notes(
             args.input_files_or_folders,
             console,
             rich_open,
@@ -248,7 +260,7 @@ def run_from_CLI():
             working_dir=args.yaml_dir,
         )
         if args.output_file:
-            write_output_file(args.output_file, content)
+            brassy.utils.file_handler.write_output_file(args.output_file, content)
             if not args.quiet:
                 console.print(f"[green]Wrote release notes to {args.output_file}")
         else:
