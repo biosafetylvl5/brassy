@@ -18,11 +18,10 @@ def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
         str: The path of the YAML template file.
 
     """
+    print(file_path_arg, type(file_path_arg))
     if file_path_arg is None:
         filename = f"{git_handler.get_current_git_branch()}.yaml"
         return os.path.join(working_dir, filename)
-    if not (file_path_arg.endswith(".yaml") or file_path_arg.endswith(".yml")):
-        return os.path.join(working_dir, file_path_arg + ".yaml")
     if "/" in file_path_arg or "\\" in file_path_arg:
         return file_path_arg
     return os.path.join(working_dir, file_path_arg)

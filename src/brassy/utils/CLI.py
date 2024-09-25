@@ -7,6 +7,7 @@ import os
 from rich_argparse import RichHelpFormatter
 import brassy.actions
 import brassy.actions.build_release_notes
+import brassy.actions.init
 import brassy.actions.prune_yaml
 import brassy.utils.file_handler
 import brassy.utils.git_handler
@@ -233,7 +234,7 @@ def run_from_CLI():
 
     exit_on_invalid_arguments(args, parser, console)
     if args.init:
-        brassy.actions.init()
+        brassy.actions.init.init()
         exit(0)
     elif args.prune:
         brassy.actions.prune_yaml.direct_pruning_of_files(
