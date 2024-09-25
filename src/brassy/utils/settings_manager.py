@@ -5,7 +5,7 @@ import platformdirs
 import pygit2
 import yaml
 
-from brassy.settings_template import Settings
+from brassy.templates.settings_template import Settings
 
 
 def get_git_repo_root(path="."):

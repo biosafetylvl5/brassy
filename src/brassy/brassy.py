@@ -11,15 +11,12 @@ import yaml
 from datetime import datetime
 
 import pygit2
-from rich.console import Console
-from rich.prompt import Confirm
-from rich.traceback import install as install_rich_tracebacks
-from rich_argparse import RichHelpFormatter
 
-import brassy.settings_manager as settings_manager
+import brassy.utils.settings_manager as settings_manager
+import brassy.utils.CLI
 
 Settings = settings_manager.get_settings("brassy")
 
-
+run_from_CLI = brassy.utils.CLI.run_from_CLI
 if __name__ == "__main__":
     run_from_CLI()

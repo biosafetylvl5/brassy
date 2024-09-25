@@ -1,3 +1,15 @@
+# This module is for the CLI only portions of brassy.
+# Brassy can be run without this file, and importing it should
+
+import argparse
+import os
+
+from rich_argparse import RichHelpFormatter
+from brassy.utils.settings_manager import get_settings
+
+Settings = get_settings("brassy")
+
+
 def get_parser():
     """
     Returns an ArgumentParser object with predefined arguments for generating release notes from YAML files.
