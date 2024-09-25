@@ -4,7 +4,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class Settings(BaseModel):
+class SettingsTemplate(BaseModel):
     use_color: bool = True
     default_yaml_path: Optional[pathlib.Path] = None
     change_categories: List[str] = [

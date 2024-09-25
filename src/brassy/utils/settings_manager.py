@@ -5,7 +5,7 @@ import platformdirs
 import pygit2
 import yaml
 
-from brassy.templates.settings_template import Settings
+from brassy.templates.settings_template import SettingsTemplate
 
 
 def get_git_repo_root(path="."):
@@ -117,7 +117,7 @@ def create_config_file(config_file):
     config_file : str
         Path where the configuration file will be created.
     """
-    default_settings = Settings()
+    default_settings = SettingsTemplate()
     config_dir = os.path.dirname(config_file)
     if config_dir:
         os.makedirs(config_dir, exist_ok=True)
@@ -146,7 +146,7 @@ def read_config_file(config_file, create_file_if_not_exist=False):
             return yaml.safe_load(f)
     except FileNotFoundError:
         if not create_file_if_not_exist:
-            return Settings().dict()
+            return SettingsTemplate().dict()
         else:
             create_config_file(config_file)
             return read_config_file(config_file)
@@ -176,7 +176,7 @@ def merge_and_validate_config_files(config_files):
     for config_file in config_files:
         file_settings = read_config_file(config_file, create_file_if_not_exist=False)
         try:
-            Settings(**file_settings)
+            SettingsTemplate(**file_settings)
         except ValidationError as e:
             print(f"Failed to validate {config_file}")
             print(repr(e.errors()[0]))
@@ -255,4 +255,4 @@ def get_settings(app_name):
     file_settings = override_dict_with_environmental_variables(
         get_settings_from_config_files(app_name)
     )
-    return Settings(**file_settings)
+    return SettingsTemplate(**file_settings)

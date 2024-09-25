@@ -1,3 +1,12 @@
+import os
+
+import yaml
+from pygit2 import GitError
+
+import brassy.utils.git_handler as git_handler
+from brassy import Settings
+
+
 def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
     """
     Returns the path of the YAML template file based on the given file path argument.
@@ -10,7 +19,7 @@ def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
 
     """
     if file_path_arg is None:
-        filename = f"{get_current_git_branch()}.yaml"
+        filename = f"{git_handler.get_current_git_branch()}.yaml"
         return os.path.join(working_dir, filename)
     if not (file_path_arg.endswith(".yaml") or file_path_arg.endswith(".yml")):
         return os.path.join(working_dir, file_path_arg + ".yaml")
@@ -64,7 +73,7 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
     }
     try:
         yaml_template_path = get_yaml_template_path(file_path_arg, working_dir)
-    except pygit2.GitError:
+    except GitError:
         console.print(
             "[bold red]Could not find a git repo. Please run in a "
             + "git repo or pass a file path for the yaml template "
