@@ -1,8 +1,7 @@
 import datetime
 
 import brassy
-
-Settings = brassy.Settings
+from brassy.brassy import Settings
 
 
 def add_header_footer(content, rich_open, header_file=None, footer_file=None):

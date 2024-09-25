@@ -13,9 +13,11 @@ from datetime import datetime
 import pygit2
 
 import brassy.utils.settings_manager as settings_manager
-import brassy.utils.CLI
 
 Settings = settings_manager.get_settings("brassy")
+
+import brassy.utils.CLI
+
 
 run_from_CLI = brassy.utils.CLI.run_from_CLI
 if __name__ == "__main__":

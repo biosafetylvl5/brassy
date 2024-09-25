@@ -4,7 +4,7 @@ import yaml
 from pygit2 import GitError
 
 import brassy.utils.git_handler as git_handler
-from brassy import Settings
+from brassy.brassy import Settings
 
 
 def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
