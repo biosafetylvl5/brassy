@@ -228,6 +228,7 @@ def run_from_CLI():
     args, parser = parse_arguments()
 
     console = messages.RichConsole
+    printer = messages.print
     rich_open = messages.open
 
     exit_on_invalid_arguments(args, parser, console)
@@ -246,7 +247,8 @@ def run_from_CLI():
         )
     elif "get_changed_files" in args:
         brassy.utils.git_handler.print_out_git_changed_files(
-            console, repo_path=args.get_changed_files
+            printer,
+            repo_path=args.get_changed_files if args.get_changed_files else ".",
         )
     elif args.input_files_or_folders:
         content = brassy.actions.build_release_notes.build_release_notes(
