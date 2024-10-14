@@ -1,0 +1,141 @@
+bug fix:
+- title: "Fixed Aang's Avatar State Ⓐ"
+  description: |
+    Resolved an issue where Aang could not exit the Avatar State after consuming cactus juice. This caused unintended behavior and prevented progression in the story.
+  files:
+    deleted:
+    - ''
+    moved:
+    - 'src/characters/aang_temp.py:src/characters/aang.py'
+    added:
+    - ''
+    modified:
+    - 'src/avatar/avatar_state_manager.py'
+  related-issue:
+    number: 1001
+    repo_url: 'https://github.com/AvatarProject/AvatarRepo/issues/1001'
+  date:
+    start: '2023/01/01'
+    finish: '2023-01-05T23:59:59Z'
+
+enhancement:
+- title: 'Implemented Multi-Element Bending for Avatars'
+  description: |
+    Avatars can now bend multiple elements simultaneously, allowing for more complex combat strategies.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - 'src/bending/multi_element.py'
+  modified:
+    - 'src/avatar/avatar_core.py'
+    - 'src/bending/bending_manager.py'
+  related-issue:
+    number: '1000000000000000000000000000000000000000000000'
+    repo_url: 'https://github.com/AvatarProject/AvatarRepo/issues/1000000000000000000000000000000000000000000000'
+  date:
+    start: '2023-03-01T00:00:00'
+    finish: '2023-03-10T23:59:59Z'
+
+deprecation:
+- title: 'Deprecated Old Bending Stances'
+  description: |
+    The classic bending stances are deprecated in favor of dynamic stances that adapt to the situation.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'assets/animations/stances/*'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: 'Yesterday'
+    finish: 'Today'
+
+removal:
+- title: 'Removed Unagi Sea Serpent from Kyoshi Island'
+  description: |
+    The Unagi has been removed due to community feedback regarding difficulty levels.
+  files:
+    deleted:
+    - 'assets/creatures/unagi.obj'
+    - 'src/creatures/unagi_behavior.py'
+  moved:
+    - ''
+  added:
+    - ''
+  modified:
+    - 'src/locations/kyoshi_island.py'
+  related-issue:
+    number: '1005'
+    repo_url: 'https://github.com/AvatarProject/AvatarRepo/'
+  date:
+    start: '2023-05-01'
+    finish: 'Never'
+
+performance:
+- title: 'Optimized Fire Nation Ship Rendering'
+  description: |
+    Improved rendering performance for Fire Nation ships by 50% by reducing polygon count and optimizing textures.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'assets/vehicles/fire_nation_ship.obj'
+  related-issue:
+    number: 1006
+    repo_url: 'https://github.com/AvatarProject/AvatarRepo/issues/1006'
+  date:
+    start: '2023-07-01'
+    finish: '2023-07-15'
+
+documentation:
+- title: 'Added Documentation for Combustion Bending'
+  description: |
+    New documentation explains the mechanics and limitations of combustion bending.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - 'docs/bending/combustion_bending.md'
+  modified:
+    - ''
+  related-issue:
+    number: 1008
+    repo_url: 'https://github.com/AvatarProject/AvatarRepo/issues/1008'
+  date:
+    start: '2023-08-05'
+    finish: '2023-08-10'
+
+continuous integration:
+- title: 'Implemented Nightly Builds for the Fire Nation Branch'
+  description: |
+    Set up nightly builds and tests for the Fire Nation development branch to ensure stability.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - '.github/workflows/nightly_fire_nation.yml'
+  modified:
+    - ''
+  related-issue:
+    number: 1009
+    repo_url: 'https://github.com/AvatarProject/AvatarRepo/issues/1009'
+  date:
+    start: '2023-09-01'
+    finish: '2023-09-02'

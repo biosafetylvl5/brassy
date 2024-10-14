@@ -1,0 +1,113 @@
+bug fix:
+- title: Fixed Bubble Blowing Glitch
+  description: 'Resolved an issue where bubble shapes would not form correctly when
+    using the Bubble Blowing Wand.
+
+    '
+  files:
+    modified:
+    - src/bubble_wand.py
+  related-issue:
+    number: 101
+    repo_url: https://github.com/spongebob-app/bubble-wand/issues/101
+  date:
+    start: '2024-03-15'
+    finish: '2024-03-16'
+enhancement:
+- title: Added Krabby Patty Secret Formula Encryption
+  description: 'Implemented advanced encryption for the Krabby Patty secret formula
+    to enhance security.
+
+    '
+  files:
+    added:
+    - src/secret_formula_encryption.py
+    modified:
+    - src/krusty_krab_menu.py
+  related-issue:
+    number: 202
+    repo_url: https://github.com/spongebob-app/krusty-krab/issues/202
+  date:
+    start: '2024-04-01'
+    finish: '2024-04-10'
+deprecation:
+- title: Deprecated Old Jellyfish Net API
+  description: 'The old Jellyfish Net API is now deprecated in favor of the new Electric
+    Jellyfish Net API.
+
+    '
+  files:
+    modified:
+    - src/jellyfish_net_v1.py
+  related-issue:
+    number: 303
+    repo_url: https://github.com/spongebob-app/jellyfish-net/issues/303
+  date:
+    start: '2024-05-01'
+    finish: '2024-05-05'
+removal:
+- title: Removed Rock Bottom Map Support
+  description: 'Dropped support for the Rock Bottom map due to low user engagement
+    and maintenance overhead.
+
+    '
+  files:
+    deleted:
+    - maps/rock_bottom_map.py
+    modified:
+    - src/map_loader.py
+  related-issue:
+    number: 404
+    repo_url: https://github.com/spongebob-app/maps/issues/404
+  date:
+    start: '2024-06-10'
+    finish: '2024-06-15'
+performance:
+- title: Optimized Patricks Rock Loading Time
+  description: 'Improved the loading time for Patrick''s Rock environment by 60% through
+    asset optimization.
+
+    '
+  files:
+    modified:
+    - assets/patricks_rock/*
+  related-issue:
+    number: 505
+    repo_url: https://github.com/spongebob-app/environments/issues/505
+  date:
+    start: '2024-07-01'
+    finish: '2024-07-05'
+documentation:
+- title: Updated Mermaid Man and Barnacle Boy Mission Logs
+  description: 'Added new entries and corrected errors in the mission logs for better
+    clarity and accuracy.
+
+    '
+  files:
+    added:
+    - docs/mission_logs/mission_99.md
+    modified:
+    - docs/mission_logs/index.md
+  related-issue:
+    number: 606
+    repo_url: https://github.com/spongebob-app/docs/issues/606
+  date:
+    start: '2024-08-01'
+    finish: '2024-08-02'
+continuous integration:
+- title: Implemented Jellyfish Fields CI/CD Pipeline
+  description: 'Set up CI/CD pipeline using Jenkins for automated testing and deployment
+    of the Jellyfish Fields module.
+
+    '
+  files:
+    added:
+    - ci/jenkinsfile
+    modified:
+    - ci/config.yml
+  related-issue:
+    number: 707
+    repo_url: https://github.com/spongebob-app/ci/issues/707
+  date:
+    start: '2024-09-01'
+    finish: '2024-09-03'
