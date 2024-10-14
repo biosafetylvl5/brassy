@@ -1,0 +1,14 @@
+enhancement:
+- title: Add internal option to related issue
+  description: Some organizations use internal repos that cannot be accessed by CI.
+    This change adds an "internal" field for the related issue so that users can add
+    strings directly rather than use the URL+issue number combo previously provided.
+    The strings are rendered directly, but must fit a "repo#number - description"
+    pattern. The field is named "internal" to suggest to users that when possible
+    the URL option *should* be used to access future functionality.
+  files:
+    modified:
+    - src/brassy/templates/release_yaml_template.py
+  date:
+    start: today
+    finish: today
