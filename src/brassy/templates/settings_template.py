@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class ReleaseTemplate(BaseModel):
-    release_template: List[Dict[str, List[str]]] = Field(
+    release_template: Optional[List[Dict[str, List[str]]]] = Field(
         default=None, alias="release-template"
     )
 
@@ -13,6 +13,7 @@ class ReleaseTemplate(BaseModel):
         populate_by_name = True
 
 
+# Example YAML representation (as a string for reference)
 """
 release-template:
   - header:
@@ -38,6 +39,7 @@ release-template:
     - {suffix_file}
 """
 
+# Corrected instantiation of DefaultTemplate
 DefaultTemplate = ReleaseTemplate(
     **{
         "release-template": [
@@ -88,4 +90,4 @@ class SettingsTemplate(BaseModel):
     valid_fields: List[str] = ["title", "description", "files", "related-issue"]
     valid_changes: List[str] = ["deleted", "moved", "added", "modified"]
     enable_experimental_features: bool = False
-    templates: List[ReleaseTemplate] = DefaultTemplate
+    templates: Optional[ReleaseTemplate] = DefaultTemplate

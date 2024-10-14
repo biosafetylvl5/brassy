@@ -82,6 +82,12 @@ def format_release_notes(data, version, release_date=None):
     summary = ""
     detailed = ""
 
+    release_template = Settings.templates.release_template
+    for section in release_template:
+        for section_name, lines in section.items():
+            for line in lines:
+                print(section_name, line)
+
     for category, entries in data.items():
         detailed += f"{category.capitalize()}\n" + "=" * len(category) + "\n\n"
         for entry in entries:
