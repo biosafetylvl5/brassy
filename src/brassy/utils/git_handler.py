@@ -64,7 +64,7 @@ def print_out_git_changed_files(print_function, repo_path="."):
     for entry in status:
         print_function(f"    {entry}:")
         for file in status[entry]:
-            print_function(f"      - '{file}'")
+            print_function(f"    - '{file}'")
 
 
 def get_current_git_branch():

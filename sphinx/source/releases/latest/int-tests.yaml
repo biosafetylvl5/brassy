@@ -1,0 +1,139 @@
+bug fix:
+- title: 'Make optional dates optional'
+  description: |
+    Dates for changes are optional. This fix allows users to leave the entry off,
+    rather than requiring a null field for building.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'src/brassy/templates/release_yaml_template.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: today
+    finish: today
+enhancement:
+- title: ''
+  description: |
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+deprecation:
+- title: ''
+  description: |
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+removal:
+- title: ''
+  description: |
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+performance:
+- title: ''
+  description: |
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+documentation:
+- title: ''
+  description: |
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+continuous integration:
+- title: 'Add integration tests'
+  description: |
+    Added basic integration tests. More work needed.
+  files:
+    added:
+    - 'pytest.ini'
+    - 'tests/inputs/barebones.yaml'
+    - 'tests/inputs/fully-featured.yaml'
+    - 'tests/inputs/mostly-featured.yaml'
+    - 'tests/inputs/to-prune.yaml'
+    - 'tests/outputs/barebones.rst'
+    - 'tests/outputs/fully-featured.rst'
+    - 'tests/outputs/mostly-featured.rst'
+    - 'tests/outputs/pruned.yaml'
+    - 'tests/test_integ.py'
+    deleted:
+    - 'test/575-cli-class-factory.yaml'
+    - 'test/burgers.rst'
+    - 'test/burgers.yaml'
+    - 'test/test.py'
+    - 'test/test.rst'
+    - 'test/test2.yaml'
+  related-issue:
+    number: 18
+    repo_url: ''
+  date:
+    start: last month
+    finish: today
