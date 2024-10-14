@@ -1,5 +1,5 @@
 import pathlib
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Union
 from datetime import date as Date
 
 import dateparser
@@ -31,6 +31,10 @@ class Files(BaseModel):
                 "At least one of deleted, moved, added, or modified must have a value"
             )
         return self
+
+
+class RelatedInternalIssue(BaseModel):
+    string: Optional[str] = Field(pattern=r"[A-Za-z]+#\d+ - .+", default=None)
 
 
 class RelatedIssue(BaseModel):
@@ -70,7 +74,7 @@ class ChangeItem(BaseModel):
     title: str
     description: str
     files: Files
-    related_issue: Optional[RelatedIssue] = Field(
+    related_issue: Optional[Union[RelatedIssue, RelatedInternalIssue]] = Field(
         alias="related-issue", exclude_unset=True, default=None
     )
     date: Optional[DateRange] = None
