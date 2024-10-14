@@ -94,7 +94,7 @@ def get_parser():
     parser.add_argument(
         "-o", "--output-file", type=str, help="The output file for release notes."
     )
-    if Settings.default_yaml_path:
+    if Settings.default_yaml_path and Settings.enable_experimental_features:
         yaml_path = os.path.join(".", Settings.default_yaml_path)
     else:
         yaml_path = "."

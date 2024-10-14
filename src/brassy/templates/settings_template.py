@@ -21,3 +21,4 @@ class SettingsTemplate(BaseModel):
 
     valid_fields: List[str] = ["title", "description", "files", "related-issue"]
     valid_changes: List[str] = ["deleted", "moved", "added", "modified"]
+    enable_experimental_features: bool = False
