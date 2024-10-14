@@ -9,5 +9,14 @@ setup(
     entry_points={
         "console_scripts": ["brassy=brassy.brassy:run_from_CLI"],
     },
-    install_requires=["argparse", "rich"],
+    install_requires=[
+        "argparse",
+        "rich",
+        "pygit2",
+        "rich-argparse",
+        "pyyaml",
+        "platformdirs",
+        "pydantic",
+        "dateparser",
+    ],
 )
