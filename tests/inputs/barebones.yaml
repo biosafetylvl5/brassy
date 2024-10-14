@@ -1,0 +1,6 @@
+bug fix:
+- title: Test bug fix.
+  description: 'This fixes all computer bugs ever written.'
+  files:
+    moved:
+    - linux/src

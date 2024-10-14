@@ -2,6 +2,8 @@ import pathlib
 from typing import List, Optional, Dict
 from datetime import date as Date
 
+import dateparser
+
 from pydantic import (
     BaseModel,
     HttpUrl,
@@ -10,6 +12,7 @@ from pydantic import (
     RootModel,
     Field,
     field_validator,
+    validator,
 )
 
 
@@ -45,12 +48,31 @@ class DateRange(BaseModel):
     start: Optional[Date]
     finish: Optional[Date]
 
+    @validator("start", "finish", pre=True, always=True)
+    def parse_date(cls, value):
+        if value is None or isinstance(value, Date):
+            return value
+        if isinstance(value, str):
+            value = value.strip()
+            if not value or value.lower() in ["never", "null"]:
+                return None
+            try:
+                parsed = dateparser.parse(value)
+                if parsed is None:
+                    raise ValueError(f"Unable to parse date string: {value}")
+                return parsed.date()
+            except Exception as e:
+                raise ValueError(f"Invalid date format: {value}") from e
+        raise ValueError(f"Invalid type for date field: {value}")
+
 
 class ChangeItem(BaseModel):
     title: str
     description: str
     files: Files
-    related_issue: Optional[RelatedIssue] = Field(alias="related-issue")
+    related_issue: Optional[RelatedIssue] = Field(
+        alias="related-issue", exclude_unset=True, default=None
+    )
     date: Optional[DateRange] = None
 
 
