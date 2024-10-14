@@ -20,6 +20,7 @@ rich-argparse = "*"
 pyyaml = "*"
 platformdirs = "*"
 pydantic = "*"
+dateparser = "*"
 
 # Doc group
 sphinx = { version = "*", optional = true }

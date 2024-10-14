@@ -1,0 +1,7 @@
+pygit2 = "*"
+rich = "*"
+rich-argparse = "*"
+pyyaml = "*"
+platformdirs = "*"
+pydantic = "*"
+dateparser = "*"

@@ -10,5 +10,5 @@ enhancement:
     modified:
     - src/brassy/templates/release_yaml_template.py
   date:
-    start: today
-    finish: today
+    start: 10-14-2024
+    finish: 10-14-2024
