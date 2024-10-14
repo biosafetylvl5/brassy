@@ -1,4 +1,4 @@
-name: Run Pytest
+name: Install
 
 on:
   push:
@@ -25,3 +25,6 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install -e .
+
+      - name: Test run
+        run: brassy -h
