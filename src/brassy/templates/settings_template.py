@@ -43,16 +43,19 @@ release-template:
 DefaultTemplate = ReleaseTemplate(
     **{
         "release-template": [
-            {"header": ["{prefix_file}"]},
+            {"header": ["{prefix_file}", ""]},
             {
                 "title": [
+                    "",
                     "Version {release_version} ({release_date})",
                     "**************************",
+                    "",
                 ]
             },
             {"summary": [" * *{change_type}*: {title}"]},
             {
                 "entry": [
+                    "",
                     "{change_type}",
                     "===========",
                     "",
@@ -66,7 +69,7 @@ DefaultTemplate = ReleaseTemplate(
                     "     {file_change}: {file}",
                 ]
             },
-            {"footer": ["{suffix_file}"]},
+            {"footer": ["", "{suffix_file}"]},
         ]
     }
 )
