@@ -4,7 +4,7 @@ import brassy
 from brassy.brassy import Settings
 
 
-def add_header_footer(content, rich_open, header_file=None, footer_file=None):
+def get_header_footer(rich_open, header_file=None, footer_file=None):
     """
     Adds a header and/or footer to the given content.
 
@@ -19,14 +19,12 @@ def add_header_footer(content, rich_open, header_file=None, footer_file=None):
     """
 
     def getFile(file):
+        if not file:
+            return None
         with rich_open(file, "r", description=f"Reading {file}") as file:
             return file.read()
 
-    if header_file:
-        content = getFile(header_file) + "\n" + content
-    if footer_file:
-        content = content + "\n" + getFile(footer_file)
-    return content
+    return getFile(header_file), getFile(footer_file)
 
 
 def find_duplicate_titles(data):
@@ -56,7 +54,79 @@ def format_files_changed_entry(detailed, entry):
     return files_changed
 
 
-def format_release_notes(data, version, release_date=None):
+def generate_file_change_section_list_of_strings(
+    entry, line, category, title, description
+):
+    lines = []
+    for change_type in entry["files"]:
+        if "{file}" in line:
+            for file in filter(lambda x: not x == "", entry["files"][change_type]):
+                lines.append(
+                    line.format(
+                        change_type=category.capitalize(),
+                        title=title,
+                        description=description,
+                        file_change=change_type,
+                        file=file,
+                    )
+                )
+        else:
+            lines.append(
+                line.format(
+                    change_type=category.capitalize(),
+                    title=title,
+                    description=description,
+                    file_change=change_type,
+                )
+            )
+    return lines
+
+
+def generate_section_string(
+    section_lines, changelog_entries, release_date, version, footer, header
+):
+    lines = []
+    entry_keywords = [
+        "{" + k + "}"
+        for k in ["title", "description", "file_change", "file", "change_type"]
+    ]
+    if any([keyword in line for keyword in entry_keywords for line in section_lines]):
+        for category, entries in changelog_entries.items():
+            for entry in entries:
+                for line in section_lines:
+                    title = entry["title"].capitalize() or Settings.default_title
+                    description = (
+                        entry["description"].capitalize()
+                        or Settings.default_description
+                    )
+                    if "{file_change}" in line:
+                        lines.extend(
+                            generate_file_change_section_list_of_strings(
+                                entry, line, category, title, description
+                            )
+                        )
+                    else:
+                        lines.append(
+                            line.format(
+                                change_type=category.capitalize(),
+                                title=title,
+                                description=description,
+                            ),
+                        )
+    else:
+        for line in section_lines:
+            lines.append(line)
+    for i, line in enumerate(lines):
+        lines[i] = line.format(
+            prefix_file=header,
+            suffix_file=footer,
+            release_version=version,
+            release_date=release_date,
+        )
+    return "\n".join(lines)
+
+
+def format_release_notes(data, version, release_date=None, header=None, footer=None):
     """
     Format the parsed YAML data into release notes in .rst format.
 
@@ -77,37 +147,21 @@ def format_release_notes(data, version, release_date=None):
     if release_date is None:
         release_date = datetime.now().strftime("%Y-%m-%d")
 
-    header = f"Version {version} ({release_date})\n"
-    header = header + ("*" * (len(header) - 1)) + ("\n" * 2)
-    summary = ""
-    detailed = ""
+    header = header or ""
+    footer = footer or ""
 
     release_template = Settings.templates.release_template
+    formatted_string = ""
     for section in release_template:
         for section_name, lines in section.items():
-            for line in lines:
-                print(section_name, line)
-
-    for category, entries in data.items():
-        detailed += f"{category.capitalize()}\n" + "=" * len(category) + "\n\n"
-        for entry in entries:
-            title = entry["title"]
-            description = entry["description"]
-            if title == "":
-                title = Settings.default_title
-            if description == "":
-                description = Settings.default_description
-
-            summary += f" * *{category.capitalize()}*: {title}\n"
-
-            detailed += f"{title}\n" + "-" * len(title) + "\n\n"
-            detailed += f"{description}\n\n"
-
-            if "files" in entry:
-                detailed += format_files_changed_entry(detailed, entry)
-            detailed += "\n"
-
-    return header + summary + "\n" + detailed[:-1]
+            formatted_string = (
+                formatted_string
+                + generate_section_string(
+                    lines, data, release_date, version, footer, header
+                )
+                + "\n"
+            )
+    return formatted_string.strip()
 
 
 def build_release_notes(
@@ -149,8 +203,10 @@ def build_release_notes(
     except (ValueError, TypeError) as e:
         console.print(f"[red]{e}")
         exit(1)
-    content = format_release_notes(data, version=version)
-    content = add_header_footer(
-        content, rich_open, header_file=header_file, footer_file=footer_file
+    header, footer = get_header_footer(
+        rich_open, header_file=header_file, footer_file=footer_file
+    )
+    content = format_release_notes(
+        data, version=version, release_date=release_date, header=header, footer=footer
     )
     return content
