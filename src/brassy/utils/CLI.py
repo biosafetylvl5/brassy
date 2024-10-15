@@ -219,6 +219,9 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
             exit(1)
         else:
             console.print(f"[yellow]Invalid file or directory: [bold]{e}[/]")
+            console.print(
+                f"[yellow]Returning 0 because fail_on_empty_dir is [bold]False[/]"
+            )
             exit(0)
     except FileNotFoundError as e:
         console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
