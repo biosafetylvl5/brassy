@@ -196,7 +196,7 @@ def get_yaml_files_from_input(input_files_or_folders):
                     if file.endswith(".yaml") or file.endswith(".yml"):
                         dir_yaml_files.append(os.path.join(root, file))
             if len(dir_yaml_files) == 0:
-                raise ValueError(f"No YAML files found in directory {path}.")
+                raise FileExistsError(f"No YAML files found in directory {path}.")
             yaml_files.extend(dir_yaml_files)
         else:
             raise FileNotFoundError(path)
@@ -213,6 +213,16 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
                 for path in input_files_or_folders
             ]
         )
+    except FileExistsError as e:
+        if Settings.fail_on_empty_dir:
+            console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
+            exit(1)
+        else:
+            console.print(f"[yellow]Invalid file or directory: [bold]{e}[/]")
+            console.print(
+                f"[yellow]Returning 0 because fail_on_empty_dir is [bold]False[/]"
+            )
+            exit(0)
     except FileNotFoundError as e:
         console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
         exit(1)
