@@ -224,11 +224,11 @@ def override_dict_with_environmental_variables(input_dict):
     for key in input_dict.keys():
         if key.lower() in lower_env_vars:
             override = lower_env_vars[key.lower()]
-            print(
-                f"Overriding value {key} with environmental "
-                f"variable {override['env_var']} "
-                f"with value {override['value']}"
-            )
+            # print(
+            #    f"Overriding value {key} with environmental "
+            #    f"variable {override['env_var']} "
+            #    f"with value {override['value']}"
+            # )
             input_dict[key] = override["value"]
     return input_dict
 
@@ -255,4 +255,5 @@ def get_settings(app_name):
     file_settings = override_dict_with_environmental_variables(
         get_settings_from_config_files(app_name)
     )
-    return SettingsTemplate(**file_settings)
+    Settings = SettingsTemplate(**file_settings)
+    return Settings
