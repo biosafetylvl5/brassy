@@ -1,4 +1,5 @@
 import brassy
+from brassy.brassy import Settings
 
 
 def init():
@@ -17,10 +18,13 @@ def init():
     >>> init()
     Do you want to create a project config file? [y/N]: y
     """
-    conf_files = [
-        brassy.utils.settings_manager.get_site_config_file_path("brassy"),
-        brassy.utils.settings_manager.get_user_config_file_path("brassy"),
-    ]
+    if Settings.enable_experimental_features:
+        conf_files = [
+            brassy.utils.settings_manager.get_site_config_file_path("brassy"),
+            brassy.utils.settings_manager.get_user_config_file_path("brassy"),
+        ]
+    else:
+        conf_files = []
     for conf_file in conf_files:
         brassy.utils.settings_manager.create_config_file(conf_file)
     if brassy.utils.messages.boolean_prompt(
