@@ -1,6 +1,7 @@
 # BRASSY: Build Release Assembler for Sane Software with YAML
 
 ![GitHub Release](https://img.shields.io/github/v/release/biosafetylvl5/brassy)
+![PyPI - Version](https://img.shields.io/pypi/v/brassy)
 ![Pepy Total Downloads](https://img.shields.io/pepy/dt/brassy?style=flat)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/brassy)
 
