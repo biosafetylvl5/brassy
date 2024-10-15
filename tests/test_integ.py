@@ -32,6 +32,7 @@ def test_build_on_test_files(input_file):
                 f"./tests/inputs/{input_file}.yaml",
                 "--output-file",
                 output_file,
+                "--release-date" "2024-10-14",
             ]
         )
         assert [row for row in open(output_file)] == [
