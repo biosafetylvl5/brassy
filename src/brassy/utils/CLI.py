@@ -5,7 +5,7 @@ import argparse
 import os
 
 from rich_argparse import RichHelpFormatter
-import brassy.actions
+
 import brassy.actions.build_release_notes
 import brassy.actions.init
 import brassy.actions.prune_yaml
