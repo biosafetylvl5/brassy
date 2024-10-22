@@ -119,7 +119,10 @@ def get_parser():
         "-pr", "--prune", action="store_true", help="Prune provided files, do not build"
     )
     parser.add_argument(
-        "--init", action="store_true", help="Initialize brassy", default=False
+        "--init",
+        action="store_true",
+        help="Initialize brassy and generate config files",
+        default=False,
     )
     return parser
 

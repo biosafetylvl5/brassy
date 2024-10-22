@@ -15,7 +15,7 @@ Bug fix
 Fixed bubble blowing glitch
 -------------------------
 
-Resolved an issue where bubble shapes would not form correctly when using the bubble blowing wand.
+Resolved an issue where bubble shapes would not form correctly when using the Bubble Blowing Wand.
 
 
 ::
@@ -28,7 +28,7 @@ Enhancement
 Added krabby patty secret formula encryption
 -------------------------
 
-Implemented advanced encryption for the krabby patty secret formula to enhance security.
+Implemented advanced encryption for the Krabby Patty secret formula to enhance security.
 
 
 ::
@@ -42,7 +42,7 @@ Deprecation
 Deprecated old jellyfish net api
 -------------------------
 
-The old jellyfish net api is now deprecated in favor of the new electric jellyfish net api.
+The old Jellyfish Net API is now deprecated in favor of the new Electric Jellyfish Net API.
 
 
 ::
@@ -55,7 +55,7 @@ Removal
 Removed rock bottom map support
 -------------------------
 
-Dropped support for the rock bottom map due to low user engagement and maintenance overhead.
+Dropped support for the Rock Bottom map due to low user engagement and maintenance overhead.
 
 
 ::
@@ -69,7 +69,7 @@ Performance
 Optimized patricks rock loading time
 -------------------------
 
-Improved the loading time for patrick's rock environment by 60% through asset optimization.
+Improved the loading time for Patrick's Rock environment by 60% through asset optimization.
 
 
 ::
@@ -96,7 +96,7 @@ Continuous integration
 Implemented jellyfish fields ci/cd pipeline
 -------------------------
 
-Set up ci/cd pipeline using jenkins for automated testing and deployment of the jellyfish fields module.
+Set up CI/CD pipeline using Jenkins for automated testing and deployment of the Jellyfish Fields module.
 
 
 ::

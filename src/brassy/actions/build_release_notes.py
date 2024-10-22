@@ -2,6 +2,7 @@ from datetime import datetime
 
 import brassy
 from brassy.brassy import Settings
+from brassy.utils.messages import RichConsole as console
 
 
 def get_header_footer(rich_open, header_file=None, footer_file=None):
@@ -93,12 +94,20 @@ def generate_section_string(
     if any([keyword in line for keyword in entry_keywords for line in section_lines]):
         for category, entries in changelog_entries.items():
             for entry in entries:
+                if not entry["title"] and not entry["description"]:
+                    continue
+                if entry["title"]:
+                    title = entry["title"]
+                    title = title.capitalize()
+                else:
+                    title = Settings.default_title
+                    # print(f"Warning: no title for entry {entry}")
+                if entry["description"]:
+                    description = entry["description"]
+                else:
+                    # print("Warning: no description")
+                    description = Settings.default_description
                 for line in section_lines:
-                    title = entry["title"].capitalize() or Settings.default_title
-                    description = (
-                        entry["description"].capitalize()
-                        or Settings.default_description
-                    )
                     if "{file_change}" in line:
                         lines.extend(
                             generate_file_change_section_list_of_strings(
@@ -161,6 +170,16 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
                 )
                 + "\n"
             )
+    if Settings.default_title in formatted_string:
+        console.print(
+            "Warning: Build completed, but at least one title is missing.",
+            style="yellow",
+        )
+    if Settings.default_description in formatted_string:
+        console.print(
+            "Warning: Build completed, but at least one description is missing.",
+            style="yellow",
+        )
     return formatted_string.strip()
 
 
