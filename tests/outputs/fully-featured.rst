@@ -15,7 +15,7 @@ Bug fix
 Fixed aang's avatar state ⓐ
 -------------------------
 
-Resolved an issue where aang could not exit the avatar state after consuming cactus juice. this caused unintended behavior and prevented progression in the story.
+Resolved an issue where Aang could not exit the Avatar State after consuming cactus juice. This caused unintended behavior and prevented progression in the story.
 
 
 ::
@@ -55,7 +55,7 @@ Removal
 Removed unagi sea serpent from kyoshi island
 -------------------------
 
-The unagi has been removed due to community feedback regarding difficulty levels.
+The Unagi has been removed due to community feedback regarding difficulty levels.
 
 
 ::
@@ -69,7 +69,7 @@ Performance
 Optimized fire nation ship rendering
 -------------------------
 
-Improved rendering performance for fire nation ships by 50% by reducing polygon count and optimizing textures.
+Improved rendering performance for Fire Nation ships by 50% by reducing polygon count and optimizing textures.
 
 
 ::
@@ -95,7 +95,7 @@ Continuous integration
 Implemented nightly builds for the fire nation branch
 -------------------------
 
-Set up nightly builds and tests for the fire nation development branch to ensure stability.
+Set up nightly builds and tests for the Fire Nation development branch to ensure stability.
 
 
 ::
