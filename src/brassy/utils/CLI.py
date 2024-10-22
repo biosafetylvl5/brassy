@@ -116,7 +116,10 @@ def get_parser():
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
     parser.add_argument(
-        "-pr", "--prune", action="store_true", help="Prune provided files, do not build"
+        "-pr",
+        "--prune",
+        action="store_true",
+        help="Prune provided yaml file(s) of empty sections",
     )
     parser.add_argument(
         "--init",
