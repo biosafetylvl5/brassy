@@ -1,17 +1,17 @@
-Version [UNKNOWN] (2024-09-17)
-******************************
+Version [UNKNOWN] (3000-30-30)
+**************************
 
  * *Bug fix*: Fixed a bug
 
 Bug fix
-=======
+===========
 
 Fixed a bug
------------
+-------------------------
 
 This bug was really annoying
 
 ::
 
-    added: new-test.py
-    deleted: old/test.py
+     added: new-test.py
+     deleted: old/test.py

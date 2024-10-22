@@ -5,7 +5,7 @@ CLI Arguments
 -------------
 
 .. argparse::
-    :filename: ../src/brassy/brassy.py
+    :filename: ../src/brassy/utils/CLI.py
     :func: get_parser
 
 Code Docstrings

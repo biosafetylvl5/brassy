@@ -22,3 +22,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+`GitHub Repository <https://github.com/biosafetylvl5/brassy>`_
