@@ -71,13 +71,23 @@ class DateRange(BaseModel):
 
 
 class ChangeItem(BaseModel):
-    title: str
-    description: str
+    title: Optional[str] = Field(min_length=1, strip_whitespace=True)
+    description: Optional[str] = Field(min_length=1, strip_whitespace=True)
     files: Files
     related_issue: Optional[Union[RelatedIssue, RelatedInternalIssue]] = Field(
         alias="related-issue", exclude_unset=True, default=None
     )
     date: Optional[DateRange] = None
+
+    @model_validator(mode="before")
+    def empty_str_to_none(values):
+        for value in ["title", "description"]:
+            if values[value] == "":
+                values[value] = None
+        if not values["title"] and not values["description"]:
+            if not values == ReleaseNote():
+                raise ValueError("Missing title and description")
+        return values
 
 
 class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):
