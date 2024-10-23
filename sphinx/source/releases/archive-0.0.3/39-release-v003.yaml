@@ -1,0 +1,78 @@
+bug fix:
+- title: 'Allow entries to have no field and no title'
+  description: |
+    Not allowing fields to have no title was causing blank sections to
+    break builds. Check removed for now.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+enhancement:
+- title: 'Allow users to disable pipe on description field'
+  description: |
+    A pipe is added by default in this release. This change allows users to revert
+    to the old behaviour by changing their local settings.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+documentation:
+- title: 'Documentation updated for new version'
+  description: |
+    Documentation written for new versions! :)
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - ''
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+continuous integration:
+- title: 'Added new templating integration test'
+  description: |
+    Added a new test that creates a template and then tried to build it.
+  files:
+    deleted:
+    - ''
+    moved:
+    - ''
+    added:
+    - ''
+    modified:
+    - 'tests/test_integ.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null

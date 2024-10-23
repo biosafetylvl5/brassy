@@ -1,0 +1,7 @@
+enhancement:
+  - title: Implement default path
+    description: Add experimental feature where a path can be specified in the settings
+      as the "default" path for brassy actions.
+    files:
+      modified:
+      - brassy.py

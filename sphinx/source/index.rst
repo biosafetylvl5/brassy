@@ -12,7 +12,7 @@ Welcome to brassy's documentation!
 .. toctree::
    :maxdepth: 2
 
-   getting-started
+   using-brassy
    api
    ./releases/index
 

@@ -1,0 +1,8 @@
+bug fix:
+- title: Real issue
+  description: Questionably real description.
+  files:
+    modified:
+    - fake_file.py
+  related-issue:
+    number: 100000

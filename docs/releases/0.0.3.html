@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Version 0.0.3 (October 23, 2024) &#8212; brassy 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Version 0.0.2 (2024-08-09)" href="0.0.2.html" />
+    <link rel="prev" title="Release Notes" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="version-0-0-3-october-23-2024">
+<h1>Version 0.0.3 (October 23, 2024)<a class="headerlink" href="#version-0-0-3-october-23-2024" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>Enhancement</em>: Implement default path</p></li>
+<li><p><em>Enhancement</em>: Add internal option to related issue</p></li>
+<li><p><em>Enhancement</em>: Add –init that writes out config files</p></li>
+<li><p><em>Enhancement</em>: Put title at top of template</p></li>
+<li><p><em>Enhancement</em>: Allow users to disable pipe on description field</p></li>
+<li><p><em>Enhancement</em>: Add start and finish dates for changes</p></li>
+<li><p><em>Bug fix</em>: Print pretty error on blank yaml.</p></li>
+<li><p><em>Bug fix</em>: Builds now have sections with either a missing title or description</p></li>
+<li><p><em>Bug fix</em>: Allow entries to have no field and no title</p></li>
+<li><p><em>Bug fix</em>: Fix bug with –write-template-error</p></li>
+<li><p><em>Bug fix</em>: Make optional dates optional</p></li>
+<li><p><em>Bug fix</em>: Fix empty “–write-yaml-template bug</p></li>
+<li><p><em>Documentation</em>: Documentation updated for new version</p></li>
+<li><p><em>Documentation</em>: Fix docs rendering of examples.</p></li>
+<li><p><em>Continuous integration</em>: Added new templating integration test</p></li>
+<li><p><em>Continuous integration</em>: Add integration tests</p></li>
+</ul>
+</div></blockquote>
+<section id="enhancement">
+<h2>Enhancement<a class="headerlink" href="#enhancement" title="Link to this heading">¶</a></h2>
+<section id="implement-default-path">
+<h3>Implement default path<a class="headerlink" href="#implement-default-path" title="Link to this heading">¶</a></h3>
+<p>Add experimental feature where a path can be specified in the settings as the “default” path for brassy actions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id1">
+<h2>Enhancement<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<section id="add-internal-option-to-related-issue">
+<h3>Add internal option to related issue<a class="headerlink" href="#add-internal-option-to-related-issue" title="Link to this heading">¶</a></h3>
+<p>Some organizations use internal repos that cannot be accessed by CI. This change adds an “internal” field for the
+related issue so that users can add strings directly rather than use the URL+issue number combo previously provided. The
+strings are rendered directly, but must fit a “repo#number - description” pattern. The field is named “internal” to
+suggest to users that when possible the URL option <em>should</em> be used to access future functionality.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">release_yaml_template</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h2>Enhancement<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="add-init-that-writes-out-config-files">
+<h3>Add –init that writes out config files<a class="headerlink" href="#add-init-that-writes-out-config-files" title="Link to this heading">¶</a></h3>
+<p>Added new CLI option that generates project <code class="docutils literal notranslate"><span class="pre">.brassy</span></code> config files</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">added</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id3">
+<h2>Enhancement<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<section id="put-title-at-top-of-template">
+<h3>Put title at top of template<a class="headerlink" href="#put-title-at-top-of-template" title="Link to this heading">¶</a></h3>
+<p>Title is now at top of template because users were mixing up description and title. This change is backwards compatible,
+and no updates to yaml files are needed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>Enhancement<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<section id="allow-users-to-disable-pipe-on-description-field">
+<h3>Allow users to disable pipe on description field<a class="headerlink" href="#allow-users-to-disable-pipe-on-description-field" title="Link to this heading">¶</a></h3>
+<p>A pipe is added by default in this release. This change allows users to revert
+to the old behaviour by changing their local settings.</p>
+</section>
+</section>
+<section id="id5">
+<h2>Enhancement<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
+<section id="add-start-and-finish-dates-for-changes">
+<h3>Add start and finish dates for changes<a class="headerlink" href="#add-start-and-finish-dates-for-changes" title="Link to this heading">¶</a></h3>
+<p>Per user request, start and finish date fields have been added to the yaml template. They are NOT rendered yet.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="bug-fix">
+<h2>Bug fix<a class="headerlink" href="#bug-fix" title="Link to this heading">¶</a></h2>
+<section id="print-pretty-error-on-blank-yaml">
+<h3>Print pretty error on blank yaml.<a class="headerlink" href="#print-pretty-error-on-blank-yaml" title="Link to this heading">¶</a></h3>
+<p>Now prints “No valid YAML content in file. Please populate example.yaml” when run on blank yaml file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h2>Bug fix<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<section id="builds-now-have-sections-with-either-a-missing-title-or-description">
+<h3>Builds now have sections with either a missing title or description<a class="headerlink" href="#builds-now-have-sections-with-either-a-missing-title-or-description" title="Link to this heading">¶</a></h3>
+<p>Previously, if yaml files only had title OR description populated, they would silently not get built into release notes.
+Now they are incorporated into release notes with a warning.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">build_release_notes</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">release_yaml_template</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">CLI</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>Bug fix<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<section id="allow-entries-to-have-no-field-and-no-title">
+<h3>Allow entries to have no field and no title<a class="headerlink" href="#allow-entries-to-have-no-field-and-no-title" title="Link to this heading">¶</a></h3>
+<p>Not allowing fields to have no title was causing blank sections to
+break builds. Check removed for now.</p>
+</section>
+</section>
+<section id="id8">
+<h2>Bug fix<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<section id="fix-bug-with-write-template-error">
+<h3>Fix bug with –write-template-error<a class="headerlink" href="#fix-bug-with-write-template-error" title="Link to this heading">¶</a></h3>
+<p>Fixed issue where –write-template-error wouldn’t run without argument</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id9">
+<h2>Bug fix<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<section id="make-optional-dates-optional">
+<h3>Make optional dates optional<a class="headerlink" href="#make-optional-dates-optional" title="Link to this heading">¶</a></h3>
+<p>Dates for changes are optional. This fix allows users to leave the entry off, rather than requiring a null field for
+building.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">release_yaml_template</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>Bug fix<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<section id="fix-empty-write-yaml-template-bug">
+<h3>Fix empty “–write-yaml-template bug<a class="headerlink" href="#fix-empty-write-yaml-template-bug" title="Link to this heading">¶</a></h3>
+<p>This was previously hotfixed, merging into main codebase now.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">brassy</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<section id="documentation-updated-for-new-version">
+<h3>Documentation updated for new version<a class="headerlink" href="#documentation-updated-for-new-version" title="Link to this heading">¶</a></h3>
+<p>Documentation written for new versions! :)</p>
+</section>
+</section>
+<section id="id11">
+<h2>Documentation<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<section id="fix-docs-rendering-of-examples">
+<h3>Fix docs rendering of examples.<a class="headerlink" href="#fix-docs-rendering-of-examples" title="Link to this heading">¶</a></h3>
+<p>Fix docs rendering of yaml examples by updating old yaml files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">genindex</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">getting</span><span class="o">-</span><span class="n">started</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">objects</span><span class="o">.</span><span class="n">inv</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">searchindex</span><span class="o">.</span><span class="n">js</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">pyproject</span><span class="o">.</span><span class="n">toml</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">basic</span><span class="o">-</span><span class="n">usage</span><span class="o">/</span><span class="n">new</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">note</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">basic</span><span class="o">-</span><span class="n">usage</span><span class="o">/</span><span class="n">new</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">note</span><span class="o">-</span><span class="n">date</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">basic</span><span class="o">-</span><span class="n">usage</span><span class="o">/</span><span class="n">new</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">note</span><span class="o">-</span><span class="n">header</span><span class="o">-</span><span class="n">footer</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">basic</span><span class="o">-</span><span class="n">usage</span><span class="o">/</span><span class="n">new</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">note</span><span class="o">-</span><span class="n">v1</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">basic</span><span class="o">-</span><span class="n">usage</span><span class="o">/</span><span class="n">release</span><span class="o">-</span><span class="n">note</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">py</span><span class="o">-</span><span class="n">modindex</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="continuous-integration">
+<h2>Continuous integration<a class="headerlink" href="#continuous-integration" title="Link to this heading">¶</a></h2>
+<section id="added-new-templating-integration-test">
+<h3>Added new templating integration test<a class="headerlink" href="#added-new-templating-integration-test" title="Link to this heading">¶</a></h3>
+<p>Added a new test that creates a template and then tried to build it.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_integ</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id12">
+<h2>Continuous integration<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<section id="add-integration-tests">
+<h3>Add integration tests<a class="headerlink" href="#add-integration-tests" title="Link to this heading">¶</a></h3>
+<p>Added basic integration tests. More work needed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">added</span><span class="p">:</span> <span class="n">pytest</span><span class="o">.</span><span class="n">ini</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">barebones</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">fully</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">mostly</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">to</span><span class="o">-</span><span class="n">prune</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">barebones</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">fully</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">mostly</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">pruned</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_integ</span><span class="o">.</span><span class="n">py</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">test</span><span class="o">/</span><span class="mi">575</span><span class="o">-</span><span class="n">cli</span><span class="o">-</span><span class="n">class</span><span class="o">-</span><span class="n">factory</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">test</span><span class="o">/</span><span class="n">burgers</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">test</span><span class="o">/</span><span class="n">burgers</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">test</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">py</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">test</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">deleted</span><span class="p">:</span> <span class="n">test</span><span class="o">/</span><span class="n">test2</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">brassy</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Release Notes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#version-0-0-3">Version 0.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#version-0-0-2">Version 0.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#version-0-0-1">Version 0.0.1</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Release Notes</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Release Notes</a></li>
+      <li>Next: <a href="0.0.2.html" title="next chapter">Version 0.0.2 (2024-08-09)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/releases/0.0.3.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,6 +1,6 @@
-enhancement:
-- title: ''
-  description: ''
+bug fix:
+- title: 'Real issue'
+  description: 'Questionably real description.'
   files:
     deleted:
     - ''
@@ -9,9 +9,9 @@ enhancement:
     added:
     - ''
     modified:
-    - ''
+    - 'fake_file.py'
   related-issue:
-    number: 0
+    number: 100000
     repo_url: ''
   date:
     start: null

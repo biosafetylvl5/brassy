@@ -1,5 +1,5 @@
 bug fix:
-- description: 'Fixed issue where --write-template-error wouldnt run without argument'
+- description: "Fixed issue where --write-template-error wouldn't run without argument"
   files:
     modified:
       - 'src/brassy/brassy.py'

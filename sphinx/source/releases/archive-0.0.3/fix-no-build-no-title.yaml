@@ -2,9 +2,7 @@ bug fix:
 - title: Builds now have sections with either a missing title or description
   description: 'Previously, if yaml files only had title OR description populated,
     they would silently not get built into release notes. Now they are incorporated
-    into release notes with a warning.
-
-    '
+    into release notes with a warning.'
   files:
     modified:
     - README.md
