@@ -17,6 +17,6 @@ import brassy.utils.settings_manager as settings_manager
 Settings = settings_manager.get_settings("brassy")
 
 if __name__ == "__main__":
-    import brassy.utils.CLI
+    from brassy.utils.CLI import run_from_CLI
 
-    brassy.utils.CLI.run_from_CLI()
+    run_from_CLI()
