@@ -1,5 +1,5 @@
-Getting Started
-===============
+Using Brassy
+============
 
 Example usage
 -------------
@@ -7,52 +7,73 @@ Example usage
 Create YAML template
 ^^^^^^^^^^^^^^^^^^^^
 
-Brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
-branch name. You can also specify a name manually, and ``.yaml`` will be appended if you do not end your file name with
+Brassy can create blank yaml templates for release notes.
+By default, brassy will name the file after your current git
+branch name. You can also specify a name manually, and
+``.yaml`` will be appended if you do not end your file name with
 ``.yml`` or ``.yaml``. You can do this with the following command:
 
 .. code-block:: bash
 
     brassy --write-yaml-template release-note.yaml
+    # or
+    brassy -t release-note.yaml
+    # or leave blank to name after current git branch
+    brassy -t
 
 By default, the yaml template will be populated with the following fields:
 
-.. runcmd:: python3 -c "from brassy import brassy; print('\n'.join(brassy.default_categories))"
+.. runcmd:: python3 -c "from brassy.templates.release_yaml_template import categories; print('\n'.join(categories))"
+
+You can configure this in your ``.brassy`` file. See also Settings.
 
 For example, the section for ``bug-fix`` will look like this:
 
 .. code-block:: yaml
 
-    bug-fix:
-      - title: ""
-        description: ""
+    bug fix:
+    - title: ''
+      description: |
+      files:
+        deleted:
+        - ''
+        moved:
+        - ''
+        added:
+        - ''
+        modified:
+        - ''
+      related-issue:
+        number: null
+        repo_url: ''
+      date:
+        start: null
+        finish: null
 
-You can do anything that is valid yaml in these fields. For example:
+For example:
 
 .. code-block:: yaml
 
-    bug-fix:
-      - title: ""
-        description: |
+    bug fix:
+    - title: 'Fix elephant related crash'
+      description: |
             - Fixed a bug where the program would crash when the user thought of elephants.
-            - Fixed a bug where the program would ``segfault``
-              when the user looked at the button.
-
-Adding changed files
-^^^^^^^^^^^^^^^^^^^^
-
-To add what files have been changed as part of your edit you must edit the
-``files`` section. For example:
-
-.. code-block:: yaml
-
-    enhancement:
-        - description: |
-            --output-to-console now writes generated release notes to the console.
-            This is disabled by default.
-        files:
-            modified:
-            - 'src/brassy/brassy.py'
+      description: |
+      files:
+        deleted:
+        - 'die-on-thoughts.py'
+        moved:
+        - ''
+        added:
+        - ''
+        modified:
+        - 'main.py'
+      related-issue:
+        number: 1938
+        repo_url: 'http://github.com/fake/repo'
+      date:
+        start: "10-10-1999"
+        finish: "02-21-2026"
 
 Generating the changed files via ``git``
 """"""""""""""""""""""""""""""""""""""""
@@ -65,14 +86,18 @@ but it accepts a path as an argument.
 
 For example, the output looks like this:
 
-::
+.. code-block:: yaml
 
     brassy --get-changed-files
 
-        added: test
-        modified: test2
-        deleted: test3
-        moved: test4
+        added:
+        - test.py
+        modified:
+        - test2.js
+        deleted:
+        - test3.cpp
+        moved:
+        - test4.fortran
 
 It prints with indents for easy copy-and-pasting into your yaml files.
 
@@ -84,6 +109,7 @@ you can generate release notes with the following command:
 
 .. code-block:: bash
 
+    brassy --output-file new-release-note.rst release-note.yaml
     brassy -o new-release-note.rst release-note.yaml
 
 For example, if release-note.yaml contains the following:
@@ -99,7 +125,9 @@ The output will be:
 Specifying Version
 ^^^^^^^^^^^^^^^^^^
 
-You can specify the version of the release notes by using the ``-r`` or ``--release-version`` flag.
+You can specify the version of the release notes by using the
+``--release-version`` or ``-r`` flag.
+
 For example, using the previous yaml file:
 
 .. code-block:: bash
@@ -114,7 +142,10 @@ Which would output:
 Specifying Date
 ^^^^^^^^^^^^^^^
 
-You can specify the date of the release notes by using the ``-d`` or ``--release-date`` flag.
+By default, brassy uses todays date in ``YYYY-MM-DD`` format.
+
+You can specify the date of the release notes in any format
+with the ``-d`` or ``--release-date`` flag.
 
 For example, using the previous yaml file:
 
@@ -150,15 +181,52 @@ Would output:
 
 .. literalinclude :: ./examples/basic-usage/new-release-note-header-footer
 
+Change YAML directory
+---------------------
+
+By default brassy works in your current working directory.
+
+You can specify a directory with ``--yaml-dir`` or ``-yd``.
+
+For example:
+
+.. code-block:: bash
+
+    brassy --yaml-dir ./docs/release-notes/v1.0.0 \
+           --write-template "updating-gpu-code"
+
+would write a template file ``updating-gpu-code.yaml``
+to ``./docs/release-notes/v1.0.0``.
+
+Prune YAML file
+---------------
+
+Brassy can "prune" yaml files by removing blank sections. Sections are considered blank
+if all of their items are blank OR are empty lists.
+
+For example:
+
+.. literalinclude :: ./examples/basic-usage/to-prune.yaml
+
+would become
+
+.. literalinclude :: ./examples/basic-usage/pruned.yaml
+
+after pruning.
+
+To prune a file, pass it to brassy with ``--prune``.
+Eg. ``brassy --prune fake_file.yaml``
+
 Controlling CLI Output
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
-You can turn off fancy formatting (colors, bold, etc.) by using the ``--no-color``/``-nc`` flag.
+You can turn off fancy formatting (colors, bold, etc.)
+by using the ``--no-color``/``-nc`` flag.
 
-You can also turn off ALL non-error outputs by using the ``--quiet``/``-q`` flag.
+You can also turn off all non-error outputs by using the ``--quiet`` or ``-q`` flag.
 
 Help!
-^^^^^
+-----
 
 When in doubt, you can always run the help command to see what options are available:
 

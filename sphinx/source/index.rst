@@ -12,7 +12,7 @@ Welcome to brassy's documentation!
 .. toctree::
    :maxdepth: 2
 
-   getting-started
+   using-brassy
    api
    ./releases/index
 
@@ -22,3 +22,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+`GitHub Repository <https://github.com/biosafetylvl5/brassy>`_

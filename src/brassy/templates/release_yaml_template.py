@@ -84,9 +84,9 @@ class ChangeItem(BaseModel):
         for value in ["title", "description"]:
             if values[value] == "":
                 values[value] = None
-        if not values["title"] and not values["description"]:
-            if not values == ReleaseNote():
-                raise ValueError("Missing title and description")
+        # if not values["title"] and not values["description"]:
+        #    if not values == ReleaseNote():
+        #        raise ValueError("Missing title and description")
         return values
 
 
@@ -98,13 +98,9 @@ class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):
     pass
 
 
+from brassy.utils.settings_manager import get_settings
+
+Settings = get_settings("brassy")
+
 # List of categories stored in a variable
-categories = [
-    "bug_fix",
-    "enhancement",
-    "deprecation",
-    "removal",
-    "performance",
-    "documentation",
-    "continuous_integration",
-]
+categories = Settings.change_categories

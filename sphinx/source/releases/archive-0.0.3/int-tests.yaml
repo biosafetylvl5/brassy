@@ -1,0 +1,37 @@
+bug fix:
+- title: Make optional dates optional
+  description: Dates for changes are optional. This fix allows users to leave the
+    entry off, rather than requiring a null field for building.
+  files:
+    modified:
+    - src/brassy/templates/release_yaml_template.py
+  date:
+    start: today
+    finish: today
+continuous integration:
+- title: Add integration tests
+  description: Added basic integration tests. More work needed.
+  files:
+    added:
+    - pytest.ini
+    - tests/inputs/barebones.yaml
+    - tests/inputs/fully-featured.yaml
+    - tests/inputs/mostly-featured.yaml
+    - tests/inputs/to-prune.yaml
+    - tests/outputs/barebones.rst
+    - tests/outputs/fully-featured.rst
+    - tests/outputs/mostly-featured.rst
+    - tests/outputs/pruned.yaml
+    - tests/test_integ.py
+    deleted:
+    - test/575-cli-class-factory.yaml
+    - test/burgers.rst
+    - test/burgers.yaml
+    - test/test.py
+    - test/test.rst
+    - test/test2.yaml
+  related-issue:
+    number: 18
+  date:
+    start: last month
+    finish: today

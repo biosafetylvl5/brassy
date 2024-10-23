@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+# This is JUST for local development
+
 setup(
     name="brassy",
     version="0.0.0",

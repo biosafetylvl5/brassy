@@ -1,0 +1,6 @@
+enhancement:
+- title: Add --init that writes out config files
+  description: Added new CLI option that generates project ``.brassy`` config files
+  files:
+    added:
+    - src/brassy/actions/init.py

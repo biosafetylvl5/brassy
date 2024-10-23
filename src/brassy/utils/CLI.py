@@ -5,7 +5,7 @@ import argparse
 import os
 
 from rich_argparse import RichHelpFormatter
-import brassy.actions
+
 import brassy.actions.build_release_notes
 import brassy.actions.init
 import brassy.actions.prune_yaml
@@ -116,12 +116,22 @@ def get_parser():
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
     parser.add_argument(
-        "-pr", "--prune", action="store_true", help="Prune provided files, do not build"
+        "-pr",
+        "--prune",
+        action="store_true",
+        help="Prune provided yaml file(s) of empty sections",
     )
     parser.add_argument(
         "--init",
         action="store_true",
         help="Initialize brassy and generate config files",
+        default=False,
+    )
+    parser.add_argument(
+        "--version",
+        action="store_true",
+        dest="print_version",
+        help="Print program version and exit",
         default=False,
     )
     return parser
@@ -140,6 +150,11 @@ def parse_arguments():
     return parser.parse_args(), parser
 
 
+def print_version_and_exit():
+    messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
+    exit(0)
+
+
 def exit_on_invalid_arguments(args, parser, console):
     """
     Validate the argparse arguments.
@@ -156,7 +171,12 @@ def exit_on_invalid_arguments(args, parser, console):
     parser : argparse.ArgumentParser
         The ArgumentParser object used to parse the command-line arguments.
     """
-    if bool(args.input_files_or_folders) or "get_changed_files" in args or args.init:
+    if (
+        bool(args.input_files_or_folders)
+        or "get_changed_files" in args
+        or args.init
+        or args.version
+    ):
         return
 
     if "write_yaml_template" in args:
@@ -248,7 +268,9 @@ def run_from_CLI():
     rich_open = messages.open
 
     exit_on_invalid_arguments(args, parser, console)
-    if args.init:
+    if args.print_version:
+        print_version_and_exit()
+    elif args.init:
         brassy.actions.init.init()
         exit(0)
     elif args.prune:

@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath("../../brassy"))
 
 project = "brassy"
 author = "Gwyn Uttmark"
-release = "0.0.1a"
+release = "0.0.3"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -1,0 +1,15 @@
+bug fix:
+- title: Fix empty "--write-yaml-template bug
+  description: This was previously hotfixed, merging into main codebase now.
+  files:
+    modified:
+    - src/brassy/brassy.py
+enhancement:
+- title: Add start and finish dates for changes
+  description: Per user request, start and finish date fields have been added to the
+    yaml template. They are NOT rendered yet.
+  files:
+    modified:
+    - src/brassy/brassy.py
+  related-issue:
+    number: 6
