@@ -8,10 +8,7 @@ import pytest
 
 test_path = Path(os.path.dirname(os.path.realpath(__file__)))
 input_path = test_path / "inputs"
-output_path = test_path / "outputs"
-
-shutil.rmtree(output_path)
-os.mkdir(output_path)
+valid_outputs_path = test_path / "outputs"
 
 
 def run_cli_command_return_true_if_command_returns_zero(command):
@@ -33,7 +30,8 @@ def test_help(monkeypatch):
 )
 def test_build_on_test_files(input_file):
     with tempfile.TemporaryDirectory() as output_file_dir:
-        output_file = output_path / (input_file + ".rst")
+        output_file_dir = Path(output_file_dir)
+        output_file = output_file_dir / (input_file + ".rst")
         print(output_file)
         if not run_cli_command_return_true_if_command_returns_zero(
             [
@@ -47,14 +45,14 @@ def test_build_on_test_files(input_file):
         ):
             raise OSError("Brassy command failed")
         assert [row for row in open(output_file)] == [
-            row for row in open(output_path / f"{input_file}.rst")
+            row for row in open(valid_outputs_path / f"{input_file}.rst")
         ]
 
 
 def test_create_template_build_template():
     with tempfile.TemporaryDirectory() as output_file_dir:
-        output_file = str(Path(output_file_dir) / "template.yaml")
-        print(output_file)
+        output_file_dir = Path(output_file_dir)
+        output_file = str(output_file_dir / "template.yaml")
         if not run_cli_command_return_true_if_command_returns_zero(
             ["brassy", "-t", output_file]
         ):
@@ -67,12 +65,13 @@ def test_create_template_build_template():
 
 def test_pruning():
     with tempfile.TemporaryDirectory() as output_file_dir:
-        to_prune = output_path / "pruned.yaml"
+        output_file_dir = Path(output_file_dir)
+        to_prune = output_file_dir / "pruned.yaml"
         shutil.copyfile(input_path / f"to-prune.yaml", to_prune)
 
         run_cli_command_return_true_if_command_returns_zero(
             ["brassy", "--prune", to_prune]
         )
         assert [row for row in open(to_prune)] == [
-            row for row in open(output_path / "pruned.yaml")
+            row for row in open(valid_outputs_path / "pruned.yaml")
         ]
