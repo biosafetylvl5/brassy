@@ -130,6 +130,7 @@ def get_parser():
     parser.add_argument(
         "--version",
         action="store_true",
+        dest="print_version",
         help="Print program version and exit",
         default=False,
     )
@@ -170,7 +171,12 @@ def exit_on_invalid_arguments(args, parser, console):
     parser : argparse.ArgumentParser
         The ArgumentParser object used to parse the command-line arguments.
     """
-    if bool(args.input_files_or_folders) or "get_changed_files" in args or args.init:
+    if (
+        bool(args.input_files_or_folders)
+        or "get_changed_files" in args
+        or args.init
+        or args.version
+    ):
         return
 
     if "write_yaml_template" in args:
@@ -262,7 +268,7 @@ def run_from_CLI():
     rich_open = messages.open
 
     exit_on_invalid_arguments(args, parser, console)
-    if args.version:
+    if args.print_version:
         print_version_and_exit()
     elif args.init:
         brassy.actions.init.init()
