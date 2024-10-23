@@ -86,14 +86,18 @@ but it accepts a path as an argument.
 
 For example, the output looks like this:
 
-::
+.. code-block:: yaml
 
     brassy --get-changed-files
 
-        added: test
-        modified: test2
-        deleted: test3
-        moved: test4
+        added:
+        - test.py
+        modified:
+        - test2.js
+        deleted:
+        - test3.cpp
+        moved:
+        - test4.fortran
 
 It prints with indents for easy copy-and-pasting into your yaml files.
 
@@ -105,6 +109,7 @@ you can generate release notes with the following command:
 
 .. code-block:: bash
 
+    brassy --output-file new-release-note.rst release-note.yaml
     brassy -o new-release-note.rst release-note.yaml
 
 For example, if release-note.yaml contains the following:
@@ -120,7 +125,9 @@ The output will be:
 Specifying Version
 ^^^^^^^^^^^^^^^^^^
 
-You can specify the version of the release notes by using the ``-r`` or ``--release-version`` flag.
+You can specify the version of the release notes by using the
+``--release-version`` or ``-r`` flag.
+
 For example, using the previous yaml file:
 
 .. code-block:: bash
@@ -135,7 +142,8 @@ Which would output:
 Specifying Date
 ^^^^^^^^^^^^^^^
 
-You can specify the date of the release notes by using the ``-d`` or ``--release-date`` flag.
+You can specify the date of the release notes
+by using the ``-d`` or ``--release-date`` flag.
 
 For example, using the previous yaml file:
 
@@ -174,9 +182,10 @@ Would output:
 Controlling CLI Output
 ^^^^^^^^^^^^^^^^^^^^^^
 
-You can turn off fancy formatting (colors, bold, etc.) by using the ``--no-color``/``-nc`` flag.
+You can turn off fancy formatting (colors, bold, etc.)
+by using the ``--no-color``/``-nc`` flag.
 
-You can also turn off ALL non-error outputs by using the ``--quiet``/``-q`` flag.
+You can also turn off all non-error outputs by using the ``--quiet`` or ``-q`` flag.
 
 Help!
 ^^^^^
