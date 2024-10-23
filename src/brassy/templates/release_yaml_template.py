@@ -84,9 +84,9 @@ class ChangeItem(BaseModel):
         for value in ["title", "description"]:
             if values[value] == "":
                 values[value] = None
-        if not values["title"] and not values["description"]:
-            if not values == ReleaseNote():
-                raise ValueError("Missing title and description")
+        # if not values["title"] and not values["description"]:
+        #    if not values == ReleaseNote():
+        #        raise ValueError("Missing title and description")
         return values
 
 

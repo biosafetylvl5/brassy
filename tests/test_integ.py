@@ -19,6 +19,7 @@ def run_cli_command_return_true_if_command_returns_zero(command):
     assert (
         result.returncode == 0
     ), f"Command failed with return code {result.returncode}"
+    return result.returncode == 0
 
 
 @pytest.mark.integtest
@@ -34,7 +35,7 @@ def test_build_on_test_files(input_file):
     with tempfile.TemporaryDirectory() as output_file_dir:
         output_file = output_path / (input_file + ".rst")
         print(output_file)
-        run_cli_command_return_true_if_command_returns_zero(
+        if not run_cli_command_return_true_if_command_returns_zero(
             [
                 "brassy",
                 str(input_path / f"{input_file}.yaml"),
@@ -43,10 +44,25 @@ def test_build_on_test_files(input_file):
                 "--release-date",
                 "2024-10-14",
             ]
-        )
+        ):
+            raise OSError("Brassy command failed")
         assert [row for row in open(output_file)] == [
             row for row in open(output_path / f"{input_file}.rst")
         ]
+
+
+def test_create_template_build_template():
+    with tempfile.TemporaryDirectory() as output_file_dir:
+        output_file = str(Path(output_file_dir) / "template.yaml")
+        print(output_file)
+        if not run_cli_command_return_true_if_command_returns_zero(
+            ["brassy", "-t", output_file]
+        ):
+            raise OSError("Brassy command failed")
+        if not run_cli_command_return_true_if_command_returns_zero(
+            ["brassy", output_file]
+        ):
+            raise OSError("Brassy command failed")
 
 
 def test_pruning():

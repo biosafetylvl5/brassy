@@ -90,6 +90,7 @@ class SettingsTemplate(BaseModel):
     default_title: str = "NO TITLE"
     default_description: str = "NO DESCRIPTION"
     fail_on_empty_dir: bool = True
+    description_populates_with_pipe: bool = False
 
     valid_fields: List[str] = ["title", "description", "files", "related-issue"]
     valid_changes: List[str] = ["deleted", "moved", "added", "modified"]

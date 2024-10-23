@@ -57,11 +57,17 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
     https://github.com/yaml/pyyaml/pull/822
     """
     pipe_replace_string = "REPLACE_ME_WITH_PIPE"
+    from brassy.templates.release_yaml_template import ReleaseNote
+
     default_yaml = {
         category: [
             {
                 "title": "",
-                "description": pipe_replace_string,
+                "description": (
+                    pipe_replace_string
+                    if Settings.description_populates_with_pipe
+                    else ""
+                ),
                 "files": {change: [""] for change in Settings.valid_changes},
                 "related-issue": {"number": None, "repo_url": ""},
                 # in time, extract from the first and last commit
@@ -83,7 +89,8 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
         yaml_text = yaml.safe_dump(
             default_yaml, sort_keys=False, default_flow_style=False
         )
-        yaml_text = yaml_text.replace(pipe_replace_string, "|")
+        if Settings.description_populates_with_pipe:
+            yaml_text = yaml_text.replace(pipe_replace_string, "|\n    replace_me")
         file.write(yaml_text)
 
 
