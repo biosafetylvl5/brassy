@@ -264,7 +264,7 @@ def run_from_CLI():
     exit_on_invalid_arguments(args, parser, console)
     if args.version:
         print_version_and_exit()
-    if args.init:
+    elif args.init:
         brassy.actions.init.init()
         exit(0)
     elif args.prune:
