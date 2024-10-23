@@ -7,52 +7,73 @@ Example usage
 Create YAML template
 ^^^^^^^^^^^^^^^^^^^^
 
-Brassy can create blank yaml templates for release notes. By default, brassy will name the file after your current git
-branch name. You can also specify a name manually, and ``.yaml`` will be appended if you do not end your file name with
+Brassy can create blank yaml templates for release notes.
+By default, brassy will name the file after your current git
+branch name. You can also specify a name manually, and
+``.yaml`` will be appended if you do not end your file name with
 ``.yml`` or ``.yaml``. You can do this with the following command:
 
 .. code-block:: bash
 
     brassy --write-yaml-template release-note.yaml
+    # or
+    brassy -t release-note.yaml
+    # or leave blank to name after current git branch
+    brassy -t
 
 By default, the yaml template will be populated with the following fields:
 
 .. runcmd:: python3 -c "from brassy import brassy; print('\n'.join(brassy.default_categories))"
 
+You can configure this in your ``.brassy`` file. See also Settings.
+
 For example, the section for ``bug-fix`` will look like this:
 
 .. code-block:: yaml
 
-    bug-fix:
-      - title: ""
-        description: ""
+    bug fix:
+    - title: ''
+      description: |
+      files:
+        deleted:
+        - ''
+        moved:
+        - ''
+        added:
+        - ''
+        modified:
+        - ''
+      related-issue:
+        number: null
+        repo_url: ''
+      date:
+        start: null
+        finish: null
 
-You can do anything that is valid yaml in these fields. For example:
+For example:
 
 .. code-block:: yaml
 
-    bug-fix:
-      - title: ""
-        description: |
+    bug fix:
+    - title: 'Fix elephant related crash'
+      description: |
             - Fixed a bug where the program would crash when the user thought of elephants.
-            - Fixed a bug where the program would ``segfault``
-              when the user looked at the button.
-
-Adding changed files
-^^^^^^^^^^^^^^^^^^^^
-
-To add what files have been changed as part of your edit you must edit the
-``files`` section. For example:
-
-.. code-block:: yaml
-
-    enhancement:
-        - description: |
-            --output-to-console now writes generated release notes to the console.
-            This is disabled by default.
-        files:
-            modified:
-            - 'src/brassy/brassy.py'
+      description: |
+      files:
+        deleted:
+        - 'die-on-thoughts.py'
+        moved:
+        - ''
+        added:
+        - ''
+        modified:
+        - 'main.py'
+      related-issue:
+        number: 1938
+        repo_url: 'http://github.com/fake/repo'
+      date:
+        start: "10-10-1999"
+        finish: "02-21-2026"
 
 Generating the changed files via ``git``
 """"""""""""""""""""""""""""""""""""""""
