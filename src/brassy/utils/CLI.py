@@ -127,6 +127,12 @@ def get_parser():
         help="Initialize brassy and generate config files",
         default=False,
     )
+    parser.add_argument(
+        "--version",
+        action="store_true",
+        help="Print program version and exit",
+        default=False,
+    )
     return parser
 
 
@@ -141,6 +147,11 @@ def parse_arguments():
     """
     parser = get_parser()
     return parser.parse_args(), parser
+
+
+def print_version_and_exit():
+    messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
+    exit(0)
 
 
 def exit_on_invalid_arguments(args, parser, console):
@@ -251,6 +262,8 @@ def run_from_CLI():
     rich_open = messages.open
 
     exit_on_invalid_arguments(args, parser, console)
+    if args.version:
+        print_version_and_exit()
     if args.init:
         brassy.actions.init.init()
         exit(0)
