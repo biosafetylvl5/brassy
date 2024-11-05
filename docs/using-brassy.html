@@ -7,10 +7,10 @@
 
     <title>Using Brassy &#8212; brassy 0.0.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=c058f7c8" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
     <script src="_static/documentation_options.js?v=47de8214"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -306,6 +306,46 @@ If you have any questions or need assistance, please contact our support team at
 </div>
 </section>
 </section>
+<section id="related-issue">
+<h2>Related Issue<a class="headerlink" href="#related-issue" title="Link to this heading">¶</a></h2>
+<p>Brassy can link issues (aka tasks, bugs, cards, etc.) to changes.</p>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">continuous integration</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Delete</span><span class="nv"> </span><span class="s">repo</span><span class="nv"> </span><span class="s">upon</span><span class="nv"> </span><span class="s">push&#39;</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;I</span><span class="nv"> </span><span class="s">am</span><span class="nv"> </span><span class="s">done</span><span class="nv"> </span><span class="s">coding.</span><span class="nv"> </span><span class="s">Just</span><span class="nv"> </span><span class="s">delete</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">repo.&#39;</span>
+<span class="w">  </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">deleted</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;main.py&#39;</span>
+<span class="w">    </span><span class="nt">added</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;delete-everything.py&#39;</span>
+<span class="w">  </span><span class="nt">related-issue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">999</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;https://github.com/torvalds/linux&#39;</span>
+</pre></div>
+</div>
+<p>links the change “Delete repo upon push” to issue #999 on the linked linux repo.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Issue information isn’t rendered in generated release notes by default.
+You must (currently) change your release generation template to include
+issue info in your release notes.</p>
+</div>
+<section id="support-for-internal-repos">
+<h3>Support for Internal Repos<a class="headerlink" href="#support-for-internal-repos" title="Link to this heading">¶</a></h3>
+<p>Some repositories aren’t something you can share a link for.
+For example, they might be on an internal server or on your
+personal laptop.</p>
+<p>In these cases, you can specify issues without a URL. They must follow this pattern:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Repo</span> <span class="n">Name</span> <span class="n">Or</span> <span class="n">Other</span> <span class="n">String</span><span class="c1">#999 - Description or other string</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">related-issue</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">internal</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Brassy#0</span><span class="nv"> </span><span class="s">-</span><span class="nv"> </span><span class="s">Fake</span><span class="nv"> </span><span class="s">issue</span><span class="nv"> </span><span class="s">as</span><span class="nv"> </span><span class="s">an</span><span class="nv"> </span><span class="s">example</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">change&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="change-yaml-directory">
 <h2>Change YAML directory<a class="headerlink" href="#change-yaml-directory" title="Link to this heading">¶</a></h2>
 <p>By default brassy works in your current working directory.</p>
@@ -449,6 +489,7 @@ Options:
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using Brassy</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-usage">Example usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generate-release-notes">Generate release notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-issue">Related Issue</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#change-yaml-directory">Change YAML directory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#prune-yaml-file">Prune YAML file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#controlling-cli-output">Controlling CLI Output</a></li>
@@ -484,7 +525,7 @@ Options:
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.0.2</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |

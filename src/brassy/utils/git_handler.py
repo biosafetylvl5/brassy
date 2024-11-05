@@ -3,14 +3,26 @@ import pygit2
 
 def get_git_status(repo_path="."):
     """
-    Retrieves the status of files in the given Git repository.
+    Retrieve the status of files in the specified Git repository.
 
-    Parameters:
-    repo_path (str): The path to the Git repository. Defaults to the current directory.
+    Parameters
+    ----------
+    repo_path : str, optional
+        The path to the Git repository. Defaults to the current directory.
 
-    Returns:
-    dict: A dictionary with keys 'added', 'modified', 'deleted', and 'renamed',
-          each containing a list of file paths that match the respective status.
+    Returns
+    -------
+    dict
+        A dictionary with the following keys:
+
+        - 'added': list of str
+            List of file paths for files that have been added.
+        - 'modified': list of str
+            List of file paths for files that have been modified.
+        - 'deleted': list of str
+            List of file paths for files that have been deleted.
+        - 'renamed': list of str
+            List of file paths for files that have been renamed.
     """
 
     # Open the repository
@@ -20,7 +32,8 @@ def get_git_status(repo_path="."):
     try:
         current_branch = repo.head
     except pygit2.GitError:
-        raise pygit2.GitError(f"{repo_path} is not a git repo or does not have a head")
+        raise pygit2.GitError(
+            f"{repo_path} is not a git repo or does not have a head")
 
     # Get the main branch reference
     main_branch = repo.branches["main"]

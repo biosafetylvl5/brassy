@@ -181,6 +181,56 @@ Would output:
 
 .. literalinclude :: ./examples/basic-usage/new-release-note-header-footer
 
+Related Issue
+-------------
+
+Brassy can link issues (aka tasks, bugs, cards, etc.) to changes.
+
+For example:
+
+.. code-block:: yaml
+
+  continuous integration:
+  - title: 'Delete repo upon push'
+    description: 'I am done coding. Just delete the repo.'
+    files:
+      deleted:
+      - 'main.py'
+      added:
+      - 'delete-everything.py'
+    related-issue:
+      number: 999
+      repo_url: 'https://github.com/torvalds/linux'
+
+links the change "Delete repo upon push" to issue #999 on the linked linux repo.
+
+.. warning::
+
+  Issue information isn't rendered in generated release notes by default.
+  You must (currently) change your release generation template to include
+  issue info in your release notes.
+
+Support for Internal Repos
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some repositories aren't something you can share a link for.
+For example, they might be on an internal server or on your
+personal laptop.
+
+In these cases, you can specify issues without a URL. They must follow this pattern:
+
+.. code-block::
+
+  Repo Name Or Other String#999 - Description or other string
+
+For example:
+
+.. code-block:: yaml
+
+  related-issue:
+    internal: "Brassy#0 - Fake issue as an example for change"
+
+
 Change YAML directory
 ---------------------
 
