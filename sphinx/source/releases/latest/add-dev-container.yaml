@@ -1,0 +1,10 @@
+developer:
+- title: Add .devcontainer config file
+  description: Added devcontainer config file for developing brassy inside of a Docker
+    container using vscode.
+  files:
+    added:
+    - .devcontainer/devcontainer.json
+  date:
+    start: Nov 5 2024
+    finish: Nov 5 2024

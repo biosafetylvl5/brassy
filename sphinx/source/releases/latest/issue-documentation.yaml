@@ -1,0 +1,9 @@
+documentation:
+- title: Add documentation on issues
+  description: Added documentation on related issues for release notes. Also added
+    info on internal issues
+  files:
+    modified:
+    - sphinx/source/using-brassy.rst
+  related-issue:
+    internal: "Brassy#1 - Fake issue as an example for change"

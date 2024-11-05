@@ -1,3 +1,4 @@
+from brassy.utils.settings_manager import get_settings
 import pathlib
 from typing import List, Optional, Dict, Union
 from datetime import date as Date
@@ -34,7 +35,8 @@ class Files(BaseModel):
 
 
 class RelatedInternalIssue(BaseModel):
-    string: Optional[str] = Field(pattern=r"[A-Za-z]+#\d+ - .+", default=None)
+    internal: Optional[str] = Field(
+        pattern=r"[A-Za-z]+#\d+ - .+", default=None)
 
 
 class RelatedIssue(BaseModel):
@@ -97,8 +99,6 @@ class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):
 
     pass
 
-
-from brassy.utils.settings_manager import get_settings
 
 Settings = get_settings("brassy")
 

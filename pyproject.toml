@@ -32,6 +32,12 @@ doc = [
     "sphinx",                    # Required for building documentation, v7.2 errors
     "sphinxcontrib-runcmd",      # Required for running shell commands in documentation
     "sphinxcontrib-napoleon",    # Required for Google-style docstrings
+    "pinkrst", # for rst formatting
+    "black", # for rst formatting
+]
+
+test = [
+    "pytest", # for running tests
 ]
 
 [tool.poetry.scripts]

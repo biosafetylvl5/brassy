@@ -20,5 +20,8 @@ setup(
         "platformdirs",
         "pydantic",
         "dateparser",
+        "pinkrst",
+        "black",
+        "pytest"
     ],
 )
