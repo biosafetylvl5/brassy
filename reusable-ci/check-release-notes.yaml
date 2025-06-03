@@ -1,0 +1,204 @@
+name: Check Release Notes
+
+on:
+  workflow_call:
+    inputs:
+      release_notes_dir:
+        description: 'Path to the release notes directory relative to the repository root'
+        required: false
+        type: string
+        default: 'docs/source/releases'
+      latest_notes_dir:
+        description: 'Path to the latest release notes directory relative to the repository root'
+        required: false
+        type: string
+        default: 'docs/source/releases/latest'
+      check_rst_files:
+        description: 'Whether to check for modified RST files'
+        required: false
+        type: boolean
+        default: true
+      check_yaml_files:
+        description: 'Whether to check for new YAML files'
+        required: false
+        type: boolean
+        default: true
+      allow_rst_edits:
+        description: 'Whether to allow edits to RST files (if false, will fail on RST changes)'
+        required: false
+        type: boolean
+        default: false
+      require_yaml_changes:
+        description: 'Whether to require changes to YAML files'
+        required: false
+        type: boolean
+        default: true
+      skip_on_release_branch:
+        description: 'Whether to skip checks on release branches'
+        required: false
+        type: boolean
+        default: true
+      file_extensions:
+        description: 'File extensions to check (comma-separated)'
+        required: false
+        type: string
+        default: 'rst,yaml'
+      release_branch_pattern:
+        description: 'Regex pattern to identify release branches'
+        required: false
+        type: string
+        default: '^release/v[0-9]+\.[0-9]+\.[0-9]+$'
+    outputs:
+      rst_changes_detected:
+        description: 'Whether RST changes were detected'
+        value: ${{ jobs.check_release_notes.outputs.rst_changes_detected }}
+      yaml_changes_detected:
+        description: 'Whether YAML changes were detected'
+        value: ${{ jobs.check_release_notes.outputs.yaml_changes_detected }}
+      is_release_branch:
+        description: 'Whether the current branch is a release branch'
+        value: ${{ jobs.check_release_notes.outputs.is_release_branch }}
+
+jobs:
+  check_release_notes:
+    runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
+    outputs:
+      rst_changes_detected: ${{ steps.check-rst.outputs.changes_detected }}
+      yaml_changes_detected: ${{ steps.check-yaml.outputs.changes_detected }}
+      is_release_branch: ${{ steps.check-release-branch.outputs.is_release_branch }}
+    
+    steps:
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory $PWD
+      
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: ./repo
+      
+      - name: Determine target reference
+        id: target-ref
+        run: |
+          if [[ "${{ github.base_ref }}" != "" ]]; then
+              echo "ref=${{ github.base_ref }}" >> $GITHUB_OUTPUT
+          else
+              echo "ref=${{ github.event.repository.default_branch }}" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check if on release branch
+        id: check-release-branch
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          RELEASE_PATTERN="${{ inputs.release_branch_pattern }}"
+          
+          echo "Checking if branch '$BRANCH_NAME' matches release pattern '$RELEASE_PATTERN'"
+          
+          if [[ $BRANCH_NAME =~ $RELEASE_PATTERN ]]; then
+            echo "Branch is a release branch"
+            echo "is_release_branch=true" >> $GITHUB_OUTPUT
+          else
+            echo "Branch is not a release branch"
+            echo "is_release_branch=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check for RST file modifications
+        id: check-rst
+        if: inputs.check_rst_files == true
+        run: |
+          RELEASE_NOTES_DIR="${{ inputs.release_notes_dir }}"
+          TARGET_REF="${{ steps.target-ref.outputs.ref }}"
+          
+          echo "Checking for RST file changes in $RELEASE_NOTES_DIR"
+          
+          git -C ./repo fetch
+          
+          # Get list of modified RST files
+          EXTENSIONS=($(echo "${{ inputs.file_extensions }}" | tr ',' ' ' | grep -o 'rst'))
+          
+          if [ ${#EXTENSIONS[@]} -gt 0 ]; then
+            CHANGES=""
+            for EXT in "${EXTENSIONS[@]}"; do
+              RET=$(git -C ./repo diff --ignore-space-at-eol --stat --diff-filter=AM remotes/origin/${TARGET_REF} -- ${RELEASE_NOTES_DIR}/*.${EXT})
+              if [ ! -z "$RET" ]; then
+                CHANGES="$CHANGES $RET"
+              fi
+            done
+            
+            if [ -z "$CHANGES" ]; then
+              echo "No RST changes detected"
+              echo "changes_detected=false" >> $GITHUB_OUTPUT
+            else
+              echo "RST changes detected:"
+              echo "$CHANGES"
+              echo "changes_detected=true" >> $GITHUB_OUTPUT
+              
+              echo "::group::Full Git Diff for RST Files"
+              for EXT in "${EXTENSIONS[@]}"; do
+                git -C ./repo diff --ignore-space-at-eol --diff-filter=AM remotes/origin/${TARGET_REF} -- ${RELEASE_NOTES_DIR}/*.${EXT}
+              done
+              echo "::endgroup::"
+              
+              if [ "${{ inputs.allow_rst_edits }}" != "true" ]; then
+                echo "FAILED: Release note RST changes detected"
+                echo "Please use the appropriate tool to enter change logs"
+                echo "DO NOT EDIT .RST FILES DIRECTLY"
+                exit 1
+              fi
+            fi
+          else
+            echo "RST file checking skipped (not in file_extensions input)"
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Check for YAML file additions
+        id: check-yaml
+        if: >
+          inputs.check_yaml_files == true &&
+          (github.ref_name != github.event.repository.default_branch) &&
+          (!inputs.skip_on_release_branch || steps.check-release-branch.outputs.is_release_branch != 'true')
+        run: |
+          LATEST_NOTES_DIR="${{ inputs.latest_notes_dir }}"
+          TARGET_REF="${{ steps.target-ref.outputs.ref }}"
+          
+          echo "Checking for YAML file changes in $LATEST_NOTES_DIR"
+          
+          git -C ./repo fetch
+          
+          # Get list of added/modified YAML files
+          EXTENSIONS=($(echo "${{ inputs.file_extensions }}" | tr ',' ' ' | grep -o 'yaml\|yml'))
+          
+          if [ ${#EXTENSIONS[@]} -gt 0 ]; then
+            CHANGES=""
+            for EXT in "${EXTENSIONS[@]}"; do
+              # If on release branch, include renamed files in the check
+              if [ "${{ steps.check-release-branch.outputs.is_release_branch }}" == "true" ]; then
+                RET=$(git -C ./repo diff --ignore-space-at-eol --stat --diff-filter=RAM remotes/origin/${TARGET_REF} -- ${LATEST_NOTES_DIR}/*.${EXT})
+              else
+                RET=$(git -C ./repo diff --ignore-space-at-eol --stat --diff-filter=AM remotes/origin/${TARGET_REF} -- ${LATEST_NOTES_DIR}/*.${EXT})
+              fi
+              
+              if [ ! -z "$RET" ]; then
+                CHANGES="$CHANGES $RET"
+              fi
+            done
+            
+            echo "Release note files modified in this PR:"
+            if [ ! -z "$CHANGES" ]; then
+              echo "$CHANGES"
+              echo "changes_detected=true" >> $GITHUB_OUTPUT
+              echo "PASSED: YAML changes detected"
+            else
+              echo "None"
+              echo "changes_detected=false" >> $GITHUB_OUTPUT
+              
+              if [ "${{ inputs.require_yaml_changes }}" == "true" ]; then
+                echo "FAILED: No YAML release note changes detected"
+                echo "Please add release notes in $LATEST_NOTES_DIR"
+                exit 1
+              fi
+            fi
+          else
+            echo "YAML file checking skipped (not in file_extensions input)"
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
