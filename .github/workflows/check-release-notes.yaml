@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-release-notes:
-    uses: biosafetylvl5/brassy/reusable-ci/check-release-notes.yaml@main
+    uses: biosafetylvl5/brassy/.github/workflows/reusable-ci/check-release-notes.yaml@main
     with:
       release_notes_dir: 'sphinx/source/releases'
       latest_notes_dir: 'sphinx/source/releases/latest'
