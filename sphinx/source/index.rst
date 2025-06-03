@@ -13,6 +13,7 @@ Welcome to brassy's documentation!
    :maxdepth: 2
 
    using-brassy
+   brassy-in-ci
    api
    ./releases/index
 
