@@ -1,0 +1,306 @@
+{
+    "version": "0.2",
+    "language": "en", // Default language
+    // --- Custom Words ---
+    // Words considered correct for THIS project specifically
+    "words": [
+        // Project Specific / Acronyms / People / Orgs
+        "brassy"
+    ],
+    // --- File/Folder Exclusions ---
+    // Glob patterns for files and folders to ignore globally
+    "ignorePaths": [
+        // Common VCS/Dev environment folders
+        "**/.env/**",
+        "**/.git/**",
+        "**/.hg/**",
+        "**/.svn/**",
+        "**/.tox/**",
+        "**/.venv/**",
+        "**/bower_components/**",
+        "**/env/**",
+        "**/node_modules/**",
+        "**/venv/**",
+        ".idea/**",
+        ".vscode/**",
+        // Python specific
+        "**/*.egg-info/**",
+        "**/*.pyc",
+        "**/*.pyo",
+        "**/__pycache__/**",
+        "**/site-packages/**",
+        // Build artifacts
+        "**/build/**",
+        "**/dist/**",
+        "**/docs/_build/**", // Sphinx build output
+        "**/htmlcov/**", // Coverage reports
+        ".pytest_cache/**",
+        // Data / Assets (adjust patterns as needed)
+        "**/test/**",
+        // Lock files and logs
+        "**/*.lock", // pipenv, poetry, npm, yarn, etc.
+        "**/*.log",
+        // Temporary/Generated files
+        "**/*.bak",
+        "**/*.swp", // Vim swap files
+        "**/*.tmp",
+        "**/*~", // Backup files
+        // Config files that often contain non-words
+        "**/Pipfile",
+        "**/Pipfile.lock",
+        "**/package-lock.json",
+        "**/package.json",
+        "**/poetry.lock",
+        "**/yarn.lock",
+        // CSpell configs
+        "**/*cspell.json",
+        "*cspell.json"
+    ],
+    // --- Dictionaries ---
+    "dictionaryDefinitions": [],
+    // List of dictionaries to use globally (can be overridden in languageSettings)
+    "dictionaries": [
+        // Standard Dictionaries
+        "companies", // Common company names
+        "en-gb", // British English (useful for mixed documentation)
+        "en_US", // Standard American English
+        "filetypes", // Common file extensions/types
+        "fonts", // Common font names
+        "html", // HTML terms (relevant for RST raw blocks/output)
+        "misc", // Miscellaneous terms
+        "scienceTerms", // Common scientific terms
+        "softwareTerms", // Common software terms (API, URL, CSS, HTML etc.)
+        // Language Specific Dictionaries
+        "bash", // Common shell commands (useful in docs/scripts)
+        "python", // Python keywords, builtins, common stdlib
+    ],
+    // --- Ignored Words ---
+    // Words to ignore entirely, even if misspelled (use sparingly!)
+    "ignoreWords": [
+        "stddev",
+        "stderr",
+        "stdin",
+        "stdout",
+        "tmp",
+        "yyyyddd",
+        "yyyymmdd",
+    ],
+    // --- Global Ignore Patterns ---
+    // Regular expressions for patterns to ignore globally
+    "ignoreRegExpList": [
+        "/[a-f0-9]{7,}/gi", // commit SHAs
+    ],
+    // --- Language Specific Settings ---
+    // Apply specific dictionaries, words, or ignore patterns based on file type
+    "languageSettings": [
+        {
+            // Python specific settings
+            "languageId": "python",
+            "dictionaries": [
+                "en_US",
+                "metoc-terms",
+                "python",
+                "scienceTerms",
+                "softwareTerms",
+            ],
+            "words": [
+            ],
+            "ignoreRegExpList": [
+                "/#\\s*noqa\\b/g", // Ignore noqa comments
+                "/#\\s*type:\\s*ignore/g", // Ignore type ignore comments
+                "/(?:from|import)\\s+[a-zA-Z0-9_.]+(?:\\s+(?:as)\\s+[a-zA-Z0-9_]+)?/g", // Import statements
+                "/@[a-zA-Z_][a-zA-Z0-9_]*/g", // Ignore decorators
+                "/\\b[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*/g", // Ignore attribute access like 'obj.attr'
+            ]
+        },
+        {
+            // reStructuredText specific settings
+            "languageId": "restructuredtext",
+            "dictionaries": [
+                "en-gb",
+                "en_US",
+                "html",
+                "metoc-terms",
+                "organization-terms",
+                "python",
+                "scienceTerms",
+                "softwareTerms",
+            ],
+            "words": [
+                "acks",
+                "autoclass",
+                "autodoc",
+                "automethod",
+                "automodule",
+                "autosummary",
+                "centered",
+                "citation",
+                "class",
+                "code-block",
+                "codeauthor",
+                "command",
+                "compound",
+                "container",
+                "contents",
+                "csv-table",
+                "date",
+                "default-role",
+                "deprecated",
+                "doctest",
+                "docutils",
+                "download",
+                "envvar",
+                "eq",
+                "figure",
+                "footer",
+                "footerbanner",
+                "footnote",
+                "genindex",
+                "glossary",
+                "header",
+                "highlight",
+                "hlist",
+                "hlisttable",
+                "image",
+                "important",
+                "include",
+                "index",
+                "ipython",
+                "jupyter",
+                "label",
+                "line-block",
+                "list-table",
+                "literalinclude",
+                "math",
+                "meta",
+                "modindex",
+                "moduleauthor",
+                "nbsphinx",
+                "note",
+                "numref",
+                "option",
+                "parsed-literal",
+                "raw",
+                "replace",
+                "restructuredtext-test-directive",
+                "role",
+                "rubric",
+                "sectionauthor",
+                "sectnum",
+                "seealso",
+                "sphx-glr-thumbnail",
+                "table",
+                "tabularcolumns",
+                "target",
+                "term",
+                "testcode",
+                "testoutput",
+                "testsetup",
+                "tip",
+                "title",
+                "titleindex",
+                "toctree",
+                "unicode",
+                "versionadded",
+                "versionchanged",
+                "warning",
+            ],
+            "ignoreRegExpList": [
+                // RST Directives (e.g., .. code-block:: python)
+                "/^\\.\\.\\s+[a-zA-Z_-]+::/m",
+                // Field lists (e.g., :param key:)
+                "/^\\s*:([^:]+):\\s*$/m", // Simple field list line
+                "/^\\s*:([^:]+):\\s+[^\\s]/m", // Field list with content on same line
+                // Interpreted text roles (e.g., :py:func:`~my_func`)
+                "/:[a-zA-Z_\\-]+:`~?([^`]+)`/",
+                // Inline literals (e.g., ``code``)
+                "/``([^`]+)``/",
+                // Standalone hyperlinks (e.g., `My Link`_)
+                "/`[^`]+`_/",
+                // Hyperlink targets (e.g., .. _my-target:)
+                "/^\\.\\.\\s+_([^:]+):/m",
+                // Substitution definitions (e.g., .. |sub| replace:: Text)
+                "/^\\.\\.\\s+\\|[^|]+\\|\\s+[a-zA-Z_-]+::/m",
+                // Comments (e.g., .. This is a comment)
+                "/^\\.\\.(\\s+|$)/m", // Ignore the '..' itself if followed by space or end of line
+                // Line blocks (lines starting with |)
+                "/^\\s*\\|\\s+/m",
+                // Grid table syntax characters
+                "/[+\\-|=]+/g", // Might be too broad, but catches table lines
+                // Section titles
+                "/^[=\\-`:'\"~^_*+#]{3,}$/m", // Underlines for section titles
+                // Footnote references
+                "/\\[\\d+\\]_/g",
+                // Substitution references
+                "/\\|[^|]+\\|/g",
+                // Math expressions
+                "/\\:math\\:`[^`]+`/g"
+            ]
+        },
+        {
+            // YAML specific settings
+            "languageId": "yaml",
+            // Dictionaries for comments and string values
+            "dictionaries": [
+                "en_US",
+                "metoc-terms",
+                "softwareTerms",
+            ],
+            // Add common YAML keys specific to your project if needed
+            "words": [
+            ],
+            // Regex patterns to ignore ONLY in YAML files
+            "ignoreRegExpList": [
+                "/!![\\w\\/]+/g", // YAML tags
+                "/&\\w+\\b/g", // YAML anchors
+                "/:\\s+\\[.*?\\]/g", // Inline arrays
+                "/:\\s+\\{.*?\\}/g", // Inline objects
+                "/<%.*?%>/g", // Ignore ERB-like template variables
+                "/\\$[{(]?[a-zA-Z_][a-zA-Z0-9_]*[})]?/g", // Ignore variable substitutions (e.g., $VAR, ${VAR}, $(VAR))
+                "/\\*\\w+\\b/g", // YAML aliases
+                "/\\s+#.*/m", // Inline comments
+                "/\\{\\{.*?\\}\\}/g", // Ignore Jinja2-like template variables
+                "/^\\s*#.*/m", // Ignore comments
+                "/^\\s*-?\\s*\\w+:\\s+[>|]\\s*$/m", // Multiline string indicators
+                "/^\\s*-\\s+/m", // List items
+                "/^\\s*[a-zA-Z0-9_-]+:/m", // Ignore keys at the start of a line (e.g., key:)
+            ]
+        }
+    ],
+    // --- Advanced Options ---
+    // Maximum number of problems to report per file (0 for unlimited)
+    "maxNumberOfProblems": 1000,
+    // Minimum word length to check
+    "minWordLength": 4,
+    // Allow compound words (e.g., "hardcode" if "hard" and "code" are known)
+    "allowCompoundWords": true,
+    // Specify character sequences that should always be treated as word separators
+    "wordSeparators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
+    // File types to check (if not inferred automatically)
+    "enableFiletypes": [
+        "bash",
+        "cfg",
+        "dockerfile",
+        "ini",
+        "json",
+        "jsonc",
+        "markdown",
+        "md",
+        "python",
+        "restructuredtext",
+        "sh",
+        "text",
+        "toml",
+        "txt",
+        "yaml",
+        "yml",
+    ],
+    // Enable suggestions (autocorrect suggestions)
+    "suggestionNumChanges": 3,
+    // Specify whether to use the locale dictionary
+    "useLocaleDictionaries": true,
+    "checkRepeatedWords": true,
+    "flagWords": [],
+    // Enable checking of compound words
+    "checkCompoundWords": true
+}
