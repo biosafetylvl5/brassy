@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.7.14', '3.13']  # Specify the Python versions you want to test
+        python-version: ['3.8', '3.13']  # Specify the Python versions you want to test
 
     steps:
       - name: Check out the repository code
