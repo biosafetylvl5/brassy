@@ -1,0 +1,20 @@
+name: PR Checks
+
+on:
+  push:
+    branches: 'main'
+  pull_request:
+
+jobs:
+  check-release-notes:
+    uses: biosafetylvl5/brassy/.github/workflows/reusable-check-release-notes.yaml@ci-add-release-note-check
+    with:
+      release_notes_dir: 'sphinx/source/releases'
+      latest_notes_dir: 'sphinx/source/releases/latest'
+      check_rst_files: true
+      check_yaml_files: true
+      allow_rst_edits: false
+      require_yaml_changes: true
+      skip_on_release_branch: true
+      file_extensions: 'rst,yaml,yml'
+      release_branch_pattern: '^(release/v[0-9]+\.[0-9]+\.[0-9]+|hotfix/.+)$'
