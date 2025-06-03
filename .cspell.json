@@ -84,6 +84,11 @@
         "tmp",
         "yyyyddd",
         "yyyymmdd",
+        "pydoclint",
+        "pydoclint", 
+        "ACMRT", 
+        "pyupgrade", 
+        "tryceratops",
     ],
     // --- Global Ignore Patterns ---
     // Regular expressions for patterns to ignore globally
