@@ -1,0 +1,26 @@
+enhancement:
+- title: 'Update minimum Python version to 3.8'
+  description: 'Updated CI workflows to use Python 3.8 as the minimum version instead of 3.7. This was incited by a drop in support of 3.7 on the latest ubuntu images for GitHub CI runners.'
+  files:
+    modified:
+    - '.github/workflows/install.yaml'
+    - '.github/workflows/pytest.yaml'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: June 3, 2025
+    finish: June 3, 2025
+continuous integration:
+- title: 'Add release notes check workflow'
+  description: 'Added GitHub Actions workflows to verify release notes are included with PRs and that old release notes have not been edited. This includes a reusable workflow for checking release notes (RST and YAML) and a workflow to implement the check for this repository.'
+  files:
+    added:
+    - '.github/workflows/check-release-notes.yaml'
+    - '.github/workflows/reusable-check-release-notes.yaml'
+  related-issue:
+    number: 53
+    repo_url: 'https://github.com/biosafetylvl5/brassy'
+  date:
+    start: June 3, 2025
+    finish: June 3, 2025
