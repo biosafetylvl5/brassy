@@ -1,0 +1,53 @@
+name: Ruff Lint Changed Files
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**.py'
+  pull_request:
+    paths:
+      - '**.py'
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # fetch all history for detecting changed files
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+
+      - name: Get changed files
+        id: changed-files
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "files=$(git diff --name-only --diff-filter=ACMRT origin/${{ github.base_ref }} HEAD | grep '\.py$' | xargs | tr ' ' ',')" >> $GITHUB_OUTPUT
+
+      - name: Get changed files (push)
+        id: changed-files-push
+        if: github.event_name == 'push'
+        run: |
+          echo "files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep '\.py$' | xargs | tr ' ' ',')" >> $GITHUB_OUTPUT
+
+      - name: Run Ruff on changed files (PR)
+        if: github.event_name == 'pull_request' && steps.changed-files.outputs.files != ''
+        run: |
+          echo "Linting these files: ${{ steps.changed-files.outputs.files }}"
+          ruff check --output-format=github ${{ steps.changed-files.outputs.files }}
+
+      - name: Run Ruff on changed files (Push)
+        if: github.event_name == 'push' && steps.changed-files-push.outputs.files != ''
+        run: |
+          echo "Linting these files: ${{ steps.changed-files-push.outputs.files }}"
+          ruff check --output-format=github ${{ steps.changed-files-push.outputs.files }}
