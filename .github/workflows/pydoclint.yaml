@@ -1,0 +1,42 @@
+name: PyDocLint Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pydoclint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pydoclint
+        
+    - name: Run PyDocLint
+      run: |
+        python -m pydoclint --style=numpy $(git ls-files '*.py')
+        
+    - name: Comment on PR (if failed)
+      if: failure() && github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '❌ PyDocLint check failed. Please fix your docstrings!!!'
+          })
