@@ -1,0 +1,50 @@
+name: Spell Check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  spell-check:
+    name: Check spelling in changed files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Need full history
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install cspell
+        run: npm install -g cspell
+
+      - name: Check spelling on modified files
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            # For pull requests, check modified files in the PR
+            git diff --name-only --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs -I{} sh -c 'test -f "{}" && echo "{}"' | cspell --config .cspell.json --no-progress --no-must-find-files --file-list stdin
+          else
+            # For pushes, check modified files in the latest commit
+            git diff --name-only --diff-filter=M ${{ github.event.before }} ${{ github.sha }} | xargs -I{} sh -c 'test -f "{}" && echo "{}"' | cspell --config .cspell.json --no-progress --no-must-find-files --file-list stdin
+          fi
+        
+      - name: Check spelling on new files
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            # For pull requests, check new files in the PR
+            git diff --name-only --diff-filter=A ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs -I{} sh -c 'test -f "{}" && echo "{}"' | cspell --config .cspell.json --no-progress --no-must-find-files --file-list stdin
+          else
+            # For pushes, check new files in the latest commit
+            git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }} | xargs -I{} sh -c 'test -f "{}" && echo "{}"' | cspell --config .cspell.json --no-progress --no-must-find-files --file-list stdin
+          fi
