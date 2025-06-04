@@ -165,3 +165,5 @@ cython_debug/
 .brassy
 
 .buildinfo
+*.DS_Store
+**/.DS_Store

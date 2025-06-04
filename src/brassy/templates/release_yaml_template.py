@@ -40,7 +40,7 @@ class RelatedInternalIssue(BaseModel):
 
 
 class RelatedIssue(BaseModel):
-    number: Optional[int] = None
+    number: Optional[Union[int, List[int]]] = None
     repo_url: Optional[HttpUrl] = None
 
     @field_validator("repo_url", mode="before")
