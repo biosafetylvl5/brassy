@@ -4,19 +4,36 @@
 {
 	"name": "Python 3",
 	"image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
-	"postCreateCommand": "pip3 install --user -e .",
+	"postCreateCommand": "pip3 install --user -e .[doc,lint,test]",
 	"customizations": {
-		"vscode": {
-			"extensions": [
-				"lextudio.restructuredtext",
-				"ms-python.python",
-				"ms-python.flake8",
-				"tamasfe.even-better-toml",
-				"streetsidesoftware.code-spell-checker",
-				"ms-python.black-formatter",
-				"ms-azuretools.vscode-docker",
-				"ms-python.isort"
-			]
-		}
+        "vscode": {
+            "extensions": [
+                "lextudio.restructuredtext",
+                "ms-python.python",
+                "ms-python.flake8",
+                "tamasfe.even-better-toml",
+                "streetsidesoftware.code-spell-checker",
+                "ms-python.black-formatter",
+                "ms-azuretools.vscode-docker",
+                "ms-python.isort",
+                "charliermarsh.ruff",
+                "matangover.mypy"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.mypyEnabled": true,
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.ruff": true
+                },
+                "python.testing.pytestEnabled": true,
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff"
+                },
+                "ruff.enable": true,
+                "ruff.format.enable": true,
+                "ruff.organizeImports": false
+            }
 	}
 }
