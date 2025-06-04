@@ -1,27 +1,24 @@
-from brassy.utils.settings_manager import get_settings
-import pathlib
-from typing import List, Optional, Dict, Union
 from datetime import date as Date
 
 import dateparser
-
 from pydantic import (
     BaseModel,
-    HttpUrl,
-    ValidationError,
-    model_validator,
-    RootModel,
     Field,
+    HttpUrl,
+    RootModel,
     field_validator,
+    model_validator,
     validator,
 )
 
+from brassy.utils.settings_manager import get_settings
+
 
 class Files(BaseModel):
-    deleted: List[str] = []
-    moved: List[str] = []
-    added: List[str] = []
-    modified: List[str] = []
+    deleted: list[str] = []
+    moved: list[str] = []
+    added: list[str] = []
+    modified: list[str] = []
 
     @model_validator(mode="after")
     def check_at_least_one_field(self):
@@ -29,19 +26,19 @@ class Files(BaseModel):
             getattr(self, field) for field in ["deleted", "moved", "added", "modified"]
         ):
             raise ValueError(
-                "At least one of deleted, moved, added, or modified must have a value"
+                "At least one of deleted, moved, added, or modified must have a value",
             )
         return self
 
 
 class RelatedInternalIssue(BaseModel):
-    internal: Optional[str] = Field(
+    internal: str | None = Field(
         pattern=r"[A-Za-z]+#\d+ - .+", default=None)
 
 
 class RelatedIssue(BaseModel):
-    number: Optional[Union[int, List[int]]] = None
-    repo_url: Optional[HttpUrl] = None
+    number: int | list[int] | None = None
+    repo_url: HttpUrl | None = None
 
     @field_validator("repo_url", mode="before")
     def blank_string(value, field):
@@ -51,8 +48,8 @@ class RelatedIssue(BaseModel):
 
 
 class DateRange(BaseModel):
-    start: Optional[Date]
-    finish: Optional[Date]
+    start: Date | None
+    finish: Date | None
 
     @validator("start", "finish", pre=True, always=True)
     def parse_date(cls, value):
@@ -63,7 +60,7 @@ class DateRange(BaseModel):
             if not value or value.lower() in ["never", "null"]:
                 return None
             try:
-                parsed = dateparser.parse(value)
+                parsed = dateparser.parse(value, settings={"PARSERS": ["timestamp", "relative-time", "absolute-time", "no-spaces-time"]})
                 if parsed is None:
                     raise ValueError(f"Unable to parse date string: {value}")
                 return parsed.date()
@@ -73,13 +70,13 @@ class DateRange(BaseModel):
 
 
 class ChangeItem(BaseModel):
-    title: Optional[str] = Field(min_length=1, strip_whitespace=True)
-    description: Optional[str] = Field(min_length=1, strip_whitespace=True)
+    title: str | None = Field(min_length=1, strip_whitespace=True)
+    description: str | None = Field(min_length=1, strip_whitespace=True)
     files: Files
-    related_issue: Optional[Union[RelatedIssue, RelatedInternalIssue]] = Field(
-        alias="related-issue", exclude_unset=True, default=None
+    related_issue: RelatedIssue | RelatedInternalIssue | None = Field(
+        alias="related-issue", exclude_unset=True, default=None,
     )
-    date: Optional[DateRange] = None
+    date: DateRange | None = None
 
     @model_validator(mode="before")
     def empty_str_to_none(values):
@@ -92,7 +89,7 @@ class ChangeItem(BaseModel):
         return values
 
 
-class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):
+class ReleaseNote(RootModel[dict[str, list[ChangeItem]]]):
     """
     ReleaseNote is a root model containing a dictionary that maps category names to lists of ChangeItems.
     """
