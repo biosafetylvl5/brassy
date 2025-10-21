@@ -50,7 +50,7 @@ def get_rich_opener(no_format=False):
     if no_format:
         return rich.progress.Progress().open
     else:
-        return rich.progress.open
+        return open
 
 
 def setup_console(no_format=False, quiet=False):
