@@ -1,9 +1,9 @@
 import os
 
-from pydantic import ValidationError
 import platformdirs
 import pygit2
 import yaml
+from pydantic import ValidationError
 
 from brassy.templates.settings_template import SettingsTemplate
 
@@ -121,7 +121,7 @@ def create_config_file(config_file):
     config_dir = os.path.dirname(config_file)
     if config_dir:
         os.makedirs(config_dir, exist_ok=True)
-    with open(config_file, "wt") as f:
+    with open(config_file, "w") as f:
         yaml.dump(default_settings.dict(), f)
 
 
@@ -142,7 +142,7 @@ def read_config_file(config_file, create_file_if_not_exist=False):
         Parsed configuration settings.
     """
     try:
-        with open(config_file, "rt") as f:
+        with open(config_file) as f:
             return yaml.safe_load(f)
     except FileNotFoundError:
         if not create_file_if_not_exist:
@@ -206,7 +206,6 @@ def override_dict_with_environmental_variables(input_dict):
     """
     Override dict values with case insensitive environment variables when available.
 
-
     Parameters
     ----------
     input_dict : dict
@@ -253,7 +252,7 @@ def get_settings(app_name):
         If the final settings do not conform to the `Settings` model.
     """
     file_settings = override_dict_with_environmental_variables(
-        get_settings_from_config_files(app_name)
+        get_settings_from_config_files(app_name),
     )
     Settings = SettingsTemplate(**file_settings)
     return Settings

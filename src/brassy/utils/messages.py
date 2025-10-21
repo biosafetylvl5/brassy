@@ -1,7 +1,8 @@
 import logging
+
 import rich
-from rich.logging import RichHandler
 from rich.console import Console as rich_console
+from rich.logging import RichHandler
 from rich.prompt import Confirm
 from rich.traceback import install as install_rich_tracebacks
 
@@ -42,7 +43,8 @@ def get_rich_opener(no_format=False):
         no_format (bool, optional): If True, returns the opener function without any formatting.
             If False, returns the opener function with formatting. Defaults to False.
 
-    Returns:
+    Returns
+    -------
         function: The opener function for rich progress bar.
     """
     if no_format:
@@ -59,7 +61,8 @@ def setup_console(no_format=False, quiet=False):
         no_format (bool, optional): Whether to disable formatting. Defaults to False.
         quiet (bool, optional): Whether to suppress console output. Defaults to False.
 
-    Returns:
+    Returns
+    -------
         Console: The configured rich console object.
     """
     if not no_format:

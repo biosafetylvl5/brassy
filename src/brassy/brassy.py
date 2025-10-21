@@ -4,21 +4,15 @@ It reads YAML files, parses their content, and formats the parsed data into rele
 The release notes can be written to an output file.
 """
 
-import argparse
-import os
-import rich.progress
-import yaml
-from datetime import datetime
 
-import pygit2
 
-import brassy.utils.settings_manager as settings_manager
+from brassy.utils import settings_manager
 
 Settings = settings_manager.get_settings("brassy")
 
 
 def run_from_CLI():
-    import brassy.utils.CLI as CLI
+    from brassy.utils import CLI
 
     CLI.run_from_CLI()
 

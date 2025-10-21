@@ -24,7 +24,6 @@ def get_git_status(repo_path="."):
         - 'renamed': list of str
             List of file paths for files that have been renamed.
     """
-
     # Open the repository
     repo = pygit2.Repository(repo_path)
 

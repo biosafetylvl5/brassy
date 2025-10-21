@@ -4,8 +4,8 @@ from pathlib import Path
 import yaml
 from pygit2 import GitError
 
-import brassy.utils.git_handler as git_handler
 from brassy.brassy import Settings
+from brassy.utils import git_handler
 
 
 def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
@@ -15,7 +15,8 @@ def get_yaml_template_path(file_path_arg, working_dir=os.getcwd()):
     Args:
         file_path_arg (str): The file path argument provided by the user.
 
-    Returns:
+    Returns
+    -------
         str: The path of the YAML template file.
 
     """
@@ -57,7 +58,6 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
     https://github.com/yaml/pyyaml/pull/822
     """
     pipe_replace_string = "REPLACE_ME_WITH_PIPE"
-    from brassy.templates.release_yaml_template import ReleaseNote
 
     default_yaml = {
         category: [
@@ -72,7 +72,7 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
                 "related-issue": {"number": None, "repo_url": ""},
                 # in time, extract from the first and last commit
                 "date": {"start": None, "finish": None},
-            }
+            },
         ]
         for category in Settings.change_categories
     }
@@ -82,12 +82,12 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
         console.print(
             "[bold red]Could not find a git repo. Please run in a "
             + "git repo or pass a file path for the yaml template "
-            + "(eg '-t /path/to/file.yaml')."
+            + "(eg '-t /path/to/file.yaml').",
         )
         exit(1)
     with open(yaml_template_path, "w") as file:
         yaml_text = yaml.safe_dump(
-            default_yaml, sort_keys=False, default_flow_style=False
+            default_yaml, sort_keys=False, default_flow_style=False,
         )
         if Settings.description_populates_with_pipe:
             yaml_text = yaml_text.replace(pipe_replace_string, "|\n    replace_me")

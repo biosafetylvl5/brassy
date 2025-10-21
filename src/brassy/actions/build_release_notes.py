@@ -15,7 +15,8 @@ def get_header_footer(rich_open, header_file=None, footer_file=None):
         header_file (str, optional): The file containing the header content. Defaults to None.
         footer_file (str, optional): The file containing the footer content. Defaults to None.
 
-    Returns:
+    Returns
+    -------
         str: The content with the header and/or footer added.
     """
 
@@ -36,7 +37,8 @@ def find_duplicate_titles(data):
         data (dict): A dictionary containing lists of dictionaries with items
          indexed by "title".
 
-    Returns:
+    Returns
+    -------
         bool: True if there are duplicate "title" values, False otherwise.
     """
     titles = [entry["title"] for category in data for entry in data[category]]
@@ -50,13 +52,13 @@ def format_files_changed_entry(detailed, entry):
             [
                 f"    {change_type}: {file}\n"
                 for file in filter(lambda x: not x == "", entry["files"][change_type])
-            ]
+            ],
         )
     return files_changed
 
 
 def generate_file_change_section_list_of_strings(
-    entry, line, category, title, description
+    entry, line, category, title, description,
 ):
     lines = []
     for change_type in entry["files"]:
@@ -69,7 +71,7 @@ def generate_file_change_section_list_of_strings(
                         description=description,
                         file_change=change_type,
                         file=file,
-                    )
+                    ),
                 )
         else:
             lines.append(
@@ -78,13 +80,13 @@ def generate_file_change_section_list_of_strings(
                     title=title,
                     description=description,
                     file_change=change_type,
-                )
+                ),
             )
     return lines
 
 
 def generate_section_string(
-    section_lines, changelog_entries, release_date, version, footer, header
+    section_lines, changelog_entries, release_date, version, footer, header,
 ):
     lines = []
     entry_keywords = [
@@ -111,8 +113,8 @@ def generate_section_string(
                     if "{file_change}" in line:
                         lines.extend(
                             generate_file_change_section_list_of_strings(
-                                entry, line, category, title, description
-                            )
+                                entry, line, category, title, description,
+                            ),
                         )
                     else:
                         lines.append(
@@ -166,7 +168,7 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
             formatted_string = (
                 formatted_string
                 + generate_section_string(
-                    lines, data, release_date, version, footer, header
+                    lines, data, release_date, version, footer, header,
                 )
                 + "\n"
             )
@@ -215,7 +217,7 @@ def build_release_notes(
         Formatted release notes in .rst format.
     """
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
-        input_files_or_folders, console, working_dir=working_dir
+        input_files_or_folders, console, working_dir=working_dir,
     )
     try:
         data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
@@ -223,9 +225,9 @@ def build_release_notes(
         console.print(f"[red]{e}")
         exit(1)
     header, footer = get_header_footer(
-        rich_open, header_file=header_file, footer_file=footer_file
+        rich_open, header_file=header_file, footer_file=footer_file,
     )
     content = format_release_notes(
-        data, version=version, release_date=release_date, header=header, footer=footer
+        data, version=version, release_date=release_date, header=header, footer=footer,
     )
     return content

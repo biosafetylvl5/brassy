@@ -41,6 +41,10 @@ test = [
     "pytest", # for running tests
 ]
 
+lint = [
+    "ruff",
+]
+
 [tool.poetry.scripts]
 brassy = "brassy.brassy:run_from_CLI"
 
