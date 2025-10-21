@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "brassy"
 version = "0.0.3"
@@ -26,23 +30,32 @@ dateparser = "*"
 sphinx = { version = "*", optional = true }
 sphinxcontrib-runcmd = { version = "*", optional = true }
 sphinxcontrib-napoleon = { version = "*", optional = true }
+sphinx-argparse = { version = "*", optional = true }
+pinkrst = { version = "*", optional = true }
+black = { version = "*", optional = true }
+
+# Test group
+pytest = { version = "*", optional = true }
+
+# Lint group
+ruff = { version = "*", optional = true }
 
 [tool.poetry.extras]
 doc = [
-    "sphinx",                    # Required for building documentation, v7.2 errors
+    "sphinx",                    # Required for building documentation
     "sphinxcontrib-runcmd",      # Required for running shell commands in documentation
     "sphinxcontrib-napoleon",    # Required for Google-style docstrings
-    "sphinx-argparse",    # Required for Google-style docstrings
-    "pinkrst", # for rst formatting
-    "black", # for rst formatting
+    "sphinx-argparse",           # Required for argparse documentation
+    "pinkrst",                   # for rst formatting
+    "black",                     # for rst formatting
 ]
 
 test = [
-    "pytest", # for running tests
+    "pytest",                    # for running tests
 ]
 
 lint = [
-    "ruff",
+    "ruff",                      # for linting
 ]
 
 [tool.poetry.scripts]
