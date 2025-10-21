@@ -1,6 +1,8 @@
 from datetime import date as Date
 
 import dateparser
+from datetime import date as Date
+from typing import Optional
 from pydantic import (
   BaseModel,
   Field,
@@ -8,7 +10,6 @@ from pydantic import (
   RootModel,
   field_validator,
   model_validator,
-  validator,
 )
 
 from brassy.utils.settings_manager import get_settings
@@ -47,70 +48,67 @@ class RelatedIssue(BaseModel):
     repo_url: HttpUrl | None = None
 
     @field_validator("repo_url", mode="before")
-    def blank_string(self, field):
-        if self == "":
+    @classmethod
+    def convert_empty_to_none(cls, value):
+        """Convert empty strings to None for URL validation."""
+        if value == "":
             return None
-        return self
-
+        return value
 
 class DateRange(BaseModel):
-    start: Date | None
-    finish: Date | None
+    start: Optional[Date] = None
+    finish: Optional[Date] = None
 
-    @validator("start", "finish", pre=True, always=True)
-    def parse_date(self, value):
+    @field_validator("start", "finish", mode="before")
+    @classmethod
+    def parse_date(cls, value):
         """
-        Parse and validate date values for 'start' and 'finish' fields.
+        Parse and validate date values.
 
-        This validator converts various date formats to a Date object. It handles
-        strings, existing Date objects, and None values. String inputs are parsed
-        using dateparser with support for timestamps, relative time, absolute time,
-        and no-spaces time formats.
+        Converts various date formats to a Date object, handling strings,
+        Date objects, and None values.
 
-        Parameters
-        ----------
-        value : str, Date, None
-            The value to parse. Can be:
-            - A Date object (returned unchanged)
-            - None (returned unchanged)
-            - A string representing a date in various formats
-            - Empty strings or "never"/"null" (converted to None)
+        Args:
+            value: Input to parse (Date, None, or string)
 
-        Returns
-        -------
-        Date or None
-            The parsed date as a Date object, or None for empty/null values.
+        Returns:
+            Date or None: Parsed date or None for empty values
 
-        Raises
-        ------
-        InvalidDateValue
-            If the value cannot be parsed as a valid date or is of an unsupported type.
-
-        Notes
-        -----
-        This validator enables "no-spaces-time" parsing which has a moderately high
-        false positive rate.
+        Raises:
+            InvalidDateValue: If the value cannot be parsed as a valid date
         """
+        # Already correct type or None
         if value is None or isinstance(value, Date):
             return value
+
+        # String values
         if isinstance(value, str):
             value = value.strip()
-            if not value or value.lower() in ["never", "null"]:
+            if not value or value.lower() in ("never", "null"):
                 return None
-            try:
-                parsed = dateparser.parse(value,
-                                          settings={"PARSERS":
-                                                    ["timestamp",
-                                                     "relative-time",
-                                                     "absolute-time",
-                                                     "no-spaces-time"]})
-                if parsed is None:
-                    raise InvalidDateValue(value)
-                return parsed.date()
-            except Exception as e:
-                raise InvalidDateValue(value) from e
-        raise InvalidDateValue(value)
 
+            parsed = dateparser.parse(
+                value,
+                settings={
+                    "PARSERS": [
+                        "timestamp",
+                        "relative-time",
+                        "absolute-time",
+                        "no-spaces-time"
+                    ]
+                }
+            )
+            if parsed is None:
+                raise InvalidDateValue(f"Could not parse date: {value}")
+            return parsed.date()
+        raise InvalidDateValue(f"Unsupported value type: {type(value)}")
+
+    @model_validator(mode='after')
+    def validate_date_range(self):
+        """Validate that finish date is not before start date if both are set."""
+        if self.start and self.finish and self.finish < self.start:
+            raise ValueError("Finish date cannot be before start date")
+        return self
 
 class ChangeItem(BaseModel):
     """A model representing a change "item", or an atomic change.

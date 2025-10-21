@@ -1,6 +1,6 @@
 import logging
 
-import rich
+import rich, rich.progress
 from rich.console import Console as rich_console
 from rich.logging import RichHandler
 from rich.prompt import Confirm
@@ -50,8 +50,7 @@ def get_rich_opener(no_format=False):
     if no_format:
         return rich.progress.Progress().open
     else:
-        return open
-
+        return rich.progress.open
 
 def setup_console(no_format=False, quiet=False):
     """
