@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 
 import brassy
@@ -42,7 +43,7 @@ def find_duplicate_titles(data):
         bool: True if there are duplicate "title" values, False otherwise.
     """
     titles = [entry["title"] for category in data for entry in data[category]]
-    return not len(set(titles)) == len(titles)
+    return len(set(titles)) != len(titles)
 
 
 def format_files_changed_entry(detailed, entry):
@@ -51,7 +52,7 @@ def format_files_changed_entry(detailed, entry):
         files_changed += "".join(
             [
                 f"    {change_type}: {file}\n"
-                for file in filter(lambda x: not x == "", entry["files"][change_type])
+                for file in filter(lambda x: x != "", entry["files"][change_type])
             ],
         )
     return files_changed
@@ -67,7 +68,7 @@ def generate_file_change_section_list_of_strings(
     lines = []
     for change_type in entry["files"]:
         if "{file}" in line:
-            for file in filter(lambda x: not x == "", entry["files"][change_type]):
+            for file in filter(lambda x: x != "", entry["files"][change_type]):
                 lines.append(
                     line.format(
                         change_type=category.capitalize(),
@@ -102,7 +103,7 @@ def generate_section_string(
         "{" + k + "}"
         for k in ["title", "description", "file_change", "file", "change_type"]
     ]
-    if any([keyword in line for keyword in entry_keywords for line in section_lines]):
+    if any(keyword in line for keyword in entry_keywords for line in section_lines):
         for category, entries in changelog_entries.items():
             for entry in entries:
                 if not entry["title"] and not entry["description"]:
@@ -177,7 +178,7 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
     release_template = Settings.templates.release_template
     formatted_string = ""
     for section in release_template:
-        for section_name, lines in section.items():
+        for _section_name, lines in section.items():
             formatted_string = (
                 formatted_string
                 + generate_section_string(
@@ -243,7 +244,7 @@ def build_release_notes(
         data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
     except (ValueError, TypeError) as e:
         console.print(f"[red]{e}")
-        exit(1)
+        sys.exit(1)
     header, footer = get_header_footer(
         rich_open,
         header_file=header_file,

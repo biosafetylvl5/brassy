@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-import pathlib
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:
+    import pathlib
 
 
 class ReleaseTemplate(BaseModel):

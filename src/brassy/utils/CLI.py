@@ -3,6 +3,7 @@
 
 import argparse
 import os
+import sys
 
 from rich_argparse import RichHelpFormatter
 
@@ -159,7 +160,7 @@ def parse_arguments():
 
 def print_version_and_exit():
     messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
-    exit(0)
+    sys.exit(0)
 
 
 def exit_on_invalid_arguments(args, parser, console):
@@ -191,7 +192,7 @@ def exit_on_invalid_arguments(args, parser, console):
 
     console.print("[bold red]Invalid arguments.\n")
     parser.print_help()
-    exit(1)
+    sys.exit(1)
 
 
 def get_yaml_files_from_input(input_files_or_folders):
@@ -221,7 +222,7 @@ def get_yaml_files_from_input(input_files_or_folders):
             yaml_files.append(path)
         elif os.path.isdir(path):
             dir_yaml_files = []
-            for root, dirs, files in os.walk(path):
+            for root, _dirs, files in os.walk(path):
                 for file in files:
                     if file.endswith(".yaml") or file.endswith(".yml"):
                         dir_yaml_files.append(os.path.join(root, file))
@@ -247,26 +248,24 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
     except FileExistsError as e:
         if Settings.fail_on_empty_dir:
             console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
-            exit(1)
+            sys.exit(1)
         else:
             console.print(f"[yellow]Invalid file or directory: [bold]{e}[/]")
             console.print(
                 "[yellow]Returning 0 because fail_on_empty_dir is [bold]False[/]",
             )
-            exit(0)
+            sys.exit(0)
     except FileNotFoundError as e:
         console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
-        exit(1)
+        sys.exit(1)
     except ValueError as e:
         console.print(f"[red]{e}")
-        exit(1)
+        sys.exit(1)
     return yaml_files
 
 
 def run_from_CLI():
-    """
-    Main function to generate release notes from YAML files and write to an output file.
-    """
+    """Main function to generate release notes from YAML files and write to an output file."""
     args, parser = parse_arguments()
 
     messages.setup_messages(format=not args.no_rich, quiet=args.quiet)
@@ -280,7 +279,7 @@ def run_from_CLI():
         print_version_and_exit()
     elif args.init:
         brassy.actions.init.init()
-        exit(0)
+        sys.exit(0)
     elif args.prune:
         brassy.actions.prune_yaml.direct_pruning_of_files(
             args.input_files_or_folders,

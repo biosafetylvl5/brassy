@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 import yaml
@@ -84,7 +85,7 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
             + "git repo or pass a file path for the yaml template "
             + "(eg '-t /path/to/file.yaml').",
         )
-        exit(1)
+        sys.exit(1)
     with open(yaml_template_path, "w") as file:
         yaml_text = yaml.safe_dump(
             default_yaml,

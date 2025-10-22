@@ -180,7 +180,7 @@ def merge_and_validate_config_files(config_files):
         except ValidationError as e:
             print(f"Failed to validate {config_file}")
             print(repr(e.errors()[0]))
-            raise e
+            raise
         settings.update(file_settings)
     return settings
 
@@ -220,7 +220,7 @@ def override_dict_with_environmental_variables(input_dict):
     lower_env_vars = {
         key.lower(): {"env_var": key, "value": value} for key, value in env_vars.items()
     }
-    for key in input_dict.keys():
+    for key in input_dict:
         if key.lower() in lower_env_vars:
             override = lower_env_vars[key.lower()]
             # print(

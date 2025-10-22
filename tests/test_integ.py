@@ -45,7 +45,7 @@ def test_build_on_test_files(input_file):
         ):
             raise OSError("Brassy command failed")
         assert list(output_file.open()) == list(
-            (valid_outputs_path / f"{input_file}.rst").open()
+            (valid_outputs_path / f"{input_file}.rst").open(),
         )
 
 
@@ -73,5 +73,5 @@ def test_pruning():
             ["brassy", "--prune", to_prune],
         )
         assert list(to_prune.open()) == list(
-            (valid_outputs_path / "pruned.yaml").open()
+            (valid_outputs_path / "pruned.yaml").open(),
         )
