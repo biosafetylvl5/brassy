@@ -1,11 +1,12 @@
 from __future__ import annotations
+from typing import List
 import pathlib
 
 from pydantic import BaseModel, Field
 
 
 class ReleaseTemplate(BaseModel):
-    release_template: list[dict[str, list[str]]] | None = Field(
+    release_template: List[dict[str, List[str]]] | None = Field(
         default=None, alias="release-template",
     )
 
@@ -78,7 +79,7 @@ DefaultTemplate = ReleaseTemplate(
 class SettingsTemplate(BaseModel):
     use_color: bool = True
     default_yaml_path: pathlib.Path | None = None
-    change_categories: list[str] = [
+    change_categories: List[str] = [
         "bug fix",
         "enhancement",
         "deprecation",
@@ -92,7 +93,7 @@ class SettingsTemplate(BaseModel):
     fail_on_empty_dir: bool = True
     description_populates_with_pipe: bool = False
 
-    valid_fields: list[str] = ["title", "description", "files", "related-issue"]
-    valid_changes: list[str] = ["deleted", "moved", "added", "modified"]
+    valid_fields: List[str] = ["title", "description", "files", "related-issue"]
+    valid_changes: List[str] = ["deleted", "moved", "added", "modified"]
     enable_experimental_features: bool = False
     templates: ReleaseTemplate | None = DefaultTemplate
