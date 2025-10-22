@@ -30,8 +30,7 @@ def test_help(monkeypatch):
 )
 def test_build_on_test_files(input_file):
     with tempfile.TemporaryDirectory() as output_file_dir:
-        output_file_dir = Path(output_file_dir)
-        output_file = output_file_dir / f"{input_file}.rst"
+        output_file = Path(output_file_dir) / f"{input_file}.rst"
         print(output_file)
         if not run_cli_command_return_true_if_command_returns_zero(
             [
@@ -51,8 +50,7 @@ def test_build_on_test_files(input_file):
 
 def test_create_template_build_template():
     with tempfile.TemporaryDirectory() as output_file_dir:
-        output_file_dir = Path(output_file_dir)
-        output_file = str(output_file_dir / "template.yaml")
+        output_file = str(Path(output_file_dir) / "template.yaml")
         if not run_cli_command_return_true_if_command_returns_zero(
             ["brassy", "-t", output_file],
         ):
@@ -65,8 +63,7 @@ def test_create_template_build_template():
 
 def test_pruning():
     with tempfile.TemporaryDirectory() as output_file_dir:
-        output_file_dir = Path(output_file_dir)
-        to_prune = output_file_dir / "pruned.yaml"
+        to_prune = Path(output_file_dir) / "pruned.yaml"
         shutil.copyfile(input_path / "to-prune.yaml", to_prune)
 
         run_cli_command_return_true_if_command_returns_zero(

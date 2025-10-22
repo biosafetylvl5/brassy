@@ -101,7 +101,7 @@ def setup_messages(format, quiet):
     boolean_prompt = get_boolean_prompt_function(format=format)
 
 
-open = get_rich_opener()
+open = get_rich_opener() # noqa: A001
 RichConsole = setup_console()
-print = RichConsole.print
+print = RichConsole.print # noqa: A001
 boolean_prompt = get_boolean_prompt_function()
