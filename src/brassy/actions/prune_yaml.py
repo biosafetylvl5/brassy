@@ -117,7 +117,9 @@ def direct_pruning_of_files(input_files_or_folders, console, working_dir):
     import brassy.utils.CLI  # here to prevent circular import
 
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
-        input_files_or_folders, console, working_dir=working_dir,
+        input_files_or_folders,
+        console,
+        working_dir=working_dir,
     )
     for yaml_file in yaml_files:
         prune_yaml_file(yaml_file, console)

@@ -23,10 +23,10 @@ setup(
         "pinkrst",
         "black",
         "pytest",
-        "sphinx-argparse",    # Required for Google-style docstrings
-        "sphinxcontrib-runcmd",      # Required for running shell commands in documentation
-        "sphinxcontrib-napoleon",    # Required for Google-style docstrings
-        "sphinx-argparse",    # Required for Google-style docstrings
-        "sphinx",                    # Required for building documentation, v7.2 errors
+        "sphinx-argparse",  # Required for Google-style docstrings
+        "sphinxcontrib-runcmd",  # Required for running shell commands in documentation
+        "sphinxcontrib-napoleon",  # Required for Google-style docstrings
+        "sphinx-argparse",  # Required for Google-style docstrings
+        "sphinx",  # Required for building documentation, v7.2 errors
     ],
 )

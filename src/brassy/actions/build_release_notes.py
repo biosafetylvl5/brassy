@@ -58,7 +58,11 @@ def format_files_changed_entry(detailed, entry):
 
 
 def generate_file_change_section_list_of_strings(
-    entry, line, category, title, description,
+    entry,
+    line,
+    category,
+    title,
+    description,
 ):
     lines = []
     for change_type in entry["files"]:
@@ -86,7 +90,12 @@ def generate_file_change_section_list_of_strings(
 
 
 def generate_section_string(
-    section_lines, changelog_entries, release_date, version, footer, header,
+    section_lines,
+    changelog_entries,
+    release_date,
+    version,
+    footer,
+    header,
 ):
     lines = []
     entry_keywords = [
@@ -113,7 +122,11 @@ def generate_section_string(
                     if "{file_change}" in line:
                         lines.extend(
                             generate_file_change_section_list_of_strings(
-                                entry, line, category, title, description,
+                                entry,
+                                line,
+                                category,
+                                title,
+                                description,
                             ),
                         )
                     else:
@@ -168,7 +181,12 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
             formatted_string = (
                 formatted_string
                 + generate_section_string(
-                    lines, data, release_date, version, footer, header,
+                    lines,
+                    data,
+                    release_date,
+                    version,
+                    footer,
+                    header,
                 )
                 + "\n"
             )
@@ -217,7 +235,9 @@ def build_release_notes(
         Formatted release notes in .rst format.
     """
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
-        input_files_or_folders, console, working_dir=working_dir,
+        input_files_or_folders,
+        console,
+        working_dir=working_dir,
     )
     try:
         data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
@@ -225,9 +245,15 @@ def build_release_notes(
         console.print(f"[red]{e}")
         exit(1)
     header, footer = get_header_footer(
-        rich_open, header_file=header_file, footer_file=footer_file,
+        rich_open,
+        header_file=header_file,
+        footer_file=footer_file,
     )
     content = format_release_notes(
-        data, version=version, release_date=release_date, header=header, footer=footer,
+        data,
+        version=version,
+        release_date=release_date,
+        header=header,
+        footer=footer,
     )
     return content

@@ -33,7 +33,10 @@ def module_under_test(monkeypatch, settings_stub):
         sys.modules["brassy.utils.settings_manager"] = settings_manager
 
     monkeypatch.setattr(
-        settings_manager, "get_settings", lambda _: settings_stub, raising=False,
+        settings_manager,
+        "get_settings",
+        lambda _: settings_stub,
+        raising=False,
     )
 
     module = importlib.import_module("brassy.templates.release_yaml_template")
@@ -108,7 +111,9 @@ def test_date_range_unsupported_type_raises(module_under_test):
 
     with pytest.raises(ValidationError) as exc_info:
         DateRange(start={"unexpected": "type"})
-    assert any("Unsupported value type" in err["msg"] for err in exc_info.value.errors())
+    assert any(
+        "Unsupported value type" in err["msg"] for err in exc_info.value.errors()
+    )
 
 
 def test_date_range_finish_before_start_raises(module_under_test):

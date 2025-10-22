@@ -4,7 +4,6 @@ It reads YAML files, parses their content, and formats the parsed data into rele
 The release notes can be written to an output file.
 """
 
-
 from __future__ import annotations
 
 from brassy.utils import settings_manager

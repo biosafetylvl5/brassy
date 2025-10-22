@@ -93,7 +93,10 @@ def get_parser():
         help="A footer file to suffix to the release notes.",
     )
     parser.add_argument(
-        "-o", "--output-file", type=str, help="The output file for release notes.",
+        "-o",
+        "--output-file",
+        type=str,
+        help="The output file for release notes.",
     )
     if Settings.default_yaml_path and Settings.enable_experimental_features:
         yaml_path = os.path.join(".", Settings.default_yaml_path)
@@ -113,7 +116,10 @@ def get_parser():
         help="Write generated release notes to console.",
     )
     parser.add_argument(
-        "-nr", "--no-rich", action="store_true", help="Disable rich text output",
+        "-nr",
+        "--no-rich",
+        action="store_true",
+        help="Disable rich text output",
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
     parser.add_argument(
@@ -232,7 +238,8 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
         yaml_files = get_yaml_files_from_input(
             [
                 brassy.utils.file_handler.get_yaml_template_path(
-                    path, working_dir=working_dir,
+                    path,
+                    working_dir=working_dir,
                 )
                 for path in input_files_or_folders
             ],
@@ -276,7 +283,9 @@ def run_from_CLI():
         exit(0)
     elif args.prune:
         brassy.actions.prune_yaml.direct_pruning_of_files(
-            args.input_files_or_folders, console, args.yaml_dir,
+            args.input_files_or_folders,
+            console,
+            args.yaml_dir,
         )
     elif "write_yaml_template" in args:
         brassy.utils.file_handler.create_blank_template_yaml_file(

@@ -5,28 +5,27 @@ from typing import Dict, List  # noqa: UP035
 
 import dateparser
 from pydantic import (
-  BaseModel,
-  Field,
-  HttpUrl,
-  RootModel,
-  field_validator,
-  model_validator,
+    BaseModel,
+    Field,
+    HttpUrl,
+    RootModel,
+    field_validator,
+    model_validator,
 )
 
 from brassy.utils.settings_manager import get_settings
 
 
 class InvalidDateValue(ValueError):
-  def __init__(self, date_string: str) -> None:
-    super().__init__(f"Invalid type for date field: {date_string}")
-
+    def __init__(self, date_string: str) -> None:
+        super().__init__(f"Invalid type for date field: {date_string}")
 
 
 class Files(BaseModel):
-    deleted: List[str] = [] # noqa: UP006
-    moved: List[str] = [] # noqa: UP006
-    added: List[str] = [] # noqa: UP006
-    modified: List[str] = [] # noqa: UP006
+    deleted: List[str] = []  # noqa: UP006
+    moved: List[str] = []  # noqa: UP006
+    added: List[str] = []  # noqa: UP006
+    modified: List[str] = []  # noqa: UP006
 
     @model_validator(mode="after")
     def check_at_least_one_field(self):
@@ -40,12 +39,11 @@ class Files(BaseModel):
 
 
 class RelatedInternalIssue(BaseModel):
-    internal: str | None = Field(
-        pattern=r"[A-Za-z]+#\d+ - .+", default=None)
+    internal: str | None = Field(pattern=r"[A-Za-z]+#\d+ - .+", default=None)
 
 
 class RelatedIssue(BaseModel):
-    number: int | List[int] | None = None # noqa: UP006
+    number: int | List[int] | None = None  # noqa: UP006
     repo_url: HttpUrl | None = None
 
     @field_validator("repo_url", mode="before")
@@ -55,6 +53,7 @@ class RelatedIssue(BaseModel):
         if value == "":
             return None
         return value
+
 
 class DateRange(BaseModel):
     start: Date | None = None
@@ -106,12 +105,13 @@ class DateRange(BaseModel):
             return parsed.date()
         raise InvalidDateValue(f"Unsupported value type: {type(value)}")
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_date_range(self):
         """Validate that finish date is not before start date if both are set."""
         if self.start and self.finish and self.finish < self.start:
             raise ValueError("Finish date cannot be before start date")
         return self
+
 
 class ChangeItem(BaseModel):
     """A model representing a change "item", or an atomic change.
@@ -146,7 +146,9 @@ class ChangeItem(BaseModel):
     description: str | None = Field(min_length=1, strip_whitespace=True)
     files: Files
     related_issue: RelatedIssue | RelatedInternalIssue | None = Field(
-        alias="related-issue", exclude_unset=True, default=None,
+        alias="related-issue",
+        exclude_unset=True,
+        default=None,
     )
     date: DateRange | None = None
 
@@ -169,7 +171,7 @@ class ChangeItem(BaseModel):
         return self
 
 
-class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]): # noqa: UP006
+class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):  # noqa: UP006
     """ReleaseNote is a root model for Release Notes.
 
     It contains a dictionary that maps category names to lists of ChangeItems.

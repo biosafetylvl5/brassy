@@ -12,9 +12,9 @@ valid_outputs_path = test_path / "outputs"
 
 def run_cli_command_return_true_if_command_returns_zero(command):
     result = subprocess.run(command, capture_output=True, text=True, check=False)
-    assert (
-        result.returncode == 0
-    ), f"Command failed with return code {result.returncode}"
+    assert result.returncode == 0, (
+        f"Command failed with return code {result.returncode}"
+    )
     return result.returncode == 0
 
 
@@ -25,7 +25,8 @@ def test_help(monkeypatch):
 
 @pytest.mark.integtest
 @pytest.mark.parametrize(
-    "input_file", ["barebones", "mostly-featured", "fully-featured"],
+    "input_file",
+    ["barebones", "mostly-featured", "fully-featured"],
 )
 def test_build_on_test_files(input_file):
     with tempfile.TemporaryDirectory() as output_file_dir:
@@ -43,7 +44,9 @@ def test_build_on_test_files(input_file):
             ],
         ):
             raise OSError("Brassy command failed")
-        assert list(output_file.open()) == list((valid_outputs_path / f"{input_file}.rst").open())
+        assert list(output_file.open()) == list(
+            (valid_outputs_path / f"{input_file}.rst").open()
+        )
 
 
 def test_create_template_build_template():
@@ -69,4 +72,6 @@ def test_pruning():
         run_cli_command_return_true_if_command_returns_zero(
             ["brassy", "--prune", to_prune],
         )
-        assert list(to_prune.open()) == list((valid_outputs_path / "pruned.yaml").open())
+        assert list(to_prune.open()) == list(
+            (valid_outputs_path / "pruned.yaml").open()
+        )

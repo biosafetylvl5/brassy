@@ -7,7 +7,8 @@ from pydantic import BaseModel, Field
 
 class ReleaseTemplate(BaseModel):
     release_template: list[dict[str, list[str]]] | None = Field(
-        default=None, alias="release-template",
+        default=None,
+        alias="release-template",
     )
 
     class Config:

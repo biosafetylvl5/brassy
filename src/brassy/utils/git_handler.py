@@ -31,8 +31,7 @@ def get_git_status(repo_path="."):
     try:
         current_branch = repo.head
     except pygit2.GitError:
-        raise pygit2.GitError(
-            f"{repo_path} is not a git repo or does not have a head")
+        raise pygit2.GitError(f"{repo_path} is not a git repo or does not have a head")
 
     # Get the main branch reference
     main_branch = repo.branches["main"]

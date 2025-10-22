@@ -87,7 +87,9 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
         exit(1)
     with open(yaml_template_path, "w") as file:
         yaml_text = yaml.safe_dump(
-            default_yaml, sort_keys=False, default_flow_style=False,
+            default_yaml,
+            sort_keys=False,
+            default_flow_style=False,
         )
         if Settings.description_populates_with_pipe:
             yaml_text = yaml_text.replace(pipe_replace_string, "|\n    replace_me")

@@ -53,6 +53,7 @@ def get_rich_opener(no_format=False):
     else:
         return rich.progress.open
 
+
 def setup_console(no_format=False, quiet=False):
     """
     Set up and return the console for printing messages.
