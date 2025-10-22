@@ -1,8 +1,8 @@
+from __future__ import annotations
 from datetime import date as Date
 
 import dateparser
 from datetime import date as Date
-from typing import Optional
 from pydantic import (
   BaseModel,
   Field,
@@ -56,8 +56,8 @@ class RelatedIssue(BaseModel):
         return value
 
 class DateRange(BaseModel):
-    start: Optional[Date] = None
-    finish: Optional[Date] = None
+    start: Date | None = None
+    finish: Date | None = None
 
     @field_validator("start", "finish", mode="before")
     @classmethod
