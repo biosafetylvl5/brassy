@@ -1,5 +1,6 @@
 from __future__ import annotations
 from datetime import date as Date
+from typing import List
 
 import dateparser
 from datetime import date as Date
@@ -22,10 +23,10 @@ class InvalidDateValue(ValueError):
 
 
 class Files(BaseModel):
-    deleted: list[str] = []
-    moved: list[str] = []
-    added: list[str] = []
-    modified: list[str] = []
+    deleted: List[str] = []
+    moved: List[str] = []
+    added: List[str] = []
+    modified: List[str] = []
 
     @model_validator(mode="after")
     def check_at_least_one_field(self):
@@ -44,7 +45,7 @@ class RelatedInternalIssue(BaseModel):
 
 
 class RelatedIssue(BaseModel):
-    number: int | list[int] | None = None
+    number: int | List[int] | None = None
     repo_url: HttpUrl | None = None
 
     @field_validator("repo_url", mode="before")
@@ -166,7 +167,7 @@ class ChangeItem(BaseModel):
         return self
 
 
-class ReleaseNote(RootModel[dict[str, list[ChangeItem]]]):
+class ReleaseNote(RootModel[dict[str, List[ChangeItem]]]):
     """ReleaseNote is a root model for Release Notes.
 
     It contains a dictionary that maps category names to lists of ChangeItems.
