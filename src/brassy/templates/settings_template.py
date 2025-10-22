@@ -2,11 +2,11 @@ from __future__ import annotations
 import pathlib
 
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 
 class ReleaseTemplate(BaseModel):
-    release_template: List[dict[str, List[str]]] | None = Field(
+    release_template: Optional[List[dict[str, List[str]]]] = Field(
         default=None, alias="release-template",
     )
 
