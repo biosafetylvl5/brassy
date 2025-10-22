@@ -25,6 +25,7 @@ pyyaml = "*"
 platformdirs = "*"
 pydantic = "*"
 dateparser = "*"
+eval-type-backport = "*"
 
 # Doc group
 sphinx = { version = "*", optional = true }
