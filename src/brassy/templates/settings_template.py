@@ -78,7 +78,7 @@ DefaultTemplate = ReleaseTemplate(
 
 class SettingsTemplate(BaseModel):
     use_color: bool = True
-    default_yaml_path: pathlib.Path | None = None
+    default_yaml_path: Optional[pathlib.Path] = None
     change_categories: List[str] = [
         "bug fix",
         "enhancement",
