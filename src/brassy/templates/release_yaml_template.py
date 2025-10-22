@@ -1,9 +1,8 @@
 from __future__ import annotations
+
 from datetime import date as Date
-from typing import List, Dict
 
 import dateparser
-from datetime import date as Date
 from pydantic import (
   BaseModel,
   Field,
@@ -23,10 +22,10 @@ class InvalidDateValue(ValueError):
 
 
 class Files(BaseModel):
-    deleted: List[str] = []
-    moved: List[str] = []
-    added: List[str] = []
-    modified: List[str] = []
+    deleted: list[str] = []
+    moved: list[str] = []
+    added: list[str] = []
+    modified: list[str] = []
 
     @model_validator(mode="after")
     def check_at_least_one_field(self):
@@ -45,7 +44,7 @@ class RelatedInternalIssue(BaseModel):
 
 
 class RelatedIssue(BaseModel):
-    number: int | List[int] | None = None
+    number: int | list[int] | None = None
     repo_url: HttpUrl | None = None
 
     @field_validator("repo_url", mode="before")
@@ -72,10 +71,12 @@ class DateRange(BaseModel):
         Args:
             value: Input to parse (Date, None, or string)
 
-        Returns:
+        Returns
+        -------
             Date or None: Parsed date or None for empty values
 
-        Raises:
+        Raises
+        ------
             InvalidDateValue: If the value cannot be parsed as a valid date
         """
         # Already correct type or None
@@ -95,9 +96,9 @@ class DateRange(BaseModel):
                         "timestamp",
                         "relative-time",
                         "absolute-time",
-                        "no-spaces-time"
-                    ]
-                }
+                        "no-spaces-time",
+                    ],
+                },
             )
             if parsed is None:
                 raise InvalidDateValue(f"Could not parse date: {value}")
@@ -167,7 +168,7 @@ class ChangeItem(BaseModel):
         return self
 
 
-class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):
+class ReleaseNote(RootModel[dict[str, list[ChangeItem]]]):
     """ReleaseNote is a root model for Release Notes.
 
     It contains a dictionary that maps category names to lists of ChangeItems.

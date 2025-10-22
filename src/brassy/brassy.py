@@ -6,6 +6,7 @@ The release notes can be written to an output file.
 
 
 from __future__ import annotations
+
 from brassy.utils import settings_manager
 
 Settings = settings_manager.get_settings("brassy")

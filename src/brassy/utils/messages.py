@@ -1,6 +1,7 @@
 import logging
 
-import rich, rich.progress
+import rich
+import rich.progress
 from rich.console import Console as rich_console
 from rich.logging import RichHandler
 from rich.prompt import Confirm

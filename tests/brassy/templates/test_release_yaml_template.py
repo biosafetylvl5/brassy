@@ -33,7 +33,7 @@ def module_under_test(monkeypatch, settings_stub):
         sys.modules["brassy.utils.settings_manager"] = settings_manager
 
     monkeypatch.setattr(
-        settings_manager, "get_settings", lambda _: settings_stub, raising=False
+        settings_manager, "get_settings", lambda _: settings_stub, raising=False,
     )
 
     module = importlib.import_module("brassy.templates.release_yaml_template")
