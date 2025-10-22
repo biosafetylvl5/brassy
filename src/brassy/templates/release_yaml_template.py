@@ -1,6 +1,6 @@
 from __future__ import annotations
 from datetime import date as Date
-from typing import List
+from typing import List, Dict
 
 import dateparser
 from datetime import date as Date
@@ -167,7 +167,7 @@ class ChangeItem(BaseModel):
         return self
 
 
-class ReleaseNote(RootModel[dict[str, List[ChangeItem]]]):
+class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):
     """ReleaseNote is a root model for Release Notes.
 
     It contains a dictionary that maps category names to lists of ChangeItems.
