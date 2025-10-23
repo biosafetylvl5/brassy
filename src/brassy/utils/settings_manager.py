@@ -1,34 +1,36 @@
-import os
+"""Manages getting and setting settings."""
 
-from pydantic import ValidationError
+import os
+from pathlib import Path
+
 import platformdirs
 import pygit2
 import yaml
+from pydantic import ValidationError
 
 from brassy.templates.settings_template import SettingsTemplate
 
 
 def get_git_repo_root(path="."):
     """
-    Get the root directory of the Git repository containing the given path.
+    Find the root directory of the Git repository for a path.
 
     Parameters
     ----------
     path : str, optional
-        A path within the Git repository. Defaults to the current directory.
+        Path inside the repository. Defaults to ".".
 
     Returns
     -------
-    str
-        Absolute path to the root of the Git repository. This is usually the
-        path containing the .git folder.
+    Path
+        Absolute path to the repository root (the dir that contains .git).
     """
-    return os.path.abspath(os.path.join(pygit2.Repository(path).path, ".."))
+    return (Path(pygit2.Repository(path).path) / "..").resolve()
 
 
 def get_project_config_file_path(app_name):
     """
-    Retrieve the project-specific configuration file path for the application.
+    Return the path to the project's configuration file.
 
     Parameters
     ----------
@@ -37,21 +39,23 @@ def get_project_config_file_path(app_name):
 
     Returns
     -------
-    str
-        Path to the project's configuration file.
+    Path
+        Path to the project's configuration file. If the file does not
+        exist locally, the path is resolved relative to the repository
+        root when possible.
     """
-    project_file = f".{app_name}"
-    if os.path.isfile(project_file):
+    project_file = Path(f".{app_name}")
+    if project_file.is_file():
         return project_file
     try:
-        return os.path.join(get_git_repo_root(), project_file)
+        return get_git_repo_root() / project_file
     except pygit2.GitError:
         return project_file
 
 
 def get_user_config_file_path(app_name):
     """
-    Retrieve the user-specific configuration file path for the application.
+    Retrieve the user-specific configuration file path for the app.
 
     Parameters
     ----------
@@ -60,15 +64,15 @@ def get_user_config_file_path(app_name):
 
     Returns
     -------
-    str
+    Path
         Path to the user's configuration file.
     """
-    return os.path.join(platformdirs.user_config_dir(app_name), "user.config")
+    return Path(platformdirs.user_config_dir(app_name)) / "user.config"
 
 
 def get_site_config_file_path(app_name):
     """
-    Retrieve the site-specific configuration file path for the application.
+    Retrieve the site-wide configuration file path for the app.
 
     Parameters
     ----------
@@ -77,15 +81,15 @@ def get_site_config_file_path(app_name):
 
     Returns
     -------
-    str
+    Path
         Path to the site's configuration file.
     """
-    return os.path.join(platformdirs.site_config_dir(app_name), "site.config")
+    return Path(platformdirs.site_config_dir(app_name)) / "site.config"
 
 
 def get_config_files(app_name):
     """
-    Get a list of configuration file paths in order of increasing precedence.
+    Get configuration file paths in increasing precedence.
 
     Parameters
     ----------
@@ -94,8 +98,8 @@ def get_config_files(app_name):
 
     Returns
     -------
-    list of str
-        List of configuration file paths.
+    List[Path]
+        List of configuration file paths. Site, user, then project.
     """
     config_files = []
     for f in [
@@ -114,15 +118,16 @@ def create_config_file(config_file):
 
     Parameters
     ----------
-    config_file : str
+    config_file : Path
         Path where the configuration file will be created.
     """
+    config_file = Path(config_file)
     default_settings = SettingsTemplate()
-    config_dir = os.path.dirname(config_file)
+    config_dir = config_file.parent
     if config_dir:
-        os.makedirs(config_dir, exist_ok=True)
-    with open(config_file, "wt") as f:
-        yaml.dump(default_settings.dict(), f)
+        config_dir.makedirs(exist_ok=True, parents=True)
+    with config_file.open("w") as f:
+        yaml.dump(default_settings.model_dump(), f)
 
 
 def read_config_file(config_file, create_file_if_not_exist=False):
@@ -131,7 +136,7 @@ def read_config_file(config_file, create_file_if_not_exist=False):
 
     Parameters
     ----------
-    config_file : str
+    config_file : Path or str
         Path to the configuration file.
     create_file_if_not_exist : bool
         Creates file if it doesn't exist
@@ -139,14 +144,15 @@ def read_config_file(config_file, create_file_if_not_exist=False):
     Returns
     -------
     dict
-        Parsed configuration settings.
+        Parsed configuration settings as a dictionary.
     """
+    config_file = Path(config_file)
     try:
-        with open(config_file, "rt") as f:
+        with config_file.open() as f:
             return yaml.safe_load(f)
     except FileNotFoundError:
         if not create_file_if_not_exist:
-            return SettingsTemplate().dict()
+            return SettingsTemplate().model_dump()
         else:
             create_config_file(config_file)
             return read_config_file(config_file)
@@ -154,13 +160,12 @@ def read_config_file(config_file, create_file_if_not_exist=False):
 
 def merge_and_validate_config_files(config_files):
     """
-    Merge settings from multiple configuration files and validate them.
+    Merge settings from multiple config files and validate them.
 
     Parameters
     ----------
-    config_files : list of str
-        List of configuration file paths. The order of the files matters.
-        Each file overwrites the values of the previous.
+    config_files : list of Path
+        Paths to configuration files. Later files override earlier ones.
 
     Returns
     -------
@@ -170,7 +175,8 @@ def merge_and_validate_config_files(config_files):
     Raises
     ------
     ValidationError
-        If any of the settings do not conform to the `Settings` model.
+        If any file's settings fail to validate against the
+        SettingsTemplate model.
     """
     settings = {}
     for config_file in config_files:
@@ -180,14 +186,14 @@ def merge_and_validate_config_files(config_files):
         except ValidationError as e:
             print(f"Failed to validate {config_file}")
             print(repr(e.errors()[0]))
-            raise e
+            raise
         settings.update(file_settings)
     return settings
 
 
 def get_settings_from_config_files(app_name):
     """
-    Retrieve settings from configuration files without environment overrides.
+    Retrieve settings from configuration files without env overrides.
 
     Parameters
     ----------
@@ -203,9 +209,7 @@ def get_settings_from_config_files(app_name):
 
 
 def override_dict_with_environmental_variables(input_dict):
-    """
-    Override dict values with case insensitive environment variables when available.
-
+    """Override dict values with case insensitive environment variables when available.
 
     Parameters
     ----------
@@ -221,21 +225,16 @@ def override_dict_with_environmental_variables(input_dict):
     lower_env_vars = {
         key.lower(): {"env_var": key, "value": value} for key, value in env_vars.items()
     }
-    for key in input_dict.keys():
+    for key in input_dict:
         if key.lower() in lower_env_vars:
             override = lower_env_vars[key.lower()]
-            # print(
-            #    f"Overriding value {key} with environmental "
-            #    f"variable {override['env_var']} "
-            #    f"with value {override['value']}"
-            # )
             input_dict[key] = override["value"]
     return input_dict
 
 
 def get_settings(app_name):
     """
-    Return application settings from config files and environment variables.
+    Return final application settings with file and env overrides.
 
     Parameters
     ----------
@@ -244,16 +243,16 @@ def get_settings(app_name):
 
     Returns
     -------
-    Settings
-        An instance of the `Settings` model with all configurations applied.
+    SettingsTemplate
+        An instance containing the merged configuration.
 
     Raises
     ------
     ValidationError
-        If the final settings do not conform to the `Settings` model.
+        If the final settings fail to validate against the model.
     """
     file_settings = override_dict_with_environmental_variables(
-        get_settings_from_config_files(app_name)
+        get_settings_from_config_files(app_name),
     )
-    Settings = SettingsTemplate(**file_settings)
-    return Settings
+    settings = SettingsTemplate(**file_settings)
+    return settings

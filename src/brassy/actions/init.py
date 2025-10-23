@@ -1,3 +1,5 @@
+"""Initialize brassy with config file."""
+
 import brassy
 from brassy.brassy import Settings
 
@@ -28,8 +30,8 @@ def init():
     for conf_file in conf_files:
         brassy.utils.settings_manager.create_config_file(conf_file)
     if brassy.utils.messages.boolean_prompt(
-        "Do you want to create a project config file?"
+        "Do you want to create a project config file?",
     ):
         brassy.utils.settings_manager.create_config_file(
-            brassy.utils.settings_manager.get_project_config_file_path("brassy")
+            brassy.utils.settings_manager.get_project_config_file_path("brassy"),
         )

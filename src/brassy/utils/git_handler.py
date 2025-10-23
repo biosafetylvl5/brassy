@@ -1,3 +1,5 @@
+"""Handle Git-related functionality."""
+
 import pygit2
 
 
@@ -24,16 +26,15 @@ def get_git_status(repo_path="."):
         - 'renamed': list of str
             List of file paths for files that have been renamed.
     """
-
     # Open the repository
     repo = pygit2.Repository(repo_path)
 
     # Get the current branch reference
     try:
         current_branch = repo.head
-    except pygit2.GitError:
+    except pygit2.GitError as e:
         raise pygit2.GitError(
-            f"{repo_path} is not a git repo or does not have a head")
+            f"{repo_path} is not a git repo or does not have a head") from e
 
     # Get the main branch reference
     main_branch = repo.branches["main"]
@@ -73,6 +74,7 @@ def get_git_status(repo_path="."):
 
 
 def print_out_git_changed_files(print_function, repo_path="."):
+    """Print out changes as detected by Git in format Brassy expects in changlogs."""
     status = get_git_status(repo_path=repo_path)
     for entry in status:
         print_function(f"    {entry}:")

@@ -1,8 +1,13 @@
-# This module is for the CLI only portions of brassy.
-# Brassy can be run without this file, and importing it should
+"""The CLI only portions of brassy.
+
+Brassy can be run without this file, and importing it brassy without it should
+allow users to call brassy without the CLI
+"""
 
 import argparse
 import os
+import sys
+from pathlib import Path
 
 from rich_argparse import RichHelpFormatter
 
@@ -11,17 +16,18 @@ import brassy.actions.init
 import brassy.actions.prune_yaml
 import brassy.utils.file_handler
 import brassy.utils.git_handler
+from brassy.utils import messages
 from brassy.utils.settings_manager import get_settings
-import brassy.utils.messages as messages
 
 Settings = get_settings("brassy")
 
 
 def get_parser():
     """
-    Returns an ArgumentParser object with predefined arguments for generating release notes from YAML files.
+    Return ArgumentParser for CLI.
 
-    Returns:
+    Returns
+    -------
         argparse.ArgumentParser: The ArgumentParser object with predefined arguments.
     """
     parser = argparse.ArgumentParser(
@@ -92,10 +98,13 @@ def get_parser():
         help="A footer file to suffix to the release notes.",
     )
     parser.add_argument(
-        "-o", "--output-file", type=str, help="The output file for release notes."
+        "-o",
+        "--output-file",
+        type=str,
+        help="The output file for release notes.",
     )
     if Settings.default_yaml_path and Settings.enable_experimental_features:
-        yaml_path = os.path.join(".", Settings.default_yaml_path)
+        yaml_path = "." / Settings.default_yaml_path
     else:
         yaml_path = "."
     parser.add_argument(
@@ -112,7 +121,10 @@ def get_parser():
         help="Write generated release notes to console.",
     )
     parser.add_argument(
-        "-nr", "--no-rich", action="store_true", help="Disable rich text output"
+        "-nr",
+        "--no-rich",
+        action="store_true",
+        help="Disable rich text output",
     )
     parser.add_argument("-q", "--quiet", action="store_true", help="Only output errors")
     parser.add_argument(
@@ -151,8 +163,9 @@ def parse_arguments():
 
 
 def print_version_and_exit():
+    """Print version and exit with status code 0."""
     messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
-    exit(0)
+    sys.exit(0)
 
 
 def exit_on_invalid_arguments(args, parser, console):
@@ -184,7 +197,7 @@ def exit_on_invalid_arguments(args, parser, console):
 
     console.print("[bold red]Invalid arguments.\n")
     parser.print_help()
-    exit(1)
+    sys.exit(1)
 
 
 def get_yaml_files_from_input(input_files_or_folders):
@@ -208,16 +221,16 @@ def get_yaml_files_from_input(input_files_or_folders):
     """
     yaml_files = []
     for path in input_files_or_folders:
-        if os.path.isfile(path):
-            if not path.endswith(".yaml") or path.endswith(".yml"):
+        if Path(path).is_file():
+            if path.suffix not in [".yaml", ".yml"]:
                 raise ValueError(f"File {path} is not a YAML file.")
             yaml_files.append(path)
-        elif os.path.isdir(path):
+        elif path.is_dir():
             dir_yaml_files = []
-            for root, dirs, files in os.walk(path):
+            for root, _dirs, files in os.walk(path):
                 for file in files:
                     if file.endswith(".yaml") or file.endswith(".yml"):
-                        dir_yaml_files.append(os.path.join(root, file))
+                        dir_yaml_files.append(root / file)
             if len(dir_yaml_files) == 0:
                 raise FileExistsError(f"No YAML files found in directory {path}.")
             yaml_files.extend(dir_yaml_files)
@@ -227,41 +240,41 @@ def get_yaml_files_from_input(input_files_or_folders):
 
 
 def get_file_list_from_cli_input(input_files_or_folders, console, working_dir="."):
+    """Parse CLI input string into full file paths."""
     try:
         yaml_files = get_yaml_files_from_input(
             [
                 brassy.utils.file_handler.get_yaml_template_path(
-                    path, working_dir=working_dir
+                    path,
+                    working_dir=working_dir,
                 )
                 for path in input_files_or_folders
-            ]
+            ],
         )
     except FileExistsError as e:
         if Settings.fail_on_empty_dir:
             console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
-            exit(1)
+            sys.exit(1)
         else:
             console.print(f"[yellow]Invalid file or directory: [bold]{e}[/]")
             console.print(
-                f"[yellow]Returning 0 because fail_on_empty_dir is [bold]False[/]"
+                "[yellow]Returning 0 because fail_on_empty_dir is [bold]False[/]",
             )
-            exit(0)
+            sys.exit(0)
     except FileNotFoundError as e:
         console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
-        exit(1)
+        sys.exit(1)
     except ValueError as e:
         console.print(f"[red]{e}")
-        exit(1)
+        sys.exit(1)
     return yaml_files
 
 
-def run_from_CLI():
-    """
-    Main function to generate release notes from YAML files and write to an output file.
-    """
+def run_from_CLI(): # noqa: N802
+    """Generate release notes from YAML files and write output file."""
     args, parser = parse_arguments()
 
-    messages.setup_messages(format=not args.no_rich, quiet=args.quiet)
+    messages.setup_messages(enable_format=not args.no_rich, quiet=args.quiet)
 
     console = messages.RichConsole
     printer = messages.print
@@ -272,10 +285,12 @@ def run_from_CLI():
         print_version_and_exit()
     elif args.init:
         brassy.actions.init.init()
-        exit(0)
+        sys.exit(0)
     elif args.prune:
         brassy.actions.prune_yaml.direct_pruning_of_files(
-            args.input_files_or_folders, console, args.yaml_dir
+            args.input_files_or_folders,
+            console,
+            args.yaml_dir,
         )
     elif "write_yaml_template" in args:
         brassy.utils.file_handler.create_blank_template_yaml_file(
@@ -303,11 +318,10 @@ def run_from_CLI():
             brassy.utils.file_handler.write_output_file(args.output_file, content)
             if not args.quiet:
                 console.print(f"[green]Wrote release notes to {args.output_file}")
-        else:
-            if not args.quiet:
-                console.print(
-                    f"[green]Release notes built successfully. No output file provided."
-                )
+        elif not args.quiet:
+            console.print(
+                "[green]Release notes built successfully. No output file provided.",
+            )
         if args.output_to_console:
             console.print(content)
 

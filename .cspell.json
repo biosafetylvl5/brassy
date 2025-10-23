@@ -5,7 +5,10 @@
     // Words considered correct for THIS project specifically
     "words": [
         // Project Specific / Acronyms / People / Orgs
-        "brassy"
+        "brassy",
+        "Uttmark",
+        "biosafetylvl",
+        "pinkrst"
     ],
     // --- File/Folder Exclusions ---
     // Glob patterns for files and folders to ignore globally
@@ -85,10 +88,12 @@
         "yyyyddd",
         "yyyymmdd",
         "pydoclint",
-        "pydoclint", 
-        "ACMRT", 
-        "pyupgrade", 
+        "pydoclint",
+        "ACMT",
+        "pyupgrade",
         "tryceratops",
+        "tamasfe",
+        "lextudio"
     ],
     // --- Global Ignore Patterns ---
     // Regular expressions for patterns to ignore globally

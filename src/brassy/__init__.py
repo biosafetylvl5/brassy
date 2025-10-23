@@ -1,3 +1,5 @@
+"""Base init, sets __version__."""
+
 import logging
 
 try:
@@ -12,5 +14,5 @@ except ModuleNotFoundError:
     except ModuleNotFoundError:
         logging.debug(
             "Could not set __version__ because importlib.metadata is not available."
-            + "If running python 3.7, installing importlib-metadata will fix this issue"
+            + "If using python 3.7, install importlib-metadata to fix this issue",
         )

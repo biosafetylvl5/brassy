@@ -32,13 +32,13 @@ jobs:
         id: changed-files
         if: github.event_name == 'pull_request'
         run: |
-          echo "files=$(git diff --name-only --diff-filter=ACMRT origin/${{ github.base_ref }} HEAD | grep '\.py$' | xargs | tr ' ' ',')" >> $GITHUB_OUTPUT
+          echo "files=$(git diff --name-only --diff-filter=ACMT origin/${{ github.base_ref }} HEAD | grep '\.py$' | xargs | tr ' ' ' ')" >> $GITHUB_OUTPUT
 
       - name: Get changed files (push)
         id: changed-files-push
         if: github.event_name == 'push'
         run: |
-          echo "files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.event.after }} | grep '\.py$' | xargs | tr ' ' ',')" >> $GITHUB_OUTPUT
+          echo "files=$(git diff --name-only --diff-filter=ACMT ${{ github.event.before }} ${{ github.event.after }} | grep '\.py$' | xargs | tr ' ' ' ')" >> $GITHUB_OUTPUT
 
       - name: Run Ruff on changed files (PR)
         if: github.event_name == 'pull_request' && steps.changed-files.outputs.files != ''

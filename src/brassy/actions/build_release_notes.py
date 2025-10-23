@@ -1,67 +1,114 @@
+"""Build release note output."""
+
+import sys
 from datetime import datetime
 
 import brassy
 from brassy.brassy import Settings
-from brassy.utils.messages import RichConsole as console
+from brassy.utils.messages import RichConsole as console  # noqa: N813
 
 
 def get_header_footer(rich_open, header_file=None, footer_file=None):
+    """Read optional header and footer content.
+
+    Parameters
+    ----------
+    rich_open : Callable
+        Context manager factory for reading files.
+    header_file : str or None, optional
+        Path to header file.
+    footer_file : str or None, optional
+        Path to footer file.
+
+    Returns
+    -------
+    tuple of str or None
+        Header and footer content or None when unavailable.
     """
-    Adds a header and/or footer to the given content.
 
-    Args:
-        content (str): The content to which the header and/or footer will be added.
-        rich_open (function): A function used to open files.
-        header_file (str, optional): The file containing the header content. Defaults to None.
-        footer_file (str, optional): The file containing the footer content. Defaults to None.
-
-    Returns:
-        str: The content with the header and/or footer added.
-    """
-
-    def getFile(file):
+    def get_file(file):
         if not file:
             return None
-        with rich_open(file, "r", description=f"Reading {file}") as file:
-            return file.read()
+        with rich_open(file, "r", description=f"Reading {file}") as open_file:
+            return open_file.read()
 
-    return getFile(header_file), getFile(footer_file)
+    return get_file(header_file), get_file(footer_file)
 
 
 def find_duplicate_titles(data):
-    """
-    Check if there are any duplicate titles in dictionaries of lists of dictionaries.
+    """Detect duplicate titles across changelog entries.
 
-    Args:
-        data (dict): A dictionary containing lists of dictionaries with items
-         indexed by "title".
+    Parameters
+    ----------
+    data : dict
+        Mapping of categories to lists of changelog entries.
 
-    Returns:
-        bool: True if there are duplicate "title" values, False otherwise.
+    Returns
+    -------
+    bool
+        True if any title occurs more than once.
     """
     titles = [entry["title"] for category in data for entry in data[category]]
-    return not len(set(titles)) == len(titles)
+    return len(set(titles)) != len(titles)
 
 
-def format_files_changed_entry(detailed, entry):
+def format_files_changed_entry(detailed, entry): # noqa: ARG001 TODO: Fix this unused arg
+    """Format an RST block describing changed files for an entry.
+
+    Parameters
+    ----------
+    detailed : bool
+        Unused flag kept for compatibility.
+    entry : dict
+        Changelog entry containing file changes.
+
+    Returns
+    -------
+    str
+        RST formatted file change listing.
+    """
     files_changed = "::\n\n"
     for change_type in entry["files"]:
         files_changed += "".join(
             [
                 f"    {change_type}: {file}\n"
-                for file in filter(lambda x: not x == "", entry["files"][change_type])
-            ]
+                for file in filter(lambda x: x != "", entry["files"][change_type])
+            ],
         )
     return files_changed
 
 
 def generate_file_change_section_list_of_strings(
-    entry, line, category, title, description
+    entry,
+    line,
+    category,
+    title,
+    description,
 ):
+    """Create file-specific section lines for a changelog entry.
+
+    Parameters
+    ----------
+    entry : dict
+        Changelog entry with file change data.
+    line : str
+        Template string for the section line.
+    category : str
+        Entry category name.
+    title : str
+        Resolved entry title.
+    description : str
+        Resolved entry description.
+
+    Returns
+    -------
+    list of str
+        Section lines formatted per file change.
+    """
     lines = []
     for change_type in entry["files"]:
         if "{file}" in line:
-            for file in filter(lambda x: not x == "", entry["files"][change_type]):
+            for file in filter(lambda x: x != "", entry["files"][change_type]):
                 lines.append(
                     line.format(
                         change_type=category.capitalize(),
@@ -69,7 +116,7 @@ def generate_file_change_section_list_of_strings(
                         description=description,
                         file_change=change_type,
                         file=file,
-                    )
+                    ),
                 )
         else:
             lines.append(
@@ -78,20 +125,47 @@ def generate_file_change_section_list_of_strings(
                     title=title,
                     description=description,
                     file_change=change_type,
-                )
+                ),
             )
     return lines
 
 
-def generate_section_string(
-    section_lines, changelog_entries, release_date, version, footer, header
+def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of this function
+    section_lines,
+    changelog_entries,
+    release_date,
+    version,
+    footer,
+    header,
 ):
+    """Render a changelog section from templates and entries.
+
+    Parameters
+    ----------
+    section_lines : list of str
+        Template lines for the section.
+    changelog_entries : dict
+        Mapping of categories to changelog entries.
+    release_date : str
+        Release date string.
+    version : str
+        Release version string.
+    footer : str or None
+        Footer content appended to templates.
+    header : str or None
+        Header content prepended to templates.
+
+    Returns
+    -------
+    str
+        Rendered section content.
+    """
     lines = []
     entry_keywords = [
         "{" + k + "}"
         for k in ["title", "description", "file_change", "file", "change_type"]
     ]
-    if any([keyword in line for keyword in entry_keywords for line in section_lines]):
+    if any(keyword in line for keyword in entry_keywords for line in section_lines):
         for category, entries in changelog_entries.items():
             for entry in entries:
                 if not entry["title"] and not entry["description"]:
@@ -101,18 +175,20 @@ def generate_section_string(
                     title = title.capitalize()
                 else:
                     title = Settings.default_title
-                    # print(f"Warning: no title for entry {entry}")
                 if entry["description"]:
                     description = entry["description"]
                 else:
-                    # print("Warning: no description")
                     description = Settings.default_description
                 for line in section_lines:
                     if "{file_change}" in line:
                         lines.extend(
                             generate_file_change_section_list_of_strings(
-                                entry, line, category, title, description
-                            )
+                                entry,
+                                line,
+                                category,
+                                title,
+                                description,
+                            ),
                         )
                     else:
                         lines.append(
@@ -136,22 +212,25 @@ def generate_section_string(
 
 
 def format_release_notes(data, version, release_date=None, header=None, footer=None):
-    """
-    Format the parsed YAML data into release notes in .rst format.
+    """Generate release notes content from parsed changelog data.
 
     Parameters
     ----------
     data : dict
-        Parsed content of YAML files.
-    version : str, optional
-        Version number of the release, by default '1.1'.
-    release_date : str, optional
-        Release date, by default None, which uses today's date.
+        Parsed changelog entries grouped by category.
+    version : str or None
+        Release version string.
+    release_date : str or None, optional
+        Release date override in ISO format. Defaults to today's date.
+    header : str or None, optional
+        Optional header content.
+    footer : str or None, optional
+        Optional footer content.
 
     Returns
     -------
     str
-        Formatted release notes in .rst format.
+        Release notes rendered in RST.
     """
     if release_date is None:
         release_date = datetime.now().strftime("%Y-%m-%d")
@@ -162,11 +241,16 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
     release_template = Settings.templates.release_template
     formatted_string = ""
     for section in release_template:
-        for section_name, lines in section.items():
+        for _section_name, lines in section.items():
             formatted_string = (
                 formatted_string
                 + generate_section_string(
-                    lines, data, release_date, version, footer, header
+                    lines,
+                    data,
+                    release_date,
+                    version,
+                    footer,
+                    header,
                 )
                 + "\n"
             )
@@ -183,7 +267,7 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
     return formatted_string.strip()
 
 
-def build_release_notes(
+def build_release_notes( # noqa PLR0913
     input_files_or_folders,
     console,
     rich_open,
@@ -193,39 +277,52 @@ def build_release_notes(
     footer_file=None,
     working_dir=".",
 ):
-    """
-    Build release notes from YAML data.
+    """Build release notes by reading YAML files and templates.
 
     Parameters
     ----------
-    data : dict
-        Parsed content of YAML files.
-    version : str, optional
-        Version number of the release, by default '1.1'.
-    release_date : str, optional
-        Release date, by default None, which uses today's date.
-    header_file : str, optional
-        A header file to prepend to the release notes.
-    footer_file : str, optional
-        A footer file to suffix to the release notes.
+    input_files_or_folders : list of str
+        CLI-supplied file or directory paths.
+    console : Console
+        Console for user feedback.
+    rich_open : Callable
+        Context manager factory for reading files.
+    version : str or None, optional
+        Release version string.
+    release_date : str or None, optional
+        Release date override in ISO format.
+    header_file : str or None, optional
+        Path to an optional header file.
+    footer_file : str or None, optional
+        Path to an optional footer file.
+    working_dir : str, optional
+        Base directory for relative paths.
 
     Returns
     -------
     str
-        Formatted release notes in .rst format.
+        Rendered release notes in RST.
     """
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
-        input_files_or_folders, console, working_dir=working_dir
+        input_files_or_folders,
+        console,
+        working_dir=working_dir,
     )
     try:
         data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
     except (ValueError, TypeError) as e:
         console.print(f"[red]{e}")
-        exit(1)
+        sys.exit(1)
     header, footer = get_header_footer(
-        rich_open, header_file=header_file, footer_file=footer_file
+        rich_open,
+        header_file=header_file,
+        footer_file=footer_file,
     )
     content = format_release_notes(
-        data, version=version, release_date=release_date, header=header, footer=footer
+        data,
+        version=version,
+        release_date=release_date,
+        header=header,
+        footer=footer,
     )
     return content
