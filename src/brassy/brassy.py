@@ -1,8 +1,4 @@
-"""
-This module provides functionality to generate release notes from YAML files.
-It reads YAML files, parses their content, and formats the parsed data into release notes in .rst format.
-The release notes can be written to an output file.
-"""
+"""Wrapper for CLI call and top-level functions."""
 
 from __future__ import annotations
 
@@ -11,9 +7,8 @@ from brassy.utils import settings_manager
 Settings = settings_manager.get_settings("brassy")
 
 
-def run_from_CLI():
-    from brassy.utils import CLI
-
+def run_from_CLI(): # noqa: N802
+    from brassy.utils import CLI  # noqa: PLC0415 # here to prevent circular import
     CLI.run_from_CLI()
 
 

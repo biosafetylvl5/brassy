@@ -3,31 +3,31 @@ from datetime import datetime
 
 import brassy
 from brassy.brassy import Settings
-from brassy.utils.messages import RichConsole as console
+from brassy.utils.messages import RichConsole as console  # noqa: N813
 
 
 def get_header_footer(rich_open, header_file=None, footer_file=None):
     """
-    Adds a header and/or footer to the given content.
+    Add a header and/or footer to the given content.
 
     Args:
         content (str): The content to which the header and/or footer will be added.
         rich_open (function): A function used to open files.
-        header_file (str, optional): The file containing the header content. Defaults to None.
-        footer_file (str, optional): The file containing the footer content. Defaults to None.
+        header_file (str, optional): File containing header content. Defaults to None.
+        footer_file (str, optional): File containing footer content. Defaults to None.
 
     Returns
     -------
         str: The content with the header and/or footer added.
     """
 
-    def getFile(file):
+    def get_file(file):
         if not file:
             return None
-        with rich_open(file, "r", description=f"Reading {file}") as file:
-            return file.read()
+        with rich_open(file, "r", description=f"Reading {file}") as open_file:
+            return open_file.read()
 
-    return getFile(header_file), getFile(footer_file)
+    return get_file(header_file), get_file(footer_file)
 
 
 def find_duplicate_titles(data):
@@ -113,11 +113,9 @@ def generate_section_string(
                     title = title.capitalize()
                 else:
                     title = Settings.default_title
-                    # print(f"Warning: no title for entry {entry}")
                 if entry["description"]:
                     description = entry["description"]
                 else:
-                    # print("Warning: no description")
                     description = Settings.default_description
                 for line in section_lines:
                     if "{file_change}" in line:

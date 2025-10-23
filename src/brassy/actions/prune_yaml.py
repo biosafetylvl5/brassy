@@ -34,11 +34,12 @@ def prune_empty(data, prune_lists=True, key=""):
     """
     nulls = (None, "", {}, [])
     if isinstance(data, dict):
-        pruned = {k: prune_empty(v, key=k) for k, v in data.items()}
+        pruned = {k: prune_empty(v, key=k, prune_lists=prune_lists)
+                  for k, v in data.items()}
         pruned = {k: v for k, v in pruned.items() if v not in nulls}
         return pruned if pruned else None
-    elif isinstance(data, list):
-        pruned = [prune_empty(item) for item in data]
+    elif isinstance(data, list) and prune_lists:
+        pruned = [prune_empty(item, prune_lists=prune_lists) for item in data]
         pruned = [item for item in pruned if item not in nulls]
         return pruned if pruned else None
     elif data == 0 and key == "number":
@@ -72,7 +73,7 @@ def prune_yaml_file(yaml_file_path, console):
     >>> prune_yaml_file('config.yaml', console)
     Pruned config.yaml
     """
-    with open(yaml_file_path, "r+") as file:
+    with yaml_file_path.open("r+") as file:
         content = yaml.safe_load(file)
         file.seek(0)
         file.write(
@@ -114,7 +115,7 @@ def direct_pruning_of_files(input_files_or_folders, console, working_dir):
     Pruned configs/config1.yaml
     Pruned configs/config2.yaml
     """
-    import brassy.utils.CLI  # here to prevent circular import
+    import brassy.utils.CLI  # noqa: PLC0415 # here to prevent circular import
 
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
         input_files_or_folders,

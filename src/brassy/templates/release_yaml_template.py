@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date as Date
+from datetime import date as Date  # noqa N812
 from typing import Dict, List  # noqa: UP035
 
 import dateparser
@@ -16,7 +16,7 @@ from pydantic import (
 from brassy.utils.settings_manager import get_settings
 
 
-class InvalidDateValue(ValueError):
+class InvalidDateValueError(ValueError):
     def __init__(self, date_string: str) -> None:
         super().__init__(f"Invalid type for date field: {date_string}")
 
@@ -101,9 +101,9 @@ class DateRange(BaseModel):
                 },
             )
             if parsed is None:
-                raise InvalidDateValue(f"Could not parse date: {value}")
+                raise InvalidDateValueError(f"Could not parse date: {value}")
             return parsed.date()
-        raise InvalidDateValue(f"Unsupported value type: {type(value)}")
+        raise InvalidDateValueError(f"Unsupported value type: {type(value)}")
 
     @model_validator(mode="after")
     def validate_date_range(self):

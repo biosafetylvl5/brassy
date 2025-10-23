@@ -20,7 +20,7 @@ Settings = get_settings("brassy")
 
 def get_parser():
     """
-    Returns an ArgumentParser object with predefined arguments for generating release notes from YAML files.
+    Return ArgumentParser for CLI.
 
     Returns
     -------
@@ -100,7 +100,7 @@ def get_parser():
         help="The output file for release notes.",
     )
     if Settings.default_yaml_path and Settings.enable_experimental_features:
-        yaml_path = os.path.join(".", Settings.default_yaml_path)
+        yaml_path = "." / Settings.default_yaml_path
     else:
         yaml_path = "."
     parser.add_argument(
@@ -216,16 +216,16 @@ def get_yaml_files_from_input(input_files_or_folders):
     """
     yaml_files = []
     for path in input_files_or_folders:
-        if os.path.isfile(path):
+        if path.is_file():
             if not path.endswith(".yaml") or path.endswith(".yml"):
                 raise ValueError(f"File {path} is not a YAML file.")
             yaml_files.append(path)
-        elif os.path.isdir(path):
+        elif path.is_dir():
             dir_yaml_files = []
             for root, _dirs, files in os.walk(path):
                 for file in files:
                     if file.endswith(".yaml") or file.endswith(".yml"):
-                        dir_yaml_files.append(os.path.join(root, file))
+                        dir_yaml_files.append(root / file)
             if len(dir_yaml_files) == 0:
                 raise FileExistsError(f"No YAML files found in directory {path}.")
             yaml_files.extend(dir_yaml_files)
@@ -264,11 +264,11 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
     return yaml_files
 
 
-def run_from_CLI():
-    """Main function to generate release notes from YAML files and write to an output file."""
+def run_from_CLI(): # noqa: N802
+    """Generate release notes from YAML files and write output file."""
     args, parser = parse_arguments()
 
-    messages.setup_messages(format=not args.no_rich, quiet=args.quiet)
+    messages.setup_messages(enable_format=not args.no_rich, quiet=args.quiet)
 
     console = messages.RichConsole
     printer = messages.print

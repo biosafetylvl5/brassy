@@ -2,7 +2,7 @@ import logging
 
 import rich
 import rich.progress
-from rich.console import Console as rich_console
+from rich.console import Console as rich_console  # noqa: N813
 from rich.logging import RichHandler
 from rich.prompt import Confirm
 from rich.traceback import install as install_rich_tracebacks
@@ -38,10 +38,11 @@ def init_logger(use_rich):
 
 def get_rich_opener(no_format=False):
     """
-    Returns the appropriate opener function for rich progress bar.
+    Return opener function with or without a rich progress bar.
 
     Args:
-        no_format (bool, optional): If True, returns the opener function without any formatting.
+        no_format (bool, optional):
+            If True, returns the opener function without any formatting.
             If False, returns the opener function with formatting. Defaults to False.
 
     Returns
@@ -72,8 +73,8 @@ def setup_console(no_format=False, quiet=False):
     return console
 
 
-def get_boolean_prompt_function(format=True):
-    if format:
+def get_boolean_prompt_function(enable_format=True):
+    if enable_format:
         return Confirm.ask
     else:
 
@@ -90,18 +91,18 @@ def get_boolean_prompt_function(format=True):
         return bool_prompt
 
 
-def setup_messages(format, quiet):
-    global open
-    global boolean_prompt
-    global RichConsole
-    global print
-    open = get_rich_opener(no_format=not format)
-    RichConsole = setup_console(no_format=not format, quiet=quiet)
-    print = RichConsole.print if format else print
-    boolean_prompt = get_boolean_prompt_function(format=format)
+def setup_messages(enable_format, quiet):
+    global open  # noqa: PLW0603
+    global boolean_prompt  # noqa: PLW0603
+    global RichConsole  # noqa: PLW0603
+    global print  # noqa: PLW0603
+    open = get_rich_opener(no_format=not enable_format)  # noqa: A001
+    RichConsole = setup_console(no_format=not enable_format, quiet=quiet)
+    print = RichConsole.print if enable_format else print  # noqa: A001
+    boolean_prompt = get_boolean_prompt_function(enable_format=enable_format)
 
 
-open = get_rich_opener() # noqa: A001
+open = get_rich_opener()  # noqa: A001
 RichConsole = setup_console()
-print = RichConsole.print # noqa: A001
+print = RichConsole.print  # noqa: A001
 boolean_prompt = get_boolean_prompt_function()
