@@ -1,24 +1,6 @@
-bug fix:
-- title: ''
-  description: ''
-  files:
-    deleted:
-    - ''
-    moved:
-    - ''
-    added:
-    - ''
-    modified:
-    - ''
-  related-issue:
-    number: null
-    repo_url: ''
-  date:
-    start: null
-    finish: null
 enhancement:
-- title: ''
-  description: ''
+- title: 'Add support for YYYY-MM-DD date format and modernize codebase'
+  description: 'Added support for YYYY-MM-DD date format. Refactored codebase to use pathlib internally, updated type hints throughout documentation and docstrings. Updated code to be ruff compliant. Added Python 3.8 compatibility dependencies. Fixed bug in prune_yaml that was incorrectly pruning lists.'
   files:
     deleted:
     - ''
@@ -27,79 +9,37 @@ enhancement:
     added:
     - ''
     modified:
-    - ''
+    - 'src/brassy/__init__.py'
+    - 'src/brassy/actions/build_release_notes.py'
+    - 'src/brassy/actions/init.py'
+    - 'src/brassy/actions/prune_yaml.py'
+    - 'src/brassy/brassy.py'
+    - 'src/brassy/templates/release_yaml_template.py'
+    - 'src/brassy/templates/settings_template.py'
+    - 'src/brassy/utils/CLI.py'
+    - 'src/brassy/utils/file_handler.py'
+    - 'src/brassy/utils/git_handler.py'
+    - 'src/brassy/utils/messages.py'
+    - 'src/brassy/utils/settings_manager.py'
   related-issue:
-    number: null
-    repo_url: ''
-  date:
-    start: null
-    finish: null
-deprecation:
-- title: ''
-  description: ''
-  files:
-    deleted:
-    - ''
-    moved:
-    - ''
-    added:
-    - ''
-    modified:
-    - ''
-  related-issue:
-    number: null
-    repo_url: ''
-  date:
-    start: null
-    finish: null
-removal:
-- title: ''
-  description: ''
-  files:
-    deleted:
-    - ''
-    moved:
-    - ''
-    added:
-    - ''
-    modified:
-    - ''
-  related-issue:
-    number: null
-    repo_url: ''
-  date:
-    start: null
-    finish: null
-performance:
-- title: ''
-  description: ''
-  files:
-    deleted:
-    - ''
-    moved:
-    - ''
-    added:
-    - ''
-    modified:
-    - ''
-  related-issue:
-    number: null
+    number: 49
     repo_url: ''
   date:
     start: null
     finish: null
 documentation:
-- title: ''
-  description: ''
+- title: 'Add brassy-in-ci guide and update documentation build process'
+  description: 'Added new RST documentation file describing how to use brassy in continuous integration workflows. Updated documentation build process and configuration.'
   files:
     deleted:
     - ''
     moved:
     - ''
     added:
-    - ''
+    - 'sphinx/source/brassy-in-ci.rst'
     modified:
-    - ''
+    - 'sphinx/source/conf.py'
+    - 'sphinx/source/examples/basic-usage/footer.txt'
   related-issue:
     number: null
     repo_url: ''
@@ -107,17 +47,23 @@ documentation:
     start: null
     finish: null
 continuous integration:
-- title: ''
-  description: ''
+- title: 'Remove setup.py, consolidate to pyproject.toml, and expand test coverage'
+  description: 'Removed setup.py and migrated all functionality to pyproject.toml. Added integration tests for yaml template, pydantic models, and CLI template output. Updated ruff workflow to correctly detect change files. Changed pytest marker from i,n,t,e,g,t,e,s,t to integration. Updated development configuration and linting settings for ruff compliance.'
   files:
-    deleted:
-    - ''
-    moved:
-    - ''
-    added:
-    - ''
     modified:
-    - ''
+    - '.github/workflows/build_docs.yaml'
+    - 'sphinx/source/releases/latest/49-support-yyyy-mm-dd-date-format.yaml'
+    - 'tests/brassy/templates/test_release_yaml_template.py'
+    - 'tests/outputs/template-output.yaml'
+    - '.cspell.json'
+    - '.devcontainer/devcontainer.json'
+    - '.github/workflows/ruff.yaml'
+    - '.ruff.toml'
+    - 'pyproject.toml'
+    - 'pytest.ini'
+    - 'tests/test_integ.py'
+    deleted:
+    - 'setup.py'
   related-issue:
     number: null
     repo_url: ''
