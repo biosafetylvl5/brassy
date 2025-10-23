@@ -118,12 +118,13 @@ def create_config_file(config_file):
     config_file : Path
         Path where the configuration file will be created.
     """
+    config_file = Path(config_dir)
     default_settings = SettingsTemplate()
     config_dir = config_file.parent
     if config_dir:
         config_dir.makedirs(exist_ok=True, parents=True)
     with config_file.open("w") as f:
-        yaml.dump(default_settings.dict(), f)
+        yaml.dump(default_settings.model_dump(), f)
 
 
 def read_config_file(config_file, create_file_if_not_exist=False):
@@ -132,7 +133,7 @@ def read_config_file(config_file, create_file_if_not_exist=False):
 
     Parameters
     ----------
-    config_file : str
+    config_file : Path or str
         Path to the configuration file.
     create_file_if_not_exist : bool
         Creates file if it doesn't exist
@@ -142,6 +143,7 @@ def read_config_file(config_file, create_file_if_not_exist=False):
     dict
         Parsed configuration settings.
     """
+    config_file = Path(config_file)
     try:
         with config_file.open() as f:
             return yaml.safe_load(f)

@@ -1,4 +1,5 @@
 import yaml
+from pathlib import Path
 
 
 def prune_empty(data, prune_lists=True, key=""):
@@ -73,12 +74,13 @@ def prune_yaml_file(yaml_file_path, console):
     >>> prune_yaml_file('config.yaml', console)
     Pruned config.yaml
     """
+    yaml_file_path = Path(yaml_file_path)
     with yaml_file_path.open("r+") as file:
         content = yaml.safe_load(file)
         file.seek(0)
         file.write(
             yaml.dump(
-                prune_empty(content, prune_lists=False),
+                prune_empty(content, prune_lists=True),
                 sort_keys=False,
                 default_flow_style=False,
             ),

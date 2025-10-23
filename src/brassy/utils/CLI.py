@@ -4,6 +4,7 @@
 import argparse
 import os
 import sys
+from pathlib import Path
 
 from rich_argparse import RichHelpFormatter
 
@@ -216,7 +217,7 @@ def get_yaml_files_from_input(input_files_or_folders):
     """
     yaml_files = []
     for path in input_files_or_folders:
-        if path.is_file():
+        if Path(path).is_file():
             if not path.endswith(".yaml") or path.endswith(".yml"):
                 raise ValueError(f"File {path} is not a YAML file.")
             yaml_files.append(path)

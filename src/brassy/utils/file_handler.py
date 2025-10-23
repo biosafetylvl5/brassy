@@ -88,7 +88,7 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
             + "(eg '-t /path/to/file.yaml').",
         )
         sys.exit(1)
-    with yaml_template_path.open("w") as file:
+    with Path(yaml_template_path).open("w") as file:
         yaml_text = yaml.safe_dump(
             default_yaml,
             sort_keys=False,
@@ -175,5 +175,5 @@ def write_output_file(output_file, content):
     content : str
         Formatted release notes.
     """
-    with output_file.open("w") as file:
+    with Path(output_file).open("w") as file:
         file.write(content)
