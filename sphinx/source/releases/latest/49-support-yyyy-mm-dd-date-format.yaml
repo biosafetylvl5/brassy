@@ -48,7 +48,7 @@ documentation:
     finish: null
 continuous integration:
 - title: 'Remove setup.py, consolidate to pyproject.toml, and expand test coverage'
-  description: 'Removed setup.py and migrated all functionality to pyproject.toml. Added integration tests for yaml template, pydantic models, and CLI template output. Updated ruff workflow to correctly detect change files. Changed pytest marker from i,n,t,e,g,t,e,s,t to integration. Updated development configuration and linting settings for ruff compliance.'
+  description: 'Removed setup.py and migrated all functionality to pyproject.toml. Added integration tests for yaml template, pydantic models, and CLI template output. Updated ruff workflow to correctly detect change files. Changed pytest marker from "integtest" to integration. Updated development configuration and linting settings for ruff compliance.'
   files:
     modified:
     - '.github/workflows/build_docs.yaml'
