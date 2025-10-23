@@ -41,7 +41,7 @@ def run_cli_command_return_true_if_command_returns_zero(command):
     return result.returncode == 0
 
 
-@pytest.mark.integtest
+@pytest.mark.integration
 def test_help(monkeypatch):  # noqa: ARG001
     """Test the CLI help option.
 
@@ -50,7 +50,7 @@ def test_help(monkeypatch):  # noqa: ARG001
     run_cli_command_return_true_if_command_returns_zero(["brassy", "-h"])
 
 
-@pytest.mark.integtest
+@pytest.mark.integration
 @pytest.mark.parametrize(
     "input_file",
     ["barebones", "mostly-featured", "fully-featured"],
