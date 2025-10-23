@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+import pathlib # noqa: TC003
 
-import pathlib
+from pydantic import BaseModel, Field
 
 
 class ReleaseTemplate(BaseModel):
