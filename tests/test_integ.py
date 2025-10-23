@@ -113,3 +113,17 @@ def test_pruning():
         assert list(to_prune.open()) == list(
             (valid_outputs_path / "pruned.yaml").open(),
         )
+
+def test_template_output():
+    """Test outputting a template file.
+
+    Create a template file and compare it to the output.
+    """
+    with tempfile.TemporaryDirectory() as output_file_dir:
+        output_file = Path(output_file_dir) / "template-output.yaml"
+        run_cli_command_return_true_if_command_returns_zero(
+            ["brassy", "--write-yaml-template", str(output_file)],
+        )
+        assert list(output_file.open()) == list(
+            (valid_outputs_path / "template-output.yaml").open(),
+        )

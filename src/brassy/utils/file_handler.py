@@ -26,9 +26,11 @@ def get_yaml_template_path(file_path_arg, working_dir=None):
     if working_dir is None:
         working_dir = Path.getcwd()
     if file_path_arg is None:
-        filename = f"{git_handler.get_current_git_branch()}.yaml"
+        filename = Path(f"{git_handler.get_current_git_branch()}.yaml")
         return working_dir / filename
-    if "/" in file_path_arg or "\\" in file_path_arg or Path(file_path_arg).is_file():
+    else:
+        file_path_arg = Path(file_path_arg)
+    if "/" in str(file_path_arg) or "\\" in str(file_path_arg) or Path(file_path_arg).is_file():
         return file_path_arg
     return working_dir / file_path_arg
 
