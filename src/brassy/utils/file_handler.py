@@ -30,7 +30,8 @@ def get_yaml_template_path(file_path_arg, working_dir=None):
         return working_dir / filename
     else:
         file_path_arg = Path(file_path_arg)
-    if "/" in str(file_path_arg) or "\\" in str(file_path_arg) or Path(file_path_arg).is_file():
+    if ("/" in str(file_path_arg) or "\\" in str(file_path_arg)
+        or Path(file_path_arg).is_file()):
         return file_path_arg
     return working_dir / file_path_arg
 

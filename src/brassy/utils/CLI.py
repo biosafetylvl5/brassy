@@ -222,7 +222,7 @@ def get_yaml_files_from_input(input_files_or_folders):
     yaml_files = []
     for path in input_files_or_folders:
         if Path(path).is_file():
-            if not path.suffix in [".yaml", ".yml"]:
+            if path.suffix not in [".yaml", ".yml"]:
                 raise ValueError(f"File {path} is not a YAML file.")
             yaml_files.append(path)
         elif path.is_dir():
