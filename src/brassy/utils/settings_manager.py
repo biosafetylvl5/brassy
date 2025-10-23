@@ -24,7 +24,7 @@ def get_git_repo_root(path="."):
         Absolute path to the root of the Git repository. This is usually the
         path containing the .git folder.
     """
-    return (pygit2.Repository(path).path / "..").resolve()
+    return (Path(pygit2.Repository(path).path) / "..").resolve()
 
 
 def get_project_config_file_path(app_name):
@@ -64,7 +64,7 @@ def get_user_config_file_path(app_name):
     Path
         Path to the user's configuration file.
     """
-    return platformdirs.user_config_dir(app_name) / "user.config"
+    return Path(platformdirs.user_config_dir(app_name)) / "user.config"
 
 
 def get_site_config_file_path(app_name):
@@ -81,7 +81,7 @@ def get_site_config_file_path(app_name):
     str
         Path to the site's configuration file.
     """
-    return platformdirs.site_config_dir(app_name) / "site.config"
+    return Path(platformdirs.site_config_dir(app_name)) / "site.config"
 
 
 def get_config_files(app_name):
@@ -147,7 +147,7 @@ def read_config_file(config_file, create_file_if_not_exist=False):
             return yaml.safe_load(f)
     except FileNotFoundError:
         if not create_file_if_not_exist:
-            return SettingsTemplate().dict()
+            return SettingsTemplate().model_dump()
         else:
             create_config_file(config_file)
             return read_config_file(config_file)
