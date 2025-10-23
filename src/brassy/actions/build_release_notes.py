@@ -52,7 +52,7 @@ def find_duplicate_titles(data):
     return len(set(titles)) != len(titles)
 
 
-def format_files_changed_entry(detailed, entry):
+def format_files_changed_entry(detailed, entry): # noqa: ARG001 TODO: Fix this unused arg
     """Format an RST block describing changed files for an entry.
 
     Parameters
@@ -130,7 +130,7 @@ def generate_file_change_section_list_of_strings(
     return lines
 
 
-def generate_section_string(
+def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of this function
     section_lines,
     changelog_entries,
     release_date,
@@ -267,7 +267,7 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
     return formatted_string.strip()
 
 
-def build_release_notes(
+def build_release_notes( # noqa PLR0913
     input_files_or_folders,
     console,
     rich_open,
