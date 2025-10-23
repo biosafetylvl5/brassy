@@ -1,3 +1,5 @@
+"""Handle outputs/inputs to the CLI."""
+
 import logging
 
 import rich
@@ -74,6 +76,7 @@ def setup_console(no_format=False, quiet=False):
 
 
 def get_boolean_prompt_function(enable_format=True):
+    """Return a function that prompts Y/N and returns True/False."""
     if enable_format:
         return Confirm.ask
     else:
@@ -92,6 +95,7 @@ def get_boolean_prompt_function(enable_format=True):
 
 
 def setup_messages(enable_format, quiet):
+    """Set up global objects for outputting messages to the CLI."""
     global open  # noqa: PLW0603
     global boolean_prompt  # noqa: PLW0603
     global RichConsole  # noqa: PLW0603

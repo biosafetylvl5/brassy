@@ -1,3 +1,5 @@
+"""Handle file system I/O."""
+
 import sys
 from pathlib import Path
 

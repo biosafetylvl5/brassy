@@ -1,3 +1,5 @@
+"""Handle Git-related functionality."""
+
 import pygit2
 
 
@@ -72,6 +74,7 @@ def get_git_status(repo_path="."):
 
 
 def print_out_git_changed_files(print_function, repo_path="."):
+    """Print out changes as detected by Git in format Brassy expects in changlogs."""
     status = get_git_status(repo_path=repo_path)
     for entry in status:
         print_function(f"    {entry}:")

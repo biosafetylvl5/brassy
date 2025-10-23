@@ -1,3 +1,5 @@
+"""Release note YAML validation logic."""
+
 from __future__ import annotations
 
 from datetime import date as Date  # noqa N812
@@ -17,11 +19,15 @@ from brassy.utils.settings_manager import get_settings
 
 
 class InvalidDateValueError(ValueError):
+    """Error for invalid date strings."""
+
     def __init__(self, date_string: str) -> None:
         super().__init__(f"Invalid type for date field: {date_string}")
 
 
 class Files(BaseModel):
+    """Files model for validating files impacted in the changelog."""
+
     deleted: List[str] = []  # noqa: UP006
     moved: List[str] = []  # noqa: UP006
     added: List[str] = []  # noqa: UP006
@@ -29,6 +35,7 @@ class Files(BaseModel):
 
     @model_validator(mode="after")
     def check_at_least_one_field(self):
+        """Verify that at least one file is provided."""
         if not any(
             getattr(self, field) for field in ["deleted", "moved", "added", "modified"]
         ):
@@ -39,10 +46,14 @@ class Files(BaseModel):
 
 
 class RelatedInternalIssue(BaseModel):
+    """Pydantic class for 'internal' or non-public related issue."""
+
     internal: str | None = Field(pattern=r"[A-Za-z]+#\d+ - .+", default=None)
 
 
 class RelatedIssue(BaseModel):
+    """Pydantic class for validating related issue (eg. GitHub issue)."""
+
     number: int | List[int] | None = None  # noqa: UP006
     repo_url: HttpUrl | None = None
 
@@ -56,6 +67,8 @@ class RelatedIssue(BaseModel):
 
 
 class DateRange(BaseModel):
+    """Date range model for pydantic validation."""
+
     start: Date | None = None
     finish: Date | None = None
 

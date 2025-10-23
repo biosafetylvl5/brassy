@@ -1,5 +1,8 @@
-import yaml
+"""Provides functions for 'pruning' yaml of extra and empty fields."""
+
 from pathlib import Path
+
+import yaml
 
 
 def prune_empty(data, prune_lists=True, key=""):

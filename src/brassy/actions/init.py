@@ -1,3 +1,5 @@
+"""Initialize brassy with config file."""
+
 import brassy
 from brassy.brassy import Settings
 

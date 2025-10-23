@@ -1,5 +1,8 @@
-# This module is for the CLI only portions of brassy.
-# Brassy can be run without this file, and importing it should
+"""The CLI only portions of brassy.
+
+Brassy can be run without this file, and importing it brassy without it should
+allow users to call brassy without the CLI
+"""
 
 import argparse
 import os
@@ -160,6 +163,7 @@ def parse_arguments():
 
 
 def print_version_and_exit():
+    """Print version and exit with status code 0."""
     messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
     sys.exit(0)
 
@@ -236,6 +240,7 @@ def get_yaml_files_from_input(input_files_or_folders):
 
 
 def get_file_list_from_cli_input(input_files_or_folders, console, working_dir="."):
+    """Parse CLI input string into full file paths."""
     try:
         yaml_files = get_yaml_files_from_input(
             [

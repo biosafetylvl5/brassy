@@ -1,17 +1,23 @@
+"""Pydantic models for validating settings files."""
+
 from __future__ import annotations
 
-import pathlib # noqa: TC003
+import pathlib  # noqa: TC003
 
 from pydantic import BaseModel, Field
 
 
 class ReleaseTemplate(BaseModel):
+    """Base pydantic model for release notes."""
+
     release_template: list[dict[str, list[str]]] | None = Field(
         default=None,
         alias="release-template",
     )
 
     class Config:
+        """Required by pydantic for configuration."""
+
         populate_by_name = True
 
 
@@ -78,6 +84,8 @@ DefaultTemplate = ReleaseTemplate(
 
 
 class SettingsTemplate(BaseModel):
+    """Pydantic model for settings file."""
+
     use_color: bool = True
     default_yaml_path: pathlib.Path | None = None
     change_categories: list[str] = [

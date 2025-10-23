@@ -1,3 +1,5 @@
+"""Base init, sets __version__."""
+
 import logging
 
 try:
