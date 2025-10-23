@@ -140,7 +140,7 @@ If your project uses different file extensions for release notes:
 .. code-block:: yaml
 
        with:
-         file_extensions: 'yaammlll,yyaml'
+         file_extensions: 'yaml_file.yet_another_yaml'
 
 Troubleshooting
 ---------------
