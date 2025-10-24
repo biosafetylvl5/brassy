@@ -110,10 +110,10 @@ def generate_file_change_section_list_of_strings(
         if "{file}" in line:
             for file in filter(lambda x: x != "", entry["files"][change_type]):
                 filename = file
-                if "{" in file:
-                    filename = file.replace("{","{{")
-                if "}" in file:
-                    filename = file.replace("}","}}")
+                if "{" in filename:
+                    filename = filename.replace("{","{{")
+                if "}" in filename:
+                    filename = filename.replace("}","}}")
                 lines.append(
                     line.format(
                         change_type=category.capitalize(),
