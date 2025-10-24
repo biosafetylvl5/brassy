@@ -1,7 +1,7 @@
 continuous integration:
 - title: CI Workflows for Code Quality and Documentation
   description: Implemented continuous integration workflows to enforce code quality
-    tandards, documentation practices, and release note management. This added linting
+    standards, documentation practices, and release note management. This added linting
     with Ruff, spellchecking with CSpell, documentation validation with Doc8 and PyDocLint,
     and automated checks for release notes and documentation updates.
   files:

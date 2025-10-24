@@ -3,7 +3,6 @@ Version [UNKNOWN] (2025-10-24)
 
  * *Developer*: Add .devcontainer config file
  * *Bug fix*: Allow brassy to work with branch names with specials characters.
- * *Bug fix*: Add sanitization for input curly brackets in filenames
  * *Enhancement*: Update minimum python version to 3.8
  * *Enhancement*: Add support for yyyy-mm-dd date format and modernize codebase
  * *Continuous integration*: Add release notes check workflow
@@ -35,18 +34,6 @@ This adds sanitization to the branch name so that it always returns a valid file
 ::
 
      modified: src/brassy/utils/git_handler.py
-
-Bug fix
-=======
-
-Add sanitization for input curly brackets in filenames
-------------------------------------------------------
-
-Prevent formatting errors by escaping curly brackets in filenames during release note generation
-
-::
-
-     modified: src/brassy/actions/build_release_notes.py
 
 Enhancement
 ===========
@@ -133,9 +120,9 @@ Continuous integration
 Ci workflows for code quality and documentation
 -----------------------------------------------
 
-Implemented continuous integration workflows to enforce code quality tandards, documentation practices, and release note
-management. This added linting with Ruff, spellchecking with CSpell, documentation validation with Doc8 and PyDocLint,
-and automated checks for release notes and documentation updates.
+Implemented continuous integration workflows to enforce code quality standards, documentation practices, and release
+note management. This added linting with Ruff, spellchecking with CSpell, documentation validation with Doc8 and
+PyDocLint, and automated checks for release notes and documentation updates.
 
 ::
 
