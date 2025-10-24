@@ -100,7 +100,7 @@ def get_current_git_branch(sanitize=True):
     repo = pygit2.Repository(".")
     branch = repo.head.shorthand
     if sanitize:
-        valid_characters = "-_.%s%s" % (string.ascii_letters, string.digits)
+        valid_characters = "-_." + string.ascii_letters + string.digits
         return ''.join(c for c in branch if c in valid_characters)
     else:
         return branch
