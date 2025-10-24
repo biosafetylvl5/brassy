@@ -8,7 +8,12 @@
         "brassy",
         "Uttmark",
         "biosafetylvl",
-        "pinkrst"
+        "pinkrst",
+        "Aang",
+        "aang",
+        "Unagi",
+        "Kyoshi",
+        "unagi",
     ],
     // --- File/Folder Exclusions ---
     // Glob patterns for files and folders to ignore globally

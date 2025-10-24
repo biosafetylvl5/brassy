@@ -1,0 +1,7 @@
+bug fix:
+- title: Add sanitization for input curly brackets in filenames
+  description: Prevent formatting errors by escaping curly brackets in filenames during
+    release note generation
+  files:
+    modified:
+    - src/brassy/actions/build_release_notes.py

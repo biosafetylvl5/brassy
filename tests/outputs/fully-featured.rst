@@ -47,7 +47,8 @@ The classic bending stances are deprecated in favor of dynamic stances that adap
 
 ::
 
-     modified: assets/animations/stances/*
+     moved: assets/animations/stances/*
+     moved: tests/unit_tests/{pydantic => models/v1}/sectors/test_cases.yaml
 
 Removal
 ===========
