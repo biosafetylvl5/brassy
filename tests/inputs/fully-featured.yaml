@@ -47,11 +47,12 @@ deprecation:
     deleted:
     - ''
     moved:
-    - ''
+    - 'assets/animations/stances/*'
+    - 'tests/unit_tests/{pydantic => models/v1}/sectors/test_cases.yaml'
     added:
     - ''
     modified:
-    - 'assets/animations/stances/*'
+    - ''
   related-issue:
     number: null
     repo_url: ''
