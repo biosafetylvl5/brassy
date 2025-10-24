@@ -1,4 +1,5 @@
 """Handle Git-related functionality."""
+import string
 
 import pygit2
 
@@ -82,9 +83,14 @@ def print_out_git_changed_files(print_function, repo_path="."):
             print_function(f"    - '{file}'")
 
 
-def get_current_git_branch():
+def get_current_git_branch(sanitize=True):
     """
     Get the current dirs git branch name.
+
+    Parameters
+    ----------
+    sanitize : bool, optional
+        If True, sanitize branch name as a valid file name before returning.
 
     Returns
     -------
@@ -92,4 +98,9 @@ def get_current_git_branch():
         The name of the current git branch.
     """
     repo = pygit2.Repository(".")
-    return repo.head.shorthand
+    branch = repo.head.shorthand
+    if sanitize:
+        valid_characters = "-_.%s%s" % (string.ascii_letters, string.digits)
+        return ''.join(c for c in branch if c in valid_characters)
+    else:
+        return branch
