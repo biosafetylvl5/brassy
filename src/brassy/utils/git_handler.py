@@ -101,6 +101,6 @@ def get_current_git_branch(sanitize=True):
     branch = repo.head.shorthand
     if sanitize:
         valid_characters = "-_." + string.ascii_letters + string.digits
-        return ''.join(c for c in branch if c in valid_characters)
+        return ''.join(c if c in valid_characters else "-" for c in branch)
     else:
         return branch
