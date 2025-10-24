@@ -1,0 +1,169 @@
+Version [UNKNOWN] (2025-10-24)
+**************************
+
+ * *Developer*: Add .devcontainer config file
+ * *Bug fix*: Allow brassy to work with branch names with specials characters.
+ * *Bug fix*: Add sanitization for input curly brackets in filenames
+ * *Enhancement*: Update minimum python version to 3.8
+ * *Enhancement*: Add support for yyyy-mm-dd date format and modernize codebase
+ * *Continuous integration*: Add release notes check workflow
+ * *Continuous integration*: Remove setup.py, consolidate to pyproject.toml, and expand test coverage
+ * *Continuous integration*: Ci workflows for code quality and documentation
+ * *Documentation*: Add brassy-in-ci guide and update documentation build process
+ * *Documentation*: Add documentation on issues
+
+Developer
+===========
+
+Add .devcontainer config file
+-------------------------
+
+Added devcontainer config file for developing brassy inside of a Docker container using vscode.
+
+::
+
+     added: .devcontainer/devcontainer.json
+
+Bug fix
+===========
+
+Allow brassy to work with branch names with specials characters.
+-------------------------
+
+This adds sanitization to the branch name so that it always returns a valid filename.
+
+::
+
+     modified: src/brassy/utils/git_handler.py
+
+Bug fix
+===========
+
+Add sanitization for input curly brackets in filenames
+-------------------------
+
+Prevent formatting errors by escaping curly brackets in filenames during release note generation
+
+::
+
+     modified: src/brassy/actions/build_release_notes.py
+
+Enhancement
+===========
+
+Update minimum python version to 3.8
+-------------------------
+
+Updated CI workflows to use Python 3.8 as the minimum version instead of 3.7. This was incited by a drop in support of 3.7 on the latest ubuntu images for GitHub CI runners.
+
+::
+
+     modified: .github/workflows/install.yaml
+     modified: .github/workflows/pytest.yaml
+
+Enhancement
+===========
+
+Add support for yyyy-mm-dd date format and modernize codebase
+-------------------------
+
+Added support for YYYY-MM-DD date format. Refactored codebase to use pathlib internally, updated type hints throughout documentation and docstrings. Updated code to be ruff compliant. Added Python 3.8 compatibility dependencies. Fixed bug in prune_yaml that was incorrectly pruning lists.
+
+::
+
+     modified: src/brassy/__init__.py
+     modified: src/brassy/actions/build_release_notes.py
+     modified: src/brassy/actions/init.py
+     modified: src/brassy/actions/prune_yaml.py
+     modified: src/brassy/brassy.py
+     modified: src/brassy/templates/release_yaml_template.py
+     modified: src/brassy/templates/settings_template.py
+     modified: src/brassy/utils/CLI.py
+     modified: src/brassy/utils/file_handler.py
+     modified: src/brassy/utils/git_handler.py
+     modified: src/brassy/utils/messages.py
+     modified: src/brassy/utils/settings_manager.py
+
+Continuous integration
+===========
+
+Add release notes check workflow
+-------------------------
+
+Added GitHub Actions workflows to verify release notes are included with PRs and that old release notes have not been edited. This includes a reusable workflow for checking release notes (RST and YAML) and a workflow to implement the check for this repository.
+
+::
+
+     added: .github/workflows/check-release-notes.yaml
+     added: .github/workflows/reusable-check-release-notes.yaml
+
+Continuous integration
+===========
+
+Remove setup.py, consolidate to pyproject.toml, and expand test coverage
+-------------------------
+
+Removed setup.py and migrated all functionality to pyproject.toml. Added integration tests for yaml template, pydantic models, and CLI template output. Updated ruff workflow to correctly detect change files. Changed pytest marker from "integtest" to integration. Updated development configuration and linting settings for ruff compliance.
+
+::
+
+     modified: .github/workflows/build_docs.yaml
+     modified: sphinx/source/releases/latest/49-support-yyyy-mm-dd-date-format.yaml
+     modified: tests/brassy/templates/test_release_yaml_template.py
+     modified: tests/outputs/template-output.yaml
+     modified: .cspell.json
+     modified: .devcontainer/devcontainer.json
+     modified: .github/workflows/ruff.yaml
+     modified: .ruff.toml
+     modified: pyproject.toml
+     modified: pytest.ini
+     modified: tests/test_integ.py
+     deleted: setup.py
+
+Continuous integration
+===========
+
+Ci workflows for code quality and documentation
+-------------------------
+
+Implemented continuous integration workflows to enforce code quality tandards, documentation practices, and release note management. This added linting with Ruff, spellchecking with CSpell, documentation validation with Doc8 and PyDocLint, and automated checks for release notes and documentation updates.
+
+::
+
+     added: .cspell.json
+     added: .github/workflows/check-if-docs-added.yaml
+     added: .github/workflows/check-release-notes.yaml
+     added: .github/workflows/doc8.yaml
+     added: .github/workflows/pydoclint.yaml
+     added: .github/workflows/reusable-check-release-notes.yaml
+     added: .github/workflows/ruff.yaml
+     added: .github/workflows/spellcheck-with-cspell.yaml
+     added: .ruff.toml
+     added: sphinx/source/brassy-in-ci.rst
+     added: sphinx/source/releases/latest/add-release-note-checking-ci.yaml
+
+Documentation
+===========
+
+Add brassy-in-ci guide and update documentation build process
+-------------------------
+
+Added new RST documentation file describing how to use brassy in continuous integration workflows. Updated documentation build process and configuration.
+
+::
+
+     added: sphinx/source/brassy-in-ci.rst
+     modified: sphinx/source/conf.py
+     modified: sphinx/source/examples/basic-usage/footer.txt
+
+Documentation
+===========
+
+Add documentation on issues
+-------------------------
+
+Added documentation on related issues for release notes. Also added info on internal issues
+
+::
+
+     modified: sphinx/source/using-brassy.rst
