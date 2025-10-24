@@ -1,0 +1,12 @@
+bug fix:
+- title: 'Allow brassy to work with branch names with specials characters.'
+  description: 'This adds sanitization to the branch name so that it always returns a valid filename.'
+  files:
+    modified:
+    - 'src/brassy/utils/git_handler.py'
+  related-issue:
+    number: 59
+    repo_url: ''
+  date:
+    start: null
+    finish: null
