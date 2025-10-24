@@ -230,7 +230,7 @@ def get_yaml_files_from_input(input_files_or_folders):
             for root, _dirs, files in os.walk(path):
                 for file in files:
                     if file.endswith(".yaml") or file.endswith(".yml"):
-                        dir_yaml_files.append(root / file)
+                        dir_yaml_files.append(Path(root) / Path(file))
             if len(dir_yaml_files) == 0:
                 raise FileExistsError(f"No YAML files found in directory {path}.")
             yaml_files.extend(dir_yaml_files)
