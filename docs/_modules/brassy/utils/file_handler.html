@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>brassy.utils.file_handler &#8212; brassy 0.0.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
     <script src="../../../_static/documentation_options.js?v=47de8214"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -31,43 +31,52 @@
           <div class="body" role="main">
             
   <h1>Source code for brassy.utils.file_handler</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span></span><span class="sd">&quot;&quot;&quot;Handle file system I/O.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">pygit2</span> <span class="kn">import</span> <span class="n">GitError</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">brassy.utils.git_handler</span> <span class="k">as</span> <span class="nn">git_handler</span>
-<span class="kn">from</span> <span class="nn">brassy.brassy</span> <span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygit2</span><span class="w"> </span><span class="kn">import</span> <span class="n">GitError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.brassy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.templates.release_yaml_template</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReleaseNote</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">git_handler</span>
 
 
 <div class="viewcode-block" id="get_yaml_template_path">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.file_handler.get_yaml_template_path">[docs]</a>
-<span class="k">def</span> <span class="nf">get_yaml_template_path</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">,</span> <span class="n">working_dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_yaml_template_path</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">,</span> <span class="n">working_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns the path of the YAML template file based on the given file path argument.</span>
+<span class="sd">    Return path of the YAML template file based on the given file path argument.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        file_path_arg (str): The file path argument provided by the user.</span>
 
-<span class="sd">    Returns:</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">        str: The path of the YAML template file.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">working_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">working_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">file_path_arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">git_handler</span><span class="o">.</span><span class="n">get_current_git_branch</span><span class="p">()</span><span class="si">}</span><span class="s2">.yaml&quot;</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">file_path_arg</span> <span class="ow">or</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">file_path_arg</span> <span class="ow">or</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">git_handler</span><span class="o">.</span><span class="n">get_current_git_branch</span><span class="p">()</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">working_dir</span> <span class="o">/</span> <span class="n">filename</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">file_path_arg</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">)</span>
+        <span class="ow">or</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()):</span>
         <span class="k">return</span> <span class="n">file_path_arg</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">file_path_arg</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">working_dir</span> <span class="o">/</span> <span class="n">file_path_arg</span></div>
 
 
 
 <div class="viewcode-block" id="create_blank_template_yaml_file">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.file_handler.create_blank_template_yaml_file">[docs]</a>
-<span class="k">def</span> <span class="nf">create_blank_template_yaml_file</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">,</span> <span class="n">console</span><span class="p">,</span> <span class="n">working_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_blank_template_yaml_file</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">,</span> <span class="n">console</span><span class="p">,</span> <span class="n">working_dir</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a blank YAML template file with a predefined structure.</span>
+<span class="sd">    Create a blank YAML template file with a predefined structure.</span>
 
 <span class="sd">    This function generates a YAML file at the specified path with a default</span>
 <span class="sd">    template. It handles special characters required for YAML compatibility and writes</span>
@@ -95,7 +104,6 @@
 <span class="sd">    https://github.com/yaml/pyyaml/pull/822</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pipe_replace_string</span> <span class="o">=</span> <span class="s2">&quot;REPLACE_ME_WITH_PIPE&quot;</span>
-    <span class="kn">from</span> <span class="nn">brassy.templates.release_yaml_template</span> <span class="kn">import</span> <span class="n">ReleaseNote</span>
 
     <span class="n">default_yaml</span> <span class="o">=</span> <span class="p">{</span>
         <span class="n">category</span><span class="p">:</span> <span class="p">[</span>
@@ -110,7 +118,7 @@
                 <span class="s2">&quot;related-issue&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;repo_url&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">},</span>
                 <span class="c1"># in time, extract from the first and last commit</span>
                 <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;finish&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
-            <span class="p">}</span>
+            <span class="p">},</span>
         <span class="p">]</span>
         <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">Settings</span><span class="o">.</span><span class="n">change_categories</span>
     <span class="p">}</span>
@@ -120,12 +128,14 @@
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
             <span class="s2">&quot;[bold red]Could not find a git repo. Please run in a &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;git repo or pass a file path for the yaml template &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;(eg &#39;-t /path/to/file.yaml&#39;).&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;(eg &#39;-t /path/to/file.yaml&#39;).&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">yaml_text</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span>
-            <span class="n">default_yaml</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span>
+            <span class="n">default_yaml</span><span class="p">,</span>
+            <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">description_populates_with_pipe</span><span class="p">:</span>
             <span class="n">yaml_text</span> <span class="o">=</span> <span class="n">yaml_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">pipe_replace_string</span><span class="p">,</span> <span class="s2">&quot;|</span><span class="se">\n</span><span class="s2">    replace_me&quot;</span><span class="p">)</span>
@@ -135,7 +145,7 @@
 
 <div class="viewcode-block" id="value_error_on_invalid_yaml">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.file_handler.value_error_on_invalid_yaml">[docs]</a>
-<span class="k">def</span> <span class="nf">value_error_on_invalid_yaml</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">value_error_on_invalid_yaml</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check if the YAML content follows the correct schema.</span>
 
@@ -153,7 +163,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No valid brassy-related YAML. Please populate </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">brassy.templates.release_yaml_template</span> <span class="kn">import</span> <span class="n">ReleaseNote</span>
 
     <span class="n">ReleaseNote</span><span class="p">(</span><span class="o">**</span><span class="n">content</span><span class="p">)</span></div>
 
@@ -161,7 +170,7 @@
 
 <div class="viewcode-block" id="read_yaml_files">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.file_handler.read_yaml_files">[docs]</a>
-<span class="k">def</span> <span class="nf">read_yaml_files</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="n">rich_open</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_yaml_files</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span> <span class="n">rich_open</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read and parse the given list of YAML files.</span>
 
@@ -192,22 +201,22 @@
             <span class="n">content</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
             <span class="n">value_error_on_invalid_yaml</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">filtered_entries</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">entry</span>
                     <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
                 <span class="p">]</span>
-                <span class="k">if</span> <span class="n">category</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">category</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">data</span><span class="p">[</span><span class="n">category</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">data</span><span class="p">[</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">filtered_entries</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span></div>
 
 
 
 <div class="viewcode-block" id="write_output_file">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.file_handler.write_output_file">[docs]</a>
-<span class="k">def</span> <span class="nf">write_output_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_output_file</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write the formatted release notes to the output file.</span>
 
@@ -218,7 +227,7 @@
 <span class="sd">    content : str</span>
 <span class="sd">        Formatted release notes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
 
 </pre></div>
@@ -250,6 +259,7 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../brassy-in-ci.html">Release Notes Checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../releases/index.html">Release Notes</a></li>
 </ul>
@@ -279,7 +289,7 @@
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>

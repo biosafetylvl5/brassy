@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Index &#8212; brassy 0.0.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
     <script src="_static/documentation_options.js?v=47de8214"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -65,8 +65,6 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#brassy.templates.release_yaml_template.RelatedIssue.blank_string">blank_string() (brassy.templates.release_yaml_template.RelatedIssue method)</a>
-</li>
       <li>
     brassy.actions.build_release_notes
 
@@ -158,9 +156,11 @@
 </li>
       <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem">ChangeItem (class in brassy.templates.release_yaml_template)</a>
 </li>
+      <li><a href="api.html#brassy.templates.release_yaml_template.Files.check_at_least_one_field">check_at_least_one_field() (brassy.templates.release_yaml_template.Files method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#brassy.templates.release_yaml_template.Files.check_at_least_one_field">check_at_least_one_field() (brassy.templates.release_yaml_template.Files method)</a>
+      <li><a href="api.html#brassy.templates.release_yaml_template.RelatedIssue.convert_empty_to_none">convert_empty_to_none() (brassy.templates.release_yaml_template.RelatedIssue class method)</a>
 </li>
       <li><a href="api.html#brassy.utils.file_handler.create_blank_template_yaml_file">create_blank_template_yaml_file() (in module brassy.utils.file_handler)</a>
 </li>
@@ -280,11 +280,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.actions.init.init">init() (in module brassy.actions.init)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.utils.messages.init_logger">init_logger() (in module brassy.utils.messages)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.templates.release_yaml_template.RelatedInternalIssue.internal">internal (brassy.templates.release_yaml_template.RelatedInternalIssue attribute)</a>
+</li>
+      <li><a href="api.html#brassy.templates.release_yaml_template.InvalidDateValueError">InvalidDateValueError</a>
 </li>
   </ul></td>
 </tr></table>
@@ -294,24 +296,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.utils.settings_manager.merge_and_validate_config_files">merge_and_validate_config_files() (in module brassy.utils.settings_manager)</a>
 </li>
-      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.model_computed_fields">model_computed_fields (brassy.templates.release_yaml_template.ChangeItem attribute)</a>
-
-      <ul>
-        <li><a href="api.html#brassy.templates.release_yaml_template.DateRange.model_computed_fields">(brassy.templates.release_yaml_template.DateRange attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.Files.model_computed_fields">(brassy.templates.release_yaml_template.Files attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.RelatedInternalIssue.model_computed_fields">(brassy.templates.release_yaml_template.RelatedInternalIssue attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.RelatedIssue.model_computed_fields">(brassy.templates.release_yaml_template.RelatedIssue attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.ReleaseNote.model_computed_fields">(brassy.templates.release_yaml_template.ReleaseNote attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.settings_template.ReleaseTemplate.model_computed_fields">(brassy.templates.settings_template.ReleaseTemplate attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.model_computed_fields">(brassy.templates.settings_template.SettingsTemplate attribute)</a>
-</li>
-      </ul></li>
       <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.model_config">model_config (brassy.templates.release_yaml_template.ChangeItem attribute)</a>
 
       <ul>
@@ -330,26 +314,6 @@
         <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.model_config">(brassy.templates.settings_template.SettingsTemplate attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.model_fields">model_fields (brassy.templates.release_yaml_template.ChangeItem attribute)</a>
-
-      <ul>
-        <li><a href="api.html#brassy.templates.release_yaml_template.DateRange.model_fields">(brassy.templates.release_yaml_template.DateRange attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.Files.model_fields">(brassy.templates.release_yaml_template.Files attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.RelatedInternalIssue.model_fields">(brassy.templates.release_yaml_template.RelatedInternalIssue attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.RelatedIssue.model_fields">(brassy.templates.release_yaml_template.RelatedIssue attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.release_yaml_template.ReleaseNote.model_fields">(brassy.templates.release_yaml_template.ReleaseNote attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.settings_template.ReleaseTemplate.model_fields">(brassy.templates.settings_template.ReleaseTemplate attribute)</a>
-</li>
-        <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.model_fields">(brassy.templates.settings_template.SettingsTemplate attribute)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.templates.release_yaml_template.Files.modified">modified (brassy.templates.release_yaml_template.Files attribute)</a>
 </li>
       <li>
@@ -379,6 +343,8 @@
         <li><a href="api.html#module-brassy.utils.settings_manager">brassy.utils.settings_manager</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.templates.release_yaml_template.Files.moved">moved (brassy.templates.release_yaml_template.Files attribute)</a>
 </li>
   </ul></td>
@@ -497,9 +463,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.valid_changes">valid_changes (brassy.templates.settings_template.SettingsTemplate attribute)</a>
 </li>
+      <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.valid_fields">valid_fields (brassy.templates.settings_template.SettingsTemplate attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.valid_fields">valid_fields (brassy.templates.settings_template.SettingsTemplate attribute)</a>
+      <li><a href="api.html#brassy.templates.release_yaml_template.DateRange.validate_date_range">validate_date_range() (brassy.templates.release_yaml_template.DateRange method)</a>
 </li>
       <li><a href="api.html#brassy.utils.file_handler.value_error_on_invalid_yaml">value_error_on_invalid_yaml() (in module brassy.utils.file_handler)</a>
 </li>
@@ -543,6 +511,7 @@
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brassy-in-ci.html">Release Notes Checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="releases/index.html">Release Notes</a></li>
 </ul>
@@ -570,7 +539,7 @@
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>

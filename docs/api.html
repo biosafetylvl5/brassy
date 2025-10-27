@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>API &#8212; brassy 0.0.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
-    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
     <script src="_static/documentation_options.js?v=47de8214"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Release Notes" href="releases/index.html" />
-    <link rel="prev" title="Using Brassy" href="using-brassy.html" />
+    <link rel="prev" title="Release Notes Checker" href="brassy-in-ci.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,6 +41,7 @@
 <h3>Actions<a class="headerlink" href="#actions" title="Link to this heading">¶</a></h3>
 <section id="module-brassy.actions.prune_yaml">
 <span id="prune-yaml"></span><h4>Prune YAML<a class="headerlink" href="#module-brassy.actions.prune_yaml" title="Link to this heading">¶</a></h4>
+<p>Provides functions for ‘pruning’ yaml of extra and empty fields.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.prune_yaml.direct_pruning_of_files">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.prune_yaml.</span></span><span class="sig-name descname"><span class="pre">direct_pruning_of_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/prune_yaml.html#direct_pruning_of_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.prune_yaml.direct_pruning_of_files" title="Link to this definition">¶</a></dt>
@@ -128,22 +129,26 @@ and writes the pruned content back to the same file.</p>
 </section>
 <section id="module-brassy.actions.build_release_notes">
 <span id="build-release-notes"></span><h4>Build Release Notes<a class="headerlink" href="#module-brassy.actions.build_release_notes" title="Link to this heading">¶</a></h4>
+<p>Build release note output.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.build_release_notes">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">build_release_notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rich_open</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#build_release_notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.build_release_notes" title="Link to this definition">¶</a></dt>
-<dd><p>Build release notes from YAML data.</p>
+<dd><p>Build release notes by reading YAML files and templates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>dict</em>) – Parsed content of YAML files.</p></li>
-<li><p><strong>version</strong> (<em>str</em><em>, </em><em>optional</em>) – Version number of the release, by default ‘1.1’.</p></li>
-<li><p><strong>release_date</strong> (<em>str</em><em>, </em><em>optional</em>) – Release date, by default None, which uses today’s date.</p></li>
-<li><p><strong>header_file</strong> (<em>str</em><em>, </em><em>optional</em>) – A header file to prepend to the release notes.</p></li>
-<li><p><strong>footer_file</strong> (<em>str</em><em>, </em><em>optional</em>) – A footer file to suffix to the release notes.</p></li>
+<li><p><strong>input_files_or_folders</strong> (<em>list</em><em> of </em><em>str</em>) – CLI-supplied file or directory paths.</p></li>
+<li><p><strong>console</strong> (<em>Console</em>) – Console for user feedback.</p></li>
+<li><p><strong>rich_open</strong> (<em>Callable</em>) – Context manager factory for reading files.</p></li>
+<li><p><strong>version</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Release version string.</p></li>
+<li><p><strong>release_date</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Release date override in ISO format.</p></li>
+<li><p><strong>header_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Path to an optional header file.</p></li>
+<li><p><strong>footer_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Path to an optional footer file.</p></li>
+<li><p><strong>working_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Base directory for relative paths.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Formatted release notes in .rst format.</p>
+<dd class="field-even"><p>Rendered release notes in RST.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -154,14 +159,13 @@ and writes the pruned content back to the same file.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.find_duplicate_titles">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">find_duplicate_titles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#find_duplicate_titles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.find_duplicate_titles" title="Link to this definition">¶</a></dt>
-<dd><p>Check if there are any duplicate titles in dictionaries of lists of dictionaries.</p>
+<dd><p>Detect duplicate titles across changelog entries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – A dictionary containing lists of dictionaries with items
-indexed by “title”.</p>
+<dd class="field-odd"><p><strong>data</strong> (<em>dict</em>) – Mapping of categories to lists of changelog entries.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if there are duplicate “title” values, False otherwise.</p>
+<dd class="field-even"><p>True if any title occurs more than once.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -172,22 +176,39 @@ indexed by “title”.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.format_files_changed_entry">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">format_files_changed_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detailed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#format_files_changed_entry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.format_files_changed_entry" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Format an RST block describing changed files for an entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>detailed</strong> (<em>bool</em>) – Unused flag kept for compatibility.</p></li>
+<li><p><strong>entry</strong> (<em>dict</em>) – Changelog entry containing file changes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>RST formatted file change listing.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.format_release_notes">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">format_release_notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#format_release_notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.format_release_notes" title="Link to this definition">¶</a></dt>
-<dd><p>Format the parsed YAML data into release notes in .rst format.</p>
+<dd><p>Generate release notes content from parsed changelog data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>dict</em>) – Parsed content of YAML files.</p></li>
-<li><p><strong>version</strong> (<em>str</em><em>, </em><em>optional</em>) – Version number of the release, by default ‘1.1’.</p></li>
-<li><p><strong>release_date</strong> (<em>str</em><em>, </em><em>optional</em>) – Release date, by default None, which uses today’s date.</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – Parsed changelog entries grouped by category.</p></li>
+<li><p><strong>version</strong> (<em>str</em><em> or </em><em>None</em>) – Release version string.</p></li>
+<li><p><strong>release_date</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Release date override in ISO format. Defaults to today’s date.</p></li>
+<li><p><strong>header</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Optional header content.</p></li>
+<li><p><strong>footer</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Optional footer content.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Formatted release notes in .rst format.</p>
+<dd class="field-even"><p>Release notes rendered in RST.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -198,28 +219,43 @@ indexed by “title”.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.generate_file_change_section_list_of_strings">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">generate_file_change_section_list_of_strings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#generate_file_change_section_list_of_strings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.generate_file_change_section_list_of_strings" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create file-specific section lines for a changelog entry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entry</strong> (<em>dict</em>) – Changelog entry with file change data.</p></li>
+<li><p><strong>line</strong> (<em>str</em>) – Template string for the section line.</p></li>
+<li><p><strong>category</strong> (<em>str</em>) – Entry category name.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Resolved entry title.</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – Resolved entry description.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Section lines formatted per file change.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of str</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.generate_section_string">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">generate_section_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">changelog_entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#generate_section_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.generate_section_string" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="brassy.actions.build_release_notes.get_header_footer">
-<span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">get_header_footer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rich_open</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#get_header_footer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.get_header_footer" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a header and/or footer to the given content.</p>
+<dd><p>Render a changelog section from templates and entries.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>content</strong> (<em>str</em>) – The content to which the header and/or footer will be added.</p></li>
-<li><p><strong>rich_open</strong> (<em>function</em>) – A function used to open files.</p></li>
-<li><p><strong>header_file</strong> (<em>str</em><em>, </em><em>optional</em>) – The file containing the header content. Defaults to None.</p></li>
-<li><p><strong>footer_file</strong> (<em>str</em><em>, </em><em>optional</em>) – The file containing the footer content. Defaults to None.</p></li>
+<li><p><strong>section_lines</strong> (<em>list</em><em> of </em><em>str</em>) – Template lines for the section.</p></li>
+<li><p><strong>changelog_entries</strong> (<em>dict</em>) – Mapping of categories to changelog entries.</p></li>
+<li><p><strong>release_date</strong> (<em>str</em>) – Release date string.</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – Release version string.</p></li>
+<li><p><strong>footer</strong> (<em>str</em><em> or </em><em>None</em>) – Footer content appended to templates.</p></li>
+<li><p><strong>header</strong> (<em>str</em><em> or </em><em>None</em>) – Header content prepended to templates.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The content with the header and/or footer added.</p>
+<dd class="field-even"><p>Rendered section content.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -227,9 +263,31 @@ indexed by “title”.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.actions.build_release_notes.get_header_footer">
+<span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">get_header_footer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rich_open</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#get_header_footer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.get_header_footer" title="Link to this definition">¶</a></dt>
+<dd><p>Read optional header and footer content.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rich_open</strong> (<em>Callable</em>) – Context manager factory for reading files.</p></li>
+<li><p><strong>header_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Path to header file.</p></li>
+<li><p><strong>footer_file</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Path to footer file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Header and footer content or None when unavailable.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of str or None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-brassy.actions.init">
 <span id="initialize"></span><h4>Initialize<a class="headerlink" href="#module-brassy.actions.init" title="Link to this heading">¶</a></h4>
+<p>Initialize brassy with config file.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.init.init">
 <span class="sig-prename descclassname"><span class="pre">brassy.actions.init.</span></span><span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/actions/init.html#init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.init.init" title="Link to this definition">¶</a></dt>
@@ -254,10 +312,32 @@ a project configuration file based on user input.</p>
 <h3>Templates<a class="headerlink" href="#templates" title="Link to this heading">¶</a></h3>
 <section id="module-brassy.templates.release_yaml_template">
 <span id="release-yaml"></span><h4>Release YAML<a class="headerlink" href="#module-brassy.templates.release_yaml_template" title="Link to this heading">¶</a></h4>
+<p>Release note YAML validation logic.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">ChangeItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MinLen</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MinLen</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files"><span class="pre">Files</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">related_issue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><span class="pre">RelatedIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><span class="pre">RelatedInternalIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><span class="pre">DateRange</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ChangeItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">ChangeItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MinLen</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">MinLen</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">min_length</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files"><span class="pre">Files</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">related_issue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><span class="pre">RelatedIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><span class="pre">RelatedInternalIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><span class="pre">DateRange</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ChangeItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>A model representing a change “item”, or an atomic change.</p>
+<p>This class provides a structured way to represent changes with associated metadata
+such as title, description, affected files, related issues, and date range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The title of the change item. Must be at least 1 character long if provided.
+Whitespace is stripped.</p></li>
+<li><p><strong>description</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – A detailed description of the change.
+Must be at least 1 character long if provided.
+Whitespace is stripped.</p></li>
+<li><p><strong>files</strong> (<a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files"><em>Files</em></a>) – The files affected by this change.</p></li>
+<li><p><strong>related_issue</strong> (<a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><em>RelatedIssue</em></a><em>, </em><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><em>RelatedInternalIssue</em></a><em>, or </em><em>None</em><em>, </em><em>optional</em>) – An issue related to this change. Aliased as “related-issue” in serialized form.
+Default is None.</p></li>
+<li><p><strong>date</strong> (<a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><em>DateRange</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – The date range associated with this change. Default is None.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Empty strings for ‘title’ and ‘description’ are automatically converted to None
+during validation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.date">
 <span class="sig-name descname"><span class="pre">date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><span class="pre">DateRange</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.date" title="Link to this definition">¶</a></dt>
@@ -271,7 +351,19 @@ a project configuration file based on user input.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none">
 <span class="sig-name descname"><span class="pre">empty_str_to_none</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ChangeItem.empty_str_to_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convert empty strings to None for ‘title’ and ‘description’ attributes.</p>
+<p>This method checks if the ‘title’ or ‘description’ attributes of the object
+are empty strings and converts them to None if they are.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>self</strong> (<em>object</em>)</p></li>
+<li><p><em>Returns the instance itself to allow for method chaining.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.files">
@@ -279,23 +371,9 @@ a project configuration file based on user input.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_config" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'date':</span> <span class="pre">FieldInfo(annotation=Union[DateRange,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'description':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=True,</span> <span class="pre">json_schema_extra={'strip_whitespace':</span> <span class="pre">True},</span> <span class="pre">metadata=[MinLen(min_length=1)]),</span> <span class="pre">'files':</span> <span class="pre">FieldInfo(annotation=Files,</span> <span class="pre">required=True),</span> <span class="pre">'related_issue':</span> <span class="pre">FieldInfo(annotation=Union[RelatedIssue,</span> <span class="pre">RelatedInternalIssue,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">alias='related-issue',</span> <span class="pre">alias_priority=2,</span> <span class="pre">json_schema_extra={'exclude_unset':</span> <span class="pre">True}),</span> <span class="pre">'title':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=True,</span> <span class="pre">json_schema_extra={'strip_whitespace':</span> <span class="pre">True},</span> <span class="pre">metadata=[MinLen(min_length=1)])}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -312,18 +390,13 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">DateRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#DateRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">DateRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#DateRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Date range model for pydantic validation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.finish">
-<span class="sig-name descname"><span class="pre">finish</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.finish" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">finish</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.finish" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.model_config">
@@ -331,30 +404,46 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'finish':</span> <span class="pre">FieldInfo(annotation=Union[date,</span> <span class="pre">NoneType],</span> <span class="pre">required=True,</span> <span class="pre">validate_default=True),</span> <span class="pre">'start':</span> <span class="pre">FieldInfo(annotation=Union[date,</span> <span class="pre">NoneType],</span> <span class="pre">required=True,</span> <span class="pre">validate_default=True)}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.parse_date">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#DateRange.parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.parse_date" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#DateRange.parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.parse_date" title="Link to this definition">¶</a></dt>
+<dd><p>Parse and validate date values.</p>
+<p>Converts various date formats to a Date object, handling strings,
+Date objects, and None values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> – Input to parse (Date, None, or string)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Date or None</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Parsed date or None for empty values</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>InvalidDateValue</strong> – If the value cannot be parsed as a valid date:</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.start">
-<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.start" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Date</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.start" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.DateRange.validate_date_range">
+<span class="sig-name descname"><span class="pre">validate_date_range</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#DateRange.validate_date_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.DateRange.validate_date_range" title="Link to this definition">¶</a></dt>
+<dd><p>Validate that finish date is not before start date if both are set.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">Files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deleted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moved</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modified</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#Files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.Files" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">Files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">deleted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">moved</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modified</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#Files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.Files" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Files model for validating files impacted in the changelog.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files.added">
 <span class="sig-name descname"><span class="pre">added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.Files.added" title="Link to this definition">¶</a></dt>
@@ -363,7 +452,8 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 <dl class="py method">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files.check_at_least_one_field">
 <span class="sig-name descname"><span class="pre">check_at_least_one_field</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#Files.check_at_least_one_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.Files.check_at_least_one_field" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Verify that at least one file is provided.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files.deleted">
@@ -371,23 +461,9 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.Files.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.Files.model_config" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.Files.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'added':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=[]),</span> <span class="pre">'deleted':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=[]),</span> <span class="pre">'modified':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=[]),</span> <span class="pre">'moved':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=[])}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.Files.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -402,20 +478,22 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 
 </dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.InvalidDateValueError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">InvalidDateValueError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#InvalidDateValueError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.InvalidDateValueError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Error for invalid date strings.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedInternalIssue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">RelatedInternalIssue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_PydanticGeneralMetadata</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'[A-Za-z]+#\\d+</span> <span class="pre">-</span> <span class="pre">.+'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#RelatedInternalIssue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">RelatedInternalIssue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">internal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_PydanticGeneralMetadata</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="s"><span class="pre">'[A-Za-z]+#\\d+</span> <span class="pre">-</span> <span class="pre">.+'</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#RelatedInternalIssue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Pydantic class for ‘internal’ or non-public related issue.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedInternalIssue.internal">
 <span class="sig-name descname"><span class="pre">internal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedInternalIssue.internal" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedInternalIssue.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedInternalIssue.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedInternalIssue.model_config">
@@ -423,29 +501,17 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedInternalIssue.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'internal':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">metadata=[_PydanticGeneralMetadata(pattern='[A-Za-z]+#\\d+</span> <span class="pre">-</span> <span class="pre">.+')])}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedInternalIssue.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">RelatedIssue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">Url</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">UrlConstraints</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">2083</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">allowed_schemes</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">host_required</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">default_host</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">default_port</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">default_path</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#RelatedIssue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">RelatedIssue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">HttpUrl</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#RelatedIssue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Pydantic class for validating related issue (eg. GitHub issue).</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue.blank_string">
-<span class="sig-name descname"><span class="pre">blank_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#RelatedIssue.blank_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.blank_string" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue.convert_empty_to_none">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convert_empty_to_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#RelatedIssue.convert_empty_to_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.convert_empty_to_none" title="Link to this definition">¶</a></dt>
+<dd><p>Convert empty strings to None for URL validation.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -455,48 +521,27 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'number':</span> <span class="pre">FieldInfo(annotation=Union[int,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'repo_url':</span> <span class="pre">FieldInfo(annotation=Union[Annotated[Url,</span> <span class="pre">UrlConstraints(max_length=2083,</span> <span class="pre">allowed_schemes=['http',</span> <span class="pre">'https'],</span> <span class="pre">host_required=None,</span> <span class="pre">default_host=None,</span> <span class="pre">default_port=None,</span> <span class="pre">default_path=None)],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None)}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue.number">
-<span class="sig-name descname"><span class="pre">number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.number" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.number" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.RelatedIssue.repo_url">
-<span class="sig-name descname"><span class="pre">repo_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Annotated</span><span class="p"><span class="pre">[</span></span><span class="pre">Url</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">UrlConstraints</span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">max_length</span></span><span class="o"><span class="pre">=</span></span><span class="m"><span class="pre">2083</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">allowed_schemes</span></span><span class="o"><span class="pre">=</span></span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'http'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'https'</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">host_required</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">default_host</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">default_port</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">default_path</span></span><span class="o"><span class="pre">=</span></span><span class="pre">None</span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.repo_url" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">repo_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">HttpUrl</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.RelatedIssue.repo_url" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ReleaseNote">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">ReleaseNote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RootModelRootType</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PydanticUndefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ReleaseNote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ReleaseNote" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.release_yaml_template.</span></span><span class="sig-name descname"><span class="pre">ReleaseNote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RootModelRootType</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PydanticUndefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ReleaseNote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ReleaseNote" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RootModel[Dict[str,</span> <span class="pre">List[ChangeItem]]]</span></code></p>
-<p>ReleaseNote is a root model containing a dictionary that maps category names to lists of ChangeItems.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ReleaseNote.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ReleaseNote.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
-
+<p>ReleaseNote is a root model for Release Notes.</p>
+<p>It contains a dictionary that maps category names to lists of ChangeItems.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ReleaseNote.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ReleaseNote.model_config" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ReleaseNote.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'root':</span> <span class="pre">FieldInfo(annotation=Dict[str,</span> <span class="pre">List[ChangeItem]],</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#brassy.templates.release_yaml_template.ReleaseNote.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
 </dd></dl>
 
 </dd></dl>
@@ -504,14 +549,17 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 </section>
 <section id="module-brassy.templates.settings_template">
 <span id="settings"></span><h4>Settings<a class="headerlink" href="#module-brassy.templates.settings_template" title="Link to this heading">¶</a></h4>
+<p>Pydantic models for validating settings files.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.settings_template.</span></span><span class="sig-name descname"><span class="pre">ReleaseTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#ReleaseTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.settings_template.</span></span><span class="sig-name descname"><span class="pre">ReleaseTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#ReleaseTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Base pydantic model for release notes.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate.Config">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#ReleaseTemplate.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.Config" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#ReleaseTemplate.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.Config" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Required by pydantic for configuration.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate.Config.populate_by_name">
 <span class="sig-name descname"><span class="pre">populate_by_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.Config.populate_by_name" title="Link to this definition">¶</a></dt>
@@ -520,39 +568,26 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'populate_by_name':</span> <span class="pre">True}</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.model_config" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'populate_by_name':</span> <span class="pre">True,</span> <span class="pre">'validate_by_alias':</span> <span class="pre">True,</span> <span class="pre">'validate_by_name':</span> <span class="pre">True}</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.model_config" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'release_template':</span> <span class="pre">FieldInfo(annotation=Union[List[Dict[str,</span> <span class="pre">List[str]]],</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None,</span> <span class="pre">alias='release-template',</span> <span class="pre">alias_priority=2)}</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.ReleaseTemplate.release_template">
-<span class="sig-name descname"><span class="pre">release_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.release_template" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">release_template</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.settings_template.ReleaseTemplate.release_template" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.settings_template.</span></span><span class="sig-name descname"><span class="pre">SettingsTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_yaml_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['bug</span> <span class="pre">fix',</span> <span class="pre">'enhancement',</span> <span class="pre">'deprecation',</span> <span class="pre">'removal',</span> <span class="pre">'performance',</span> <span class="pre">'documentation',</span> <span class="pre">'continuous</span> <span class="pre">integration']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">TITLE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">DESCRIPTION'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_empty_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_populates_with_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['title',</span> <span class="pre">'description',</span> <span class="pre">'files',</span> <span class="pre">'related-issue']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_changes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['deleted',</span> <span class="pre">'moved',</span> <span class="pre">'added',</span> <span class="pre">'modified']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_experimental_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.settings_template.ReleaseTemplate" title="brassy.templates.settings_template.ReleaseTemplate"><span class="pre">ReleaseTemplate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ReleaseTemplate(release_template=[{'header':</span> <span class="pre">['{prefix_file}',</span> <span class="pre">'']},</span> <span class="pre">{'title':</span> <span class="pre">['',</span> <span class="pre">'Version</span> <span class="pre">{release_version}</span> <span class="pre">({release_date})',</span> <span class="pre">'**************************',</span> <span class="pre">'']},</span> <span class="pre">{'summary':</span> <span class="pre">['</span> <span class="pre">*</span> <span class="pre">*{change_type}*:</span> <span class="pre">{title}']},</span> <span class="pre">{'entry':</span> <span class="pre">['',</span> <span class="pre">'{change_type}',</span> <span class="pre">'===========',</span> <span class="pre">'',</span> <span class="pre">'{title}',</span> <span class="pre">'-------------------------',</span> <span class="pre">'',</span> <span class="pre">'{description}',</span> <span class="pre">'',</span> <span class="pre">'::',</span> <span class="pre">'',</span> <span class="pre">'</span>&#160;&#160;&#160;&#160; <span class="pre">{file_change}:</span> <span class="pre">{file}']},</span> <span class="pre">{'footer':</span> <span class="pre">['',</span> <span class="pre">'{suffix_file}']}])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#SettingsTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">brassy.templates.settings_template.</span></span><span class="sig-name descname"><span class="pre">SettingsTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_yaml_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['bug</span> <span class="pre">fix',</span> <span class="pre">'enhancement',</span> <span class="pre">'deprecation',</span> <span class="pre">'removal',</span> <span class="pre">'performance',</span> <span class="pre">'documentation',</span> <span class="pre">'continuous</span> <span class="pre">integration']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">TITLE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">DESCRIPTION'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_empty_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_populates_with_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['title',</span> <span class="pre">'description',</span> <span class="pre">'files',</span> <span class="pre">'related-issue']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_changes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['deleted',</span> <span class="pre">'moved',</span> <span class="pre">'added',</span> <span class="pre">'modified']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_experimental_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.settings_template.ReleaseTemplate" title="brassy.templates.settings_template.ReleaseTemplate"><span class="pre">ReleaseTemplate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ReleaseTemplate(release_template=[{'header':</span> <span class="pre">['{prefix_file}',</span> <span class="pre">'']},</span> <span class="pre">{'title':</span> <span class="pre">['',</span> <span class="pre">'Version</span> <span class="pre">{release_version}</span> <span class="pre">({release_date})',</span> <span class="pre">'**************************',</span> <span class="pre">'']},</span> <span class="pre">{'summary':</span> <span class="pre">['</span> <span class="pre">*</span> <span class="pre">*{change_type}*:</span> <span class="pre">{title}']},</span> <span class="pre">{'entry':</span> <span class="pre">['',</span> <span class="pre">'{change_type}',</span> <span class="pre">'===========',</span> <span class="pre">'',</span> <span class="pre">'{title}',</span> <span class="pre">'-------------------------',</span> <span class="pre">'',</span> <span class="pre">'{description}',</span> <span class="pre">'',</span> <span class="pre">'::',</span> <span class="pre">'',</span> <span class="pre">'</span>&#160;&#160;&#160;&#160; <span class="pre">{file_change}:</span> <span class="pre">{file}']},</span> <span class="pre">{'footer':</span> <span class="pre">['',</span> <span class="pre">'{suffix_file}']}])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#SettingsTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Pydantic model for settings file.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.change_categories">
-<span class="sig-name descname"><span class="pre">change_categories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.change_categories" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">change_categories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.change_categories" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -567,7 +602,7 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.default_yaml_path">
-<span class="sig-name descname"><span class="pre">default_yaml_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.default_yaml_path" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">default_yaml_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.default_yaml_path" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -586,23 +621,9 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.model_computed_fields">
-<span class="sig-name descname"><span class="pre">model_computed_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ComputedFieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.model_computed_fields" title="Link to this definition">¶</a></dt>
-<dd><p>A dictionary of computed field names and their corresponding <cite>ComputedFieldInfo</cite> objects.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.model_config" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'change_categories':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=['bug</span> <span class="pre">fix',</span> <span class="pre">'enhancement',</span> <span class="pre">'deprecation',</span> <span class="pre">'removal',</span> <span class="pre">'performance',</span> <span class="pre">'documentation',</span> <span class="pre">'continuous</span> <span class="pre">integration']),</span> <span class="pre">'default_description':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default='NO</span> <span class="pre">DESCRIPTION'),</span> <span class="pre">'default_title':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default='NO</span> <span class="pre">TITLE'),</span> <span class="pre">'default_yaml_path':</span> <span class="pre">FieldInfo(annotation=Union[Path,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=None),</span> <span class="pre">'description_populates_with_pipe':</span> <span class="pre">FieldInfo(annotation=bool,</span> <span class="pre">required=False,</span> <span class="pre">default=False),</span> <span class="pre">'enable_experimental_features':</span> <span class="pre">FieldInfo(annotation=bool,</span> <span class="pre">required=False,</span> <span class="pre">default=False),</span> <span class="pre">'fail_on_empty_dir':</span> <span class="pre">FieldInfo(annotation=bool,</span> <span class="pre">required=False,</span> <span class="pre">default=True),</span> <span class="pre">'templates':</span> <span class="pre">FieldInfo(annotation=Union[ReleaseTemplate,</span> <span class="pre">NoneType],</span> <span class="pre">required=False,</span> <span class="pre">default=ReleaseTemplate(release_template=[{'header':</span> <span class="pre">['{prefix_file}',</span> <span class="pre">'']},</span> <span class="pre">{'title':</span> <span class="pre">['',</span> <span class="pre">'Version</span> <span class="pre">{release_version}</span> <span class="pre">({release_date})',</span> <span class="pre">'**************************',</span> <span class="pre">'']},</span> <span class="pre">{'summary':</span> <span class="pre">['</span> <span class="pre">*</span> <span class="pre">*{change_type}*:</span> <span class="pre">{title}']},</span> <span class="pre">{'entry':</span> <span class="pre">['',</span> <span class="pre">'{change_type}',</span> <span class="pre">'===========',</span> <span class="pre">'',</span> <span class="pre">'{title}',</span> <span class="pre">'-------------------------',</span> <span class="pre">'',</span> <span class="pre">'{description}',</span> <span class="pre">'',</span> <span class="pre">'::',</span> <span class="pre">'',</span> <span class="pre">'</span>&#160;&#160;&#160;&#160; <span class="pre">{file_change}:</span> <span class="pre">{file}']},</span> <span class="pre">{'footer':</span> <span class="pre">['',</span> <span class="pre">'{suffix_file}']}])),</span> <span class="pre">'use_color':</span> <span class="pre">FieldInfo(annotation=bool,</span> <span class="pre">required=False,</span> <span class="pre">default=True),</span> <span class="pre">'valid_changes':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=['deleted',</span> <span class="pre">'moved',</span> <span class="pre">'added',</span> <span class="pre">'modified']),</span> <span class="pre">'valid_fields':</span> <span class="pre">FieldInfo(annotation=List[str],</span> <span class="pre">required=False,</span> <span class="pre">default=['title',</span> <span class="pre">'description',</span> <span class="pre">'files',</span> <span class="pre">'related-issue'])}</span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.model_fields" title="Link to this definition">¶</a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] objects.</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -617,12 +638,12 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.valid_changes">
-<span class="sig-name descname"><span class="pre">valid_changes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.valid_changes" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">valid_changes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.valid_changes" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.valid_fields">
-<span class="sig-name descname"><span class="pre">valid_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.valid_fields" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">valid_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.valid_fields" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -633,6 +654,9 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo] ob
 <h3>Utils<a class="headerlink" href="#utils" title="Link to this heading">¶</a></h3>
 <section id="module-brassy.utils.CLI">
 <span id="cli"></span><h4>CLI<a class="headerlink" href="#module-brassy.utils.CLI" title="Link to this heading">¶</a></h4>
+<p>The CLI only portions of brassy.</p>
+<p>Brassy can be run without this file, and importing it brassy without it should
+allow users to call brassy without the CLI</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.CLI.exit_on_invalid_arguments">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">exit_on_invalid_arguments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parser</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/CLI.html#exit_on_invalid_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.exit_on_invalid_arguments" title="Link to this definition">¶</a></dt>
@@ -653,18 +677,19 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.CLI.get_file_list_from_cli_input">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">get_file_list_from_cli_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/CLI.html#get_file_list_from_cli_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.get_file_list_from_cli_input" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Parse CLI input string into full file paths.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.CLI.get_parser">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">get_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/CLI.html#get_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.get_parser" title="Link to this definition">¶</a></dt>
-<dd><p>Returns an ArgumentParser object with predefined arguments for generating release notes from YAML files.</p>
+<dd><p>Return ArgumentParser for CLI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The ArgumentParser object with predefined arguments.</p>
+<dd class="field-odd"><p><strong>argparse.ArgumentParser</strong></p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>argparse.ArgumentParser</p>
+<dd class="field-even"><p>The ArgumentParser object with predefined arguments.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -706,27 +731,32 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.CLI.print_version_and_exit">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">print_version_and_exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/CLI.html#print_version_and_exit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.print_version_and_exit" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Print version and exit with status code 0.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.CLI.run_from_CLI">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">run_from_CLI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/CLI.html#run_from_CLI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.run_from_CLI" title="Link to this definition">¶</a></dt>
-<dd><p>Main function to generate release notes from YAML files and write to an output file.</p>
+<dd><p>Generate release notes from YAML files and write output file.</p>
 </dd></dl>
 
 </section>
 <section id="module-brassy.utils.git_handler">
 <span id="git-handler"></span><h4>git_handler<a class="headerlink" href="#module-brassy.utils.git_handler" title="Link to this heading">¶</a></h4>
+<p>Handle Git-related functionality.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.git_handler.get_current_git_branch">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">get_current_git_branch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#get_current_git_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.get_current_git_branch" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">get_current_git_branch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sanitize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#get_current_git_branch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.get_current_git_branch" title="Link to this definition">¶</a></dt>
 <dd><p>Get the current dirs git branch name.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The name of the current git branch.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sanitize</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, sanitize branch name as a valid file name before returning.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The name of the current git branch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -774,30 +804,33 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.git_handler.print_out_git_changed_files">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">print_out_git_changed_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#print_out_git_changed_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.print_out_git_changed_files" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Print out changes as detected by Git in format Brassy expects in changlogs.</p>
+</dd></dl>
 
 </section>
 <section id="module-brassy.utils.messages">
 <span id="messages"></span><h4>Messages<a class="headerlink" href="#module-brassy.utils.messages" title="Link to this heading">¶</a></h4>
+<p>Handle outputs/inputs to the CLI.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.get_boolean_prompt_function">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">get_boolean_prompt_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/messages.html#get_boolean_prompt_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.get_boolean_prompt_function" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">get_boolean_prompt_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/messages.html#get_boolean_prompt_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.get_boolean_prompt_function" title="Link to this definition">¶</a></dt>
+<dd><p>Return a function that prompts Y/N and returns True/False.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.get_rich_opener">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">get_rich_opener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/messages.html#get_rich_opener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.get_rich_opener" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the appropriate opener function for rich progress bar.</p>
+<dd><p>Return opener function with or without a rich progress bar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>no_format</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, returns the opener function without any formatting.
 If False, returns the opener function with formatting. Defaults to False.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The opener function for rich progress bar.</p>
+<dd class="field-even"><p><strong>function</strong></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>function</p>
+<dd class="field-odd"><p>The opener function for rich progress bar.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -831,29 +864,31 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The configured rich console object.</p>
+<dd class="field-even"><p><strong>Console</strong></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Console</p>
+<dd class="field-odd"><p>The configured rich console object.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.setup_messages">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">setup_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/messages.html#setup_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.setup_messages" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">setup_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/messages.html#setup_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.setup_messages" title="Link to this definition">¶</a></dt>
+<dd><p>Set up global objects for outputting messages to the CLI.</p>
+</dd></dl>
 
 </section>
 <section id="module-brassy.utils.settings_manager">
 <span id="settings-manager"></span><h4>Settings Manager<a class="headerlink" href="#module-brassy.utils.settings_manager" title="Link to this heading">¶</a></h4>
+<p>Manages getting and setting settings.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.create_config_file">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">create_config_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#create_config_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.create_config_file" title="Link to this definition">¶</a></dt>
 <dd><p>Create a configuration file with default settings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config_file</strong> (<em>str</em>) – Path where the configuration file will be created.</p>
+<dd class="field-odd"><p><strong>config_file</strong> (<em>Path</em>) – Path where the configuration file will be created.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -861,16 +896,16 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_config_files">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_config_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_config_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_config_files" title="Link to this definition">¶</a></dt>
-<dd><p>Get a list of configuration file paths in order of increasing precedence.</p>
+<dd><p>Get configuration file paths in increasing precedence.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>app_name</strong> (<em>str</em>) – Name of the application.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of configuration file paths.</p>
+<dd class="field-even"><p>List of configuration file paths. Site, user, then project.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list of str</p>
+<dd class="field-odd"><p>List[Path]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -878,17 +913,16 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_git_repo_root">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_git_repo_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_git_repo_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_git_repo_root" title="Link to this definition">¶</a></dt>
-<dd><p>Get the root directory of the Git repository containing the given path.</p>
+<dd><p>Find the root directory of the Git repository for a path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – A path within the Git repository. Defaults to the current directory.</p>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path inside the repository. Defaults to “.”.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Absolute path to the root of the Git repository. This is usually the
-path containing the .git folder.</p>
+<dd class="field-even"><p>Absolute path to the repository root (the dir that contains .git).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>Path</p>
 </dd>
 </dl>
 </dd></dl>
@@ -896,16 +930,18 @@ path containing the .git folder.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_project_config_file_path">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_project_config_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_project_config_file_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_project_config_file_path" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the project-specific configuration file path for the application.</p>
+<dd><p>Return the path to the project’s configuration file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>app_name</strong> (<em>str</em>) – Name of the application.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Path to the project’s configuration file.</p>
+<dd class="field-even"><p>Path to the project’s configuration file. If the file does not
+exist locally, the path is resolved relative to the repository
+root when possible.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>Path</p>
 </dd>
 </dl>
 </dd></dl>
@@ -913,19 +949,19 @@ path containing the .git folder.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_settings">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_settings" title="Link to this definition">¶</a></dt>
-<dd><p>Return application settings from config files and environment variables.</p>
+<dd><p>Return final application settings with file and env overrides.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>app_name</strong> (<em>str</em>) – Name of the application.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>An instance of the <cite>Settings</cite> model with all configurations applied.</p>
+<dd class="field-even"><p>An instance containing the merged configuration.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Settings</p>
+<dd class="field-odd"><p><a class="reference internal" href="#brassy.templates.settings_template.SettingsTemplate" title="brassy.templates.settings_template.SettingsTemplate">SettingsTemplate</a></p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If the final settings do not conform to the <cite>Settings</cite> model.</p>
+<dd class="field-even"><p><strong>ValidationError</strong> – If the final settings fail to validate against the model.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -933,7 +969,7 @@ path containing the .git folder.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_settings_from_config_files">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_settings_from_config_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_settings_from_config_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_settings_from_config_files" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve settings from configuration files without environment overrides.</p>
+<dd><p>Retrieve settings from configuration files without env overrides.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>app_name</strong> (<em>str</em>) – Name of the application.</p>
@@ -950,7 +986,7 @@ path containing the .git folder.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_site_config_file_path">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_site_config_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_site_config_file_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_site_config_file_path" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the site-specific configuration file path for the application.</p>
+<dd><p>Retrieve the site-wide configuration file path for the app.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>app_name</strong> (<em>str</em>) – Name of the application.</p>
@@ -959,7 +995,7 @@ path containing the .git folder.</p>
 <dd class="field-even"><p>Path to the site’s configuration file.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>Path</p>
 </dd>
 </dl>
 </dd></dl>
@@ -967,7 +1003,7 @@ path containing the .git folder.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.get_user_config_file_path">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">get_user_config_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#get_user_config_file_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.get_user_config_file_path" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve the user-specific configuration file path for the application.</p>
+<dd><p>Retrieve the user-specific configuration file path for the app.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>app_name</strong> (<em>str</em>) – Name of the application.</p>
@@ -976,7 +1012,7 @@ path containing the .git folder.</p>
 <dd class="field-even"><p>Path to the user’s configuration file.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>Path</p>
 </dd>
 </dl>
 </dd></dl>
@@ -984,11 +1020,10 @@ path containing the .git folder.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.merge_and_validate_config_files">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">merge_and_validate_config_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#merge_and_validate_config_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.merge_and_validate_config_files" title="Link to this definition">¶</a></dt>
-<dd><p>Merge settings from multiple configuration files and validate them.</p>
+<dd><p>Merge settings from multiple config files and validate them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>config_files</strong> (<em>list</em><em> of </em><em>str</em>) – List of configuration file paths. The order of the files matters.
-Each file overwrites the values of the previous.</p>
+<dd class="field-odd"><p><strong>config_files</strong> (<em>list</em><em> of </em><em>Path</em>) – Paths to configuration files. Later files override earlier ones.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Merged and validated configuration settings.</p>
@@ -997,7 +1032,8 @@ Each file overwrites the values of the previous.</p>
 <dd class="field-odd"><p>dict</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValidationError</strong> – If any of the settings do not conform to the <cite>Settings</cite> model.</p>
+<dd class="field-even"><p><strong>ValidationError</strong> – If any file’s settings fail to validate against the
+    SettingsTemplate model.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1026,12 +1062,12 @@ Each file overwrites the values of the previous.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>config_file</strong> (<em>str</em>) – Path to the configuration file.</p></li>
+<li><p><strong>config_file</strong> (<em>Path</em><em> or </em><em>str</em>) – Path to the configuration file.</p></li>
 <li><p><strong>create_file_if_not_exist</strong> (<em>bool</em>) – Creates file if it doesn’t exist</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Parsed configuration settings.</p>
+<dd class="field-even"><p>Parsed configuration settings as a dictionary.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
@@ -1042,10 +1078,11 @@ Each file overwrites the values of the previous.</p>
 </section>
 <section id="module-brassy.utils.file_handler">
 <span id="file-handler"></span><h4>File Handler<a class="headerlink" href="#module-brassy.utils.file_handler" title="Link to this heading">¶</a></h4>
+<p>Handle file system I/O.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.file_handler.create_blank_template_yaml_file">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.file_handler.</span></span><span class="sig-name descname"><span class="pre">create_blank_template_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/file_handler.html#create_blank_template_yaml_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.file_handler.create_blank_template_yaml_file" title="Link to this definition">¶</a></dt>
-<dd><p>Creates a blank YAML template file with a predefined structure.</p>
+<dd><p>Create a blank YAML template file with a predefined structure.</p>
 <p>This function generates a YAML file at the specified path with a default
 template. It handles special characters required for YAML compatibility and writes
 the file to disk.</p>
@@ -1070,17 +1107,17 @@ YAML’s handling of pipe symbols. For more details, see:
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.file_handler.get_yaml_template_path">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.file_handler.</span></span><span class="sig-name descname"><span class="pre">get_yaml_template_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/workspaces/yaml-to-release-note/sphinx'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/file_handler.html#get_yaml_template_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.file_handler.get_yaml_template_path" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the path of the YAML template file based on the given file path argument.</p>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.file_handler.</span></span><span class="sig-name descname"><span class="pre">get_yaml_template_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/file_handler.html#get_yaml_template_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.file_handler.get_yaml_template_path" title="Link to this definition">¶</a></dt>
+<dd><p>Return path of the YAML template file based on the given file path argument.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>file_path_arg</strong> (<em>str</em>) – The file path argument provided by the user.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The path of the YAML template file.</p>
+<dd class="field-even"><p><strong>str</strong></p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p>The path of the YAML template file.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1148,13 +1185,12 @@ YAML’s handling of pipe symbols. For more details, see:
 </section>
 <section id="module-brassy.brassy">
 <span id="main-module"></span><h3>Main Module<a class="headerlink" href="#module-brassy.brassy" title="Link to this heading">¶</a></h3>
-<p>This module provides functionality to generate release notes from YAML files.
-It reads YAML files, parses their content, and formats the parsed data into release notes in .rst format.
-The release notes can be written to an output file.</p>
+<p>Wrapper for CLI call and top-level functions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.brassy.run_from_CLI">
 <span class="sig-prename descclassname"><span class="pre">brassy.brassy.</span></span><span class="sig-name descname"><span class="pre">run_from_CLI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/brassy.html#run_from_CLI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.brassy.run_from_CLI" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Run brassy via the CLI.</p>
+</dd></dl>
 
 </section>
 </section>
@@ -1188,6 +1224,7 @@ The release notes can be written to an output file.</p>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="brassy-in-ci.html">Release Notes Checker</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#code-docstrings">Code Docstrings</a></li>
 </ul>
@@ -1199,7 +1236,7 @@ The release notes can be written to an output file.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="using-brassy.html" title="previous chapter">Using Brassy</a></li>
+      <li>Previous: <a href="brassy-in-ci.html" title="previous chapter">Release Notes Checker</a></li>
       <li>Next: <a href="releases/index.html" title="next chapter">Release Notes</a></li>
   </ul></li>
 </ul>
@@ -1220,7 +1257,7 @@ The release notes can be written to an output file.</p>
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |

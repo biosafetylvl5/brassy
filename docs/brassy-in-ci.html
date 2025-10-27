@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Release Notes Checker &#8212; brassy 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=47de8214"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Using Brassy" href="using-brassy.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="release-notes-checker">
+<h1>Release Notes Checker<a class="headerlink" href="#release-notes-checker" title="Link to this heading">¶</a></h1>
+<p>This GitHub Action checks release notes in your repo.
+It ensures that contributors properly document changes by
+checking for the presence of new release note files.
+It also protects your old release notes by preventing
+modifications to existing rst release notes.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>Create a workflow file that uses this reusable action:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Has correct release note edits</span>
+
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;main&#39;</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">check-release-notes</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biosafetylvl5/brassy/.github/workflows/reusable-check-release-notes.yaml@main</span><span class="w"> </span><span class="c1"># you should specify a</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">commit here</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">release_notes_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sphinx/source/releases&#39;</span>
+<span class="w">      </span><span class="nt">latest_notes_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sphinx/source/releases/latest&#39;</span>
+<span class="w">      </span><span class="nt">check_rst_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">check_yaml_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">allow_rst_edits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">      </span><span class="nt">require_yaml_changes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">skip_on_release_branch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">file_extensions</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;rst,yaml,yml&#39;</span>
+<span class="w">      </span><span class="nt">release_branch_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^(release/v[0-9]+\.[0-9]+\.[0-9]+|hotfix/.+)$&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-options">
+<h2>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading">¶</a></h2>
+<section id="paths-and-directories">
+<h3>Paths and Directories<a class="headerlink" href="#paths-and-directories" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>``release_notes_dir``</strong>: Directory containing all release notes (default: <code class="docutils literal notranslate"><span class="pre">docs/source/releases</span></code>)</p></li>
+<li><p><strong>``latest_notes_dir``</strong>: Directory containing release notes for the current development cycle (default:
+<code class="docutils literal notranslate"><span class="pre">docs/source/releases/latest</span></code>)</p></li>
+</ul>
+</section>
+<section id="file-type-controls">
+<h3>File Type Controls<a class="headerlink" href="#file-type-controls" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>``check_rst_files``</strong>: Whether to check for changes to RST files (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><strong>``check_yaml_files``</strong>: Whether to check for changes to YAML files (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><strong>``file_extensions``</strong>: Comma-separated list of file extensions to check (default: <code class="docutils literal notranslate"><span class="pre">rst,yaml</span></code>)</p></li>
+</ul>
+</section>
+<section id="behavior-controls">
+<h3>Behavior Controls<a class="headerlink" href="#behavior-controls" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>``allow_rst_edits``</strong>: Whether to allow direct edits to RST files (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>)</p></li>
+<li><p><strong>``require_yaml_changes``</strong>: Whether to require new/modified YAML release notes (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><strong>``skip_on_release_branch``</strong>: Whether to skip checks on release branches (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><strong>``release_branch_pattern``</strong>: Regex pattern to identify release branches (default:
+<code class="docutils literal notranslate"><span class="pre">^release/v[0-9]+\.[0-9]+\.[0-9]+$</span></code>)</p></li>
+</ul>
+</section>
+<section id="outputs">
+<h3>Outputs<a class="headerlink" href="#outputs" title="Link to this heading">¶</a></h3>
+<p>The action provides the following outputs that can be used in subsequent workflow steps:</p>
+<ul class="simple">
+<li><p><strong>``rst_changes_detected``</strong>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if RST file changes were detected</p></li>
+<li><p><strong>``yaml_changes_detected``</strong>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if YAML file changes were detected</p></li>
+<li><p><strong>``is_release_branch``</strong>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the current branch matches the release branch pattern</p></li>
+</ul>
+</section>
+</section>
+<section id="use-cases">
+<h2>Use Cases<a class="headerlink" href="#use-cases" title="Link to this heading">¶</a></h2>
+<section id="standard-pr-validation">
+<h3>Standard PR Validation<a class="headerlink" href="#standard-pr-validation" title="Link to this heading">¶</a></h3>
+<p>Ensure every PR that _should_ include release notes, _does_ include release notes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">require_yaml_changes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</section>
+<section id="custom-release-branch-pattern">
+<h3>Custom Release Branch Pattern<a class="headerlink" href="#custom-release-branch-pattern" title="Link to this heading">¶</a></h3>
+<p>If your project uses a different naming convention for release branches,
+you can edit the “release branch” regex.</p>
+<p>The action uses regex patterns to identify release branches. Here are some examples:</p>
+<ul class="simple">
+<li><p><strong>Default</strong>: <code class="docutils literal notranslate"><span class="pre">^release/v[0-9]+\.[0-9]+\.[0-9]+$</span></code></p>
+<ul>
+<li><p>Matches: <code class="docutils literal notranslate"><span class="pre">release/v1.2.3</span></code>, <code class="docutils literal notranslate"><span class="pre">release/v10.0.0</span></code></p></li>
+<li><p>Doesn’t match: <code class="docutils literal notranslate"><span class="pre">feature/new-thing</span></code>, <code class="docutils literal notranslate"><span class="pre">bugfix/issue-123</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Include hotfix branches</strong>: <code class="docutils literal notranslate"><span class="pre">^(release/v[0-9]+\.[0-9]+\.[0-9]+|hotfix/.+)$</span></code></p>
+<ul>
+<li><p>Matches: <code class="docutils literal notranslate"><span class="pre">release/v1.2.3</span></code>, <code class="docutils literal notranslate"><span class="pre">hotfix/critical-bug</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Calendar versioning</strong>: <code class="docutils literal notranslate"><span class="pre">^release/[0-9]{4}\.[0-9]{2}$</span></code></p>
+<ul>
+<li><p>Matches: <code class="docutils literal notranslate"><span class="pre">release/2023.05</span></code>, <code class="docutils literal notranslate"><span class="pre">release/2024.01</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Custom versioning</strong>: <code class="docutils literal notranslate"><span class="pre">^(rel-[0-9]{4}-[0-9]{2}|version/[0-9]+)$</span></code></p>
+<ul>
+<li><p>Matches: <code class="docutils literal notranslate"><span class="pre">rel-2023-05</span></code>, <code class="docutils literal notranslate"><span class="pre">version/42</span></code></p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">release_branch_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;^(release/v[0-9]+\.[0-9]+\.[0-9]+|hotfix/.+)$&#39;</span>
+</pre></div>
+</div>
+<p>Alternatively, set this to blank to disable:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">release_branch_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="allowing-rst-edits-in-specific-workflows">
+<h3>Allowing RST Edits in Specific Workflows<a class="headerlink" href="#allowing-rst-edits-in-specific-workflows" title="Link to this heading">¶</a></h3>
+<p>If you have a workflow where you need to modify RST release notes files directly,
+you can disable the rst edit check:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">allow_rst_edits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</section>
+<section id="checking-custom-file-extensions">
+<h3>Checking Custom File Extensions<a class="headerlink" href="#checking-custom-file-extensions" title="Link to this heading">¶</a></h3>
+<p>If your project uses different file extensions for release notes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">with</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file_extensions</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;yaml_file.yet_another_yaml&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="no-yaml-changes-detected">
+<h3>No YAML Changes Detected<a class="headerlink" href="#no-yaml-changes-detected" title="Link to this heading">¶</a></h3>
+<p>If the action fails with “No YAML release note changes detected”:</p>
+<p>1. Add a new release note file in the <code class="docutils literal notranslate"><span class="pre">latest_notes_dir</span></code> directory using brassy
+3. Ensure the file has the correct extension (<code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code>)</p>
+</section>
+<section id="rst-changes-detected">
+<h3>RST Changes Detected<a class="headerlink" href="#rst-changes-detected" title="Link to this heading">¶</a></h3>
+<p>If the action fails with “Release note RST changes detected”:</p>
+<p>1. Check that you have not accidentally modified RST release files directly in a branch that isn’t a release branch
+3. If you need to edit RST files directly, set <code class="docutils literal notranslate"><span class="pre">allow_rst_edits:</span> <span class="pre">true</span></code></p>
+</section>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<p>Contributions to improve this action are welcome! Please submit a PR with your proposed changes.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">brassy</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release Notes Checker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-options">Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-cases">Use Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="releases/index.html">Release Notes</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="using-brassy.html" title="previous chapter">Using Brassy</a></li>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/brassy-in-ci.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
