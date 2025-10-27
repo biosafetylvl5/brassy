@@ -230,7 +230,6 @@ For example:
   related-issue:
     internal: "Brassy#0 - Fake issue as an example for change"
 
-
 Change YAML directory
 ---------------------
 

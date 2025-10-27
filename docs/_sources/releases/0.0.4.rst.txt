@@ -1,5 +1,5 @@
-Version [UNKNOWN] (2025-10-24)
-******************************
+Version 0.0.4 (2025-10-27)
+**************************
 
  * *Developer*: Add .devcontainer config file
  * *Bug fix*: Allow brassy to work with branch names with specials characters.
