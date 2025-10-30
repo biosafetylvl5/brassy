@@ -1,6 +1,7 @@
 """Build release note output."""
 
 import sys
+import traceback
 from datetime import datetime
 
 import brassy
@@ -316,7 +317,8 @@ def build_release_notes( # noqa PLR0913
     try:
         data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
     except (ValueError, TypeError) as e:
-        console.print(f"[red]{e}")
+        traceback_string = traceback.format_exc()
+        console.print(f"[red]{traceback_string}")
         sys.exit(1)
     header, footer = get_header_footer(
         rich_open,
