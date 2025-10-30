@@ -118,6 +118,6 @@ continuous integration:
       number: 707
       repo_url: 'https://github.com/spongebob-app/ci/issues/707'
     date:
-      start: '2024-09-01'
-      finish: '2024-09-03'
+      start: null
+      finish: null
 

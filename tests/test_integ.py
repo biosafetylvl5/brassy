@@ -53,7 +53,7 @@ def test_help(monkeypatch):  # noqa: ARG001
 @pytest.mark.integration
 @pytest.mark.parametrize(
     "input_file",
-    ["barebones", "mostly-featured", "fully-featured"],
+    ["barebones", "mostly-featured", "fully-featured", "real-world"],
 )
 def test_build_on_test_files(input_file):
     """Build outputs for predefined test inputs.

@@ -1,31 +1,31 @@
 Release Notes
 *************
 
-Version 0.0.4
+Version 0.4.0
 -------------
 
 .. toctree::
    :maxdepth: 1
 
-   0.0.4
+   0.4.0
 
-Version 0.0.3
+Version 0.3.0
 -------------
 
 .. toctree::
    :maxdepth: 1
 
-   0.0.3
+   0.3.0
 
-Version 0.0.2
+Version 0.2.0
 -------------
 
 .. toctree::
    :maxdepth: 1
 
-   0.0.2
+   0.2.0
 
-Version 0.0.1
+Version 0.1.0
 -------------
 
 No release notes for this version.
