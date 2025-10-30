@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "brassy"
-version = "0.0.4"
+version = "0.4.1"
 description = "Builds release notes from yaml files for sane software development"
 authors = ["Gwyn Uttmark <biosafetylevel5@gmail.com>"]
 

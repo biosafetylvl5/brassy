@@ -1,0 +1,68 @@
+enhancement:
+- title: 'Add file name to validation error.'
+  description: 'This adds the filename of the file failing validation to the error upon failed validation.'
+  files:
+    modified:
+    - 'src/brassy/utils/file_handler.py'
+    - 'tests/test_integ.py'
+    - 'tests/inputs/real-world.yaml'
+    - 'tests/outputs/real-world.rst'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+documentation:
+- title: 'Fix versioning number scheme'
+  description: 'This updates the numbering scheme to use standard semantic versioning.'
+  files:
+    modified:
+    - 'docs/_modules/brassy/utils/file_handler.html'
+    - 'docs/_sources/releases/index.rst.txt'
+    - 'docs/index.html'
+    - 'docs/objects.inv'
+    - 'docs/releases/index.html'
+    - 'docs/searchindex.js'
+    - 'pyproject.toml'
+    - 'sphinx/source/releases/index.rst'
+    - 'tests/inputs/mostly-featured.yaml'
+    moved:
+    - 'docs/_sources/releases/0.0.2.rst.txt'
+    - 'docs/_sources/releases/0.0.3.rst.txt'
+    - 'docs/_sources/releases/0.0.4.rst.txt'
+    - 'docs/releases/0.0.2.html'
+    - 'docs/releases/0.0.3.html'
+    - 'docs/releases/0.0.4.html'
+    - 'sphinx/source/releases/0.0.2.rst'
+    - 'sphinx/source/releases/0.0.3.rst'
+    - 'sphinx/source/releases/0.0.4.rst'
+    - 'sphinx/source/releases/archive-0.0.2/build-without-write.yaml'
+    - 'sphinx/source/releases/archive-0.0.2/fix-blank-line-bug.yaml'
+    - 'sphinx/source/releases/archive-0.0.2/fix-quiet.yaml'
+    - 'sphinx/source/releases/archive-0.0.2/get-changed-files.yaml'
+    - 'sphinx/source/releases/archive-0.0.2/output-to-console.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/1-brassy-fails-if-run-on-blank-file.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/30-accept-strings-in-related-issue-for-compatibility-with-internal-repos-with-inaccessible-urls.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/39-release-v003.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/6-add-date-field.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/9-add-default-template-write-path.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/add-init.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/fix-docs-yaml.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/fix-no-build-no-title.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/fix-template-arg-error.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/int-tests.yaml'
+    - 'sphinx/source/releases/archive-0.0.3/put-title-above-desc-in-temp.yaml'
+    - 'sphinx/source/releases/archive-0.0.4/49-support-yyyy-mm-dd-date-format.yaml'
+    - 'sphinx/source/releases/archive-0.0.4/59-brassy-cant-generate-documentation-for-branches-with-a-in-their-name.yaml'
+    - 'sphinx/source/releases/archive-0.0.4/add-dev-container.yaml'
+    - 'sphinx/source/releases/archive-0.0.4/add-linting-ci.yaml'
+    - 'sphinx/source/releases/archive-0.0.4/add-release-note-checking-ci.yaml'
+    - 'sphinx/source/releases/archive-0.0.4/issue-documentation.yaml'
+    - 'sphinx/source/releases/latest/58-brassy-misinterprets-files-moves-with-brace-expansion-as-invalid-substitution-causing-release-note-generation-failure.yaml'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null

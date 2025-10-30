@@ -122,8 +122,11 @@ def value_error_on_invalid_yaml(content, file_path):
     """
     if content is None:
         raise ValueError(f"No valid brassy-related YAML. Please populate {file_path}")
+    try:
+        ReleaseNote(**content)
+    except Exception as e:
 
-    ReleaseNote(**content)
+        raise ValueError(f"Could not validate file {file_path}") from e
 
 
 def read_yaml_files(input_files, rich_open):
