@@ -18,6 +18,8 @@ Fixed aang's avatar state ⓐ
 Resolved an issue where Aang could not exit the Avatar State after consuming cactus juice. This caused unintended behavior and prevented progression in the story.
 
 
+`#1001 <https://github.com/AvatarProject/AvatarRepo/issues/1001>`_
+
 ::
 
      moved: src/characters/aang_temp.py:src/characters/aang.py
@@ -32,9 +34,13 @@ Implemented multi-element bending for avatars
 Avatars can now bend multiple elements simultaneously, allowing for more complex combat strategies.
 
 
+`#1000000000000000000000000000000000000000000000 <https://github.com/AvatarProject/AvatarRepo/issues/1000000000000000000000000000000000000000000000>`_
+
 ::
 
      added: src/bending/multi_element.py
+     modified: src/avatar/avatar_core.py
+     modified: src/bending/bending_manager.py
 
 Deprecation
 ===========
@@ -43,6 +49,8 @@ Deprecated old bending stances
 -------------------------
 
 The classic bending stances are deprecated in favor of dynamic stances that adapt to the situation.
+
+
 
 
 ::
@@ -59,10 +67,13 @@ Removed unagi sea serpent from kyoshi island
 The Unagi has been removed due to community feedback regarding difficulty levels.
 
 
+`#1005 <https://github.com/AvatarProject/AvatarRepo/>`_
+
 ::
 
      deleted: assets/creatures/unagi.obj
      deleted: src/creatures/unagi_behavior.py
+     modified: src/locations/kyoshi_island.py
 
 Performance
 ===========
@@ -72,6 +83,8 @@ Optimized fire nation ship rendering
 
 Improved rendering performance for Fire Nation ships by 50% by reducing polygon count and optimizing textures.
 
+
+`#1006 <https://github.com/AvatarProject/AvatarRepo/issues/1006>`_
 
 ::
 
@@ -86,6 +99,8 @@ Added documentation for combustion bending
 New documentation explains the mechanics and limitations of combustion bending.
 
 
+`#1008 <https://github.com/AvatarProject/AvatarRepo/issues/1008>`_
+
 ::
 
      added: docs/bending/combustion_bending.md
@@ -98,6 +113,8 @@ Implemented nightly builds for the fire nation branch
 
 Set up nightly builds and tests for the Fire Nation development branch to ensure stability.
 
+
+`#1009 <https://github.com/AvatarProject/AvatarRepo/issues/1009>`_
 
 ::
 

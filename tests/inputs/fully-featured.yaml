@@ -29,7 +29,7 @@ enhancement:
     - ''
     added:
     - 'src/bending/multi_element.py'
-  modified:
+    modified:
     - 'src/avatar/avatar_core.py'
     - 'src/bending/bending_manager.py'
   related-issue:
@@ -68,11 +68,11 @@ removal:
     deleted:
     - 'assets/creatures/unagi.obj'
     - 'src/creatures/unagi_behavior.py'
-  moved:
+    moved:
     - ''
-  added:
+    added:
     - ''
-  modified:
+    modified:
     - 'src/locations/kyoshi_island.py'
   related-issue:
     number: '1005'
@@ -112,7 +112,7 @@ documentation:
     - ''
     added:
     - 'docs/bending/combustion_bending.md'
-  modified:
+    modified:
     - ''
   related-issue:
     number: 1008
@@ -132,7 +132,7 @@ continuous integration:
     - ''
     added:
     - '.github/workflows/nightly_fire_nation.yml'
-  modified:
+    modified:
     - ''
   related-issue:
     number: 1009

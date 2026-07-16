@@ -15,6 +15,8 @@ Fixed crash on app startup
 The app no longer crashes when started with no arguments.
 
 
+`#100 <https://github.com/example/repo/issues/100>`_
+
 ::
 
      modified: src/startup.py
@@ -24,6 +26,8 @@ Fixed off-by-one in parser
 
 Loop bound corrected in the YAML parser.
 
+
+`#101 <https://github.com/example/repo/issues/101>`_
 
 ::
 
@@ -38,6 +42,8 @@ Added dark mode
 Users can now switch to a dark color scheme.
 
 
+`#200 <https://github.com/example/repo/issues/200>`_
+
 ::
 
      added: src/themes/dark.py
@@ -48,6 +54,8 @@ Added export to json
 
 Release notes can now be exported in JSON format.
 
+
+`#201 <https://github.com/example/repo/issues/201>`_
 
 ::
 

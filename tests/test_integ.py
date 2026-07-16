@@ -6,6 +6,7 @@ help display, building from test inputs, template creation,
 and pruning behavior.
 """
 
+import os
 import shutil
 import subprocess
 import tempfile
@@ -115,6 +116,59 @@ def test_pruning():
         )
 
 
+DUPLICATE_KEY_YAML = """\
+bug fix:
+- title: 'First entry'
+  description: 'first'
+bug fix:
+- title: 'Second entry'
+  description: 'second'
+"""
+
+
+@pytest.mark.integration
+def test_build_rejects_duplicate_keys():
+    """Building a file with a duplicate category fails loudly.
+
+    Without this check the first entry is silently dropped and brassy
+    still exits zero.
+    """
+    with tempfile.TemporaryDirectory() as work_dir:
+        dupe = Path(work_dir) / "dupe.yaml"
+        dupe.write_text(DUPLICATE_KEY_YAML)
+
+        result = subprocess.run(  # noqa: S603
+            ["brassy", str(dupe), "--release-date", "2024-10-14"],  # noqa: S607
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert result.returncode != 0
+        assert "Duplicate key 'bug fix'" in result.stdout + result.stderr
+
+
+@pytest.mark.integration
+def test_prune_rejects_duplicate_keys_without_touching_file():
+    """Pruning a file with a duplicate key fails and leaves it unmodified.
+
+    --prune rewrites in place, so bailing out before the write is what
+    keeps the dropped entry from being destroyed on disk.
+    """
+    with tempfile.TemporaryDirectory() as work_dir:
+        dupe = Path(work_dir) / "dupe.yaml"
+        dupe.write_text(DUPLICATE_KEY_YAML)
+
+        result = subprocess.run(  # noqa: S603
+            ["brassy", "--prune", str(dupe)],  # noqa: S607
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert result.returncode != 0
+        assert "Duplicate key 'bug fix'" in result.stdout + result.stderr
+        assert dupe.read_text() == DUPLICATE_KEY_YAML
+
+
 def test_template_output():
     """Test outputting a template file.
 
@@ -127,4 +181,137 @@ def test_template_output():
         )
         assert list(output_file.open()) == list(
             (valid_outputs_path / "template-output.yaml").open(),
+        )
+
+
+def _run_with_env(command, env_overrides):
+    """Run a CLI command with extra environment variables.
+
+    Parameters
+    ----------
+    command : sequence[str]
+        Command and arguments to execute.
+    env_overrides : dict[str, str]
+        Environment variables to set for the subprocess, merged on top of
+        the current process environment.
+
+    Returns
+    -------
+    subprocess.CompletedProcess
+        The completed subprocess result.
+    """
+    env = {**dict(os.environ), **env_overrides}
+    return subprocess.run(  # noqa: S603
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+        env=env,
+    )
+
+
+_EDITOR_TRUE_ENV = {
+    "BRASSY_AUTO_OPEN_EDITOR": "true",
+    "BRASSY_DEFAULT_EDITOR": "true",
+}
+
+
+@pytest.mark.integration
+def test_create_template_opens_editor():
+    """Test that -t opens the editor when auto_open_editor is enabled.
+
+    With ``auto_open_editor=true`` and every editor source set to ``true``
+    (the ``true`` binary exits 0 immediately), ``brassy -t`` should create
+    the template, launch the editor, and exit 0.
+    """
+    with tempfile.TemporaryDirectory() as output_file_dir:
+        output_file = str(Path(output_file_dir) / "template.yaml")
+        result = _run_with_env(
+            ["brassy", "-t", output_file],
+            _EDITOR_TRUE_ENV,
+        )
+        assert result.returncode == 0, (
+            f"Command failed with return code {result.returncode}: "
+            f"{result.stdout}\n{result.stderr}"
+        )
+        assert Path(output_file).exists()
+        assert "opening in" in result.stdout, (
+            f"Editor should have been launched; stdout: {result.stdout}"
+        )
+
+
+@pytest.mark.integration
+def test_create_template_no_open_override():
+    """Test that --no-open suppresses the editor even when enabled.
+
+    With ``auto_open_editor=true`` set, passing ``--no-open`` should still
+    create the template without launching the editor.
+    """
+    with tempfile.TemporaryDirectory() as output_file_dir:
+        output_file = str(Path(output_file_dir) / "template.yaml")
+        result = _run_with_env(
+            ["brassy", "-t", output_file, "--no-open"],
+            _EDITOR_TRUE_ENV,
+        )
+        assert result.returncode == 0, (
+            f"Command failed with return code {result.returncode}: "
+            f"{result.stdout}\n{result.stderr}"
+        )
+        assert Path(output_file).exists()
+        assert "opening in" not in result.stdout, (
+            f"Editor should NOT have been launched; stdout: {result.stdout}"
+        )
+
+
+@pytest.mark.integration
+def test_create_template_editor_flag():
+    """Test that --editor overrides the resolved editor command.
+
+    With ``default_editor=false`` in the environment (would fail), passing
+    ``--editor true`` should override it and the command should succeed.
+    """
+    with tempfile.TemporaryDirectory() as output_file_dir:
+        output_file = str(Path(output_file_dir) / "template.yaml")
+        result = _run_with_env(
+            ["brassy", "-t", output_file, "--editor", "true"],
+            {
+                "BRASSY_AUTO_OPEN_EDITOR": "true",
+                "BRASSY_DEFAULT_EDITOR": "false",
+            },
+        )
+        assert result.returncode == 0, (
+            f"Command failed with return code {result.returncode}: "
+            f"{result.stdout}\n{result.stderr}"
+        )
+        assert Path(output_file).exists()
+        assert "opening in 'true'" in result.stdout, (
+            f"Editor should have been overridden to 'true'; stdout: {result.stdout}"
+        )
+
+
+@pytest.mark.integration
+def test_visual_takes_priority_over_editor():
+    """Test that $VISUAL outranks $EDITOR in the resolution chain.
+
+    With ``$VISUAL=echo`` and ``$EDITOR=false`` (the ``false`` binary
+    exits 1), the resolution should pick ``echo`` over ``false``,
+    verifying the documented priority: ``$VISUAL`` > ``$EDITOR``.
+    """
+    with tempfile.TemporaryDirectory() as output_file_dir:
+        output_file = str(Path(output_file_dir) / "template.yaml")
+        result = _run_with_env(
+            ["brassy", "-t", output_file],
+            {
+                "BRASSY_AUTO_OPEN_EDITOR": "true",
+                "VISUAL": "echo",
+                "EDITOR": "false",
+            },
+        )
+        assert result.returncode == 0, (
+            f"Command failed with return code {result.returncode}: "
+            f"{result.stdout}\n{result.stderr}"
+        )
+        assert Path(output_file).exists()
+        assert "opening in 'echo'" in result.stdout, (
+            f"VISUAL should have been resolved as the editor; stdout: {result.stdout}"
         )
