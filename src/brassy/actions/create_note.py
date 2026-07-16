@@ -18,7 +18,7 @@ def create_note(  # noqa: PLR0913
     editor_override: str | None = None,
     error_console: Any = None,
     force: bool = False,
-) -> int:
+) -> None:
     """
     Create a blank release-note YAML template and optionally open it.
 
@@ -49,13 +49,6 @@ def create_note(  # noqa: PLR0913
     force : bool
         Whether to overwrite an existing template file. Defaults to False.
 
-    Returns
-    -------
-    int
-        ``0`` when the file was created. A nonzero editor exit code is
-        surfaced but does not fail the overall command because the template
-        was already written successfully.
-
     Notes
     -----
     The editor is launched in the foreground so that interactive editors
@@ -72,7 +65,7 @@ def create_note(  # noqa: PLR0913
         force=force,
     )
     if not open_editor:
-        return 0
+        return
     editor = editor_handler.resolve_editor(editor_override)
     console.print(
         f"[green]Created [bold]{yaml_path}[/], opening in '{editor}'...",
@@ -83,4 +76,3 @@ def create_note(  # noqa: PLR0913
             f"[yellow]Editor exited with code {exit_code}; the template at "
             f"{yaml_path} was still created.",
         )
-    return 0

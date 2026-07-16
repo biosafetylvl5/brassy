@@ -85,7 +85,7 @@ def prune_yaml_file(
     """
     yaml_file_path = Path(yaml_file_path)
     with yaml_file_path.open("r+") as file:
-        content = load_yaml(file, str(yaml_file_path))
+        content = load_yaml(file, yaml_file_path)
         file.seek(0)
         file.write(
             yaml.dump(

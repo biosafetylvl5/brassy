@@ -53,7 +53,7 @@
     <span class="n">editor_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">error_console</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a blank release-note YAML template and optionally open it.</span>
 
@@ -84,13 +84,6 @@
 <span class="sd">    force : bool</span>
 <span class="sd">        Whether to overwrite an existing template file. Defaults to False.</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    int</span>
-<span class="sd">        ``0`` when the file was created. A nonzero editor exit code is</span>
-<span class="sd">        surfaced but does not fail the overall command because the template</span>
-<span class="sd">        was already written successfully.</span>
-
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    The editor is launched in the foreground so that interactive editors</span>
@@ -107,7 +100,7 @@
         <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">open_editor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span>
     <span class="n">editor</span> <span class="o">=</span> <span class="n">editor_handler</span><span class="o">.</span><span class="n">resolve_editor</span><span class="p">(</span><span class="n">editor_override</span><span class="p">)</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;[green]Created [bold]</span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2">[/], opening in &#39;</span><span class="si">{</span><span class="n">editor</span><span class="si">}</span><span class="s2">&#39;...&quot;</span><span class="p">,</span>
@@ -117,8 +110,7 @@
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;[yellow]Editor exited with code </span><span class="si">{</span><span class="n">exit_code</span><span class="si">}</span><span class="s2">; the template at &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2"> was still created.&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span></div>
+        <span class="p">)</span></div>
 
 </pre></div>
 

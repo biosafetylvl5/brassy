@@ -127,6 +127,24 @@ bug fix:
   date:
     start: null
     finish: null
+- title: 'Tidy internal APIs from code review'
+  description: |
+    create_note no longer returns a meaningless 0; it returns None, since no
+    caller consumed the value. load_yaml now accepts a Path as well as a str
+    for its file_path argument, and the redundant str() casts at its call
+    sites in settings_manager and prune_yaml were removed.
+  files:
+    modified:
+    - 'src/brassy/actions/create_note.py'
+    - 'src/brassy/utils/yaml_handler.py'
+    - 'src/brassy/utils/settings_manager.py'
+    - 'src/brassy/actions/prune_yaml.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
 - title: 'Fix Path.cwd fallback and correct a malformed test fixture'
   description: |
     Resolving a template path with no working directory used a non-existent

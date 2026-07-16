@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import yaml
 from yaml.constructor import ConstructorError
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 class DuplicateKeyError(ConstructorError):
@@ -84,7 +87,7 @@ class UniqueKeySafeLoader(yaml.SafeLoader):
         return super().construct_mapping(node, deep)
 
 
-def load_yaml(stream: Any, file_path: str) -> Any:
+def load_yaml(stream: Any, file_path: str | Path) -> Any:
     """
     Parse a YAML document, rejecting duplicate keys and malformed syntax.
 
@@ -92,7 +95,7 @@ def load_yaml(stream: Any, file_path: str) -> Any:
     ----------
     stream : Any
         An open file object or string containing YAML.
-    file_path : str
+    file_path : str | Path
         Path to the source file, used in the error message.
 
     Returns

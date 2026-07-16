@@ -160,7 +160,7 @@ def read_config_file(
     config_file = Path(config_file)
     try:
         with config_file.open() as f:
-            content = load_yaml(f, str(config_file))
+            content = load_yaml(f, config_file)
     except FileNotFoundError:
         if not create_file_if_not_exist:
             return {}

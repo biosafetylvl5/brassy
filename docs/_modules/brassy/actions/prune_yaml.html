@@ -123,7 +123,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">yaml_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_file_path</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">yaml_file_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">yaml_file_path</span><span class="p">))</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">yaml_file_path</span><span class="p">)</span>
         <span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
             <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span>
