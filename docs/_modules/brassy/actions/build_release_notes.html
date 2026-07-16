@@ -41,7 +41,6 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">brassy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">brassy.brassy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichConsole</span> <span class="k">as</span> <span class="n">console</span>  <span class="c1"># noqa: N813</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
@@ -167,6 +166,12 @@
 <span class="sd">        Section lines formatted per file change.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">issue_number</span><span class="p">,</span> <span class="n">issue_url</span><span class="p">,</span> <span class="n">issue_rst</span> <span class="o">=</span> <span class="n">_extract_issue_info</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+    <span class="n">issue_number</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">issue_number</span><span class="p">)</span>
+    <span class="n">issue_url</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">issue_url</span><span class="p">)</span>
+    <span class="n">issue_rst</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">issue_rst</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">change_type</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="s2">&quot;</span><span class="si">{file}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;files&quot;</span><span class="p">][</span><span class="n">change_type</span><span class="p">]):</span>
@@ -180,6 +185,9 @@
                         <span class="n">change_type</span><span class="o">=</span><span class="n">category</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
                         <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
                         <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                        <span class="n">issue_number</span><span class="o">=</span><span class="n">issue_number</span><span class="p">,</span>
+                        <span class="n">issue_url</span><span class="o">=</span><span class="n">issue_url</span><span class="p">,</span>
+                        <span class="n">issue</span><span class="o">=</span><span class="n">issue_rst</span><span class="p">,</span>
                         <span class="n">file_change</span><span class="o">=</span><span class="n">change_type</span><span class="p">,</span>
                         <span class="n">file</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
                     <span class="p">),</span>
@@ -190,6 +198,9 @@
                     <span class="n">change_type</span><span class="o">=</span><span class="n">category</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
                     <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
                     <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                    <span class="n">issue_number</span><span class="o">=</span><span class="n">issue_number</span><span class="p">,</span>
+                    <span class="n">issue_url</span><span class="o">=</span><span class="n">issue_url</span><span class="p">,</span>
+                    <span class="n">issue</span><span class="o">=</span><span class="n">issue_rst</span><span class="p">,</span>
                     <span class="n">file_change</span><span class="o">=</span><span class="n">change_type</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -197,8 +208,67 @@
 
 
 
-<span class="n">_ENTRY_BODY_KEYWORDS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{title}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{description}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{file_change}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">_ENTRY_BODY_KEYWORDS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;</span><span class="si">{title}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;</span><span class="si">{description}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;</span><span class="si">{file_change}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;</span><span class="si">{issue}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;</span><span class="si">{issue_number}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;</span><span class="si">{issue_url}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">_ENTRY_KEYWORDS</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">_ENTRY_BODY_KEYWORDS</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{file}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{change_type}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_issue_info</span><span class="p">(</span><span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract and format issue information from a changelog entry.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    entry : dict[str, Any]</span>
+<span class="sd">        Changelog entry dict possibly containing a &quot;related-issue&quot; key.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Formatted issue number (e.g. &quot;#1001&quot;) or empty string.</span>
+<span class="sd">    str</span>
+<span class="sd">        Issue URL string or empty string.</span>
+<span class="sd">    str</span>
+<span class="sd">        Fully formatted RST hyperlink (e.g. &quot;`#1001 &lt;url&gt;`_&quot;)</span>
+<span class="sd">        or empty string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">related</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;related-issue&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">internal</span> <span class="o">=</span> <span class="n">related</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;internal&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">internal</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">internal</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">internal</span><span class="p">)</span>
+
+    <span class="n">number</span> <span class="o">=</span> <span class="n">related</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;number&quot;</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">related</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;repo_url&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">number</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">formatted</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">number</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;#</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">formatted</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">formatted</span><span class="si">}</span><span class="s2"> &lt;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&gt;`_&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_escape_braces</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Escape ``{`` and ``}`` so they pass through a format() call.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s : str</span>
+<span class="sd">        A string that may contain curly braces.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The string with ``{`` replaced by ``{{`` and ``}`` by ``}}``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&quot;</span><span class="p">,</span> <span class="s2">&quot;{{&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">,</span> <span class="s2">&quot;}}&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_split_template_lines</span><span class="p">(</span>
@@ -281,6 +351,12 @@
                     <span class="n">description</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">description</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">default_description</span>
+                <span class="n">issue_number</span><span class="p">,</span> <span class="n">issue_url</span><span class="p">,</span> <span class="n">issue_rst</span> <span class="o">=</span> <span class="n">_extract_issue_info</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+                <span class="n">issue_number</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">issue_number</span><span class="p">)</span>
+                <span class="n">issue_url</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">issue_url</span><span class="p">)</span>
+                <span class="n">issue_rst</span> <span class="o">=</span> <span class="n">_escape_braces</span><span class="p">(</span><span class="n">issue_rst</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">entry_lines</span><span class="p">:</span>
                     <span class="k">if</span> <span class="s2">&quot;</span><span class="si">{file_change}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                         <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
@@ -298,6 +374,9 @@
                                 <span class="n">change_type</span><span class="o">=</span><span class="n">category</span><span class="o">.</span><span class="n">capitalize</span><span class="p">(),</span>
                                 <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
                                 <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                                <span class="n">issue_number</span><span class="o">=</span><span class="n">issue_number</span><span class="p">,</span>
+                                <span class="n">issue_url</span><span class="o">=</span><span class="n">issue_url</span><span class="p">,</span>
+                                <span class="n">issue</span><span class="o">=</span><span class="n">issue_rst</span><span class="p">,</span>
                             <span class="p">),</span>
                         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -365,23 +444,38 @@
                 <span class="p">)</span>
                 <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-    <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">default_title</span> <span class="ow">in</span> <span class="n">formatted_string</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">formatted_string</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="warn_on_missing_entry_fields">
+<a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.warn_on_missing_entry_fields">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">warn_on_missing_entry_fields</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">console</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Warn when rendered notes still contain placeholder titles or descriptions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    content : str</span>
+<span class="sd">        Rendered release notes to inspect.</span>
+<span class="sd">    console : Any</span>
+<span class="sd">        Console for user feedback.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">default_title</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
             <span class="s2">&quot;Warning: Build completed, but at least one title is missing.&quot;</span><span class="p">,</span>
             <span class="n">style</span><span class="o">=</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">default_description</span> <span class="ow">in</span> <span class="n">formatted_string</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">default_description</span> <span class="ow">in</span> <span class="n">content</span><span class="p">:</span>
         <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
             <span class="s2">&quot;Warning: Build completed, but at least one description is missing.&quot;</span><span class="p">,</span>
             <span class="n">style</span><span class="o">=</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">return</span> <span class="n">formatted_string</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+        <span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="build_release_notes">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.build_release_notes">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">build_release_notes</span><span class="p">(</span>  <span class="c1"># noqa PLR0913</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_release_notes</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
     <span class="n">input_files_or_folders</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">console</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">rich_open</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
@@ -390,6 +484,7 @@
     <span class="n">header_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">footer_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">error_console</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build release notes by reading YAML files and templates.</span>
 
@@ -398,7 +493,7 @@
 <span class="sd">    input_files_or_folders : list[str]</span>
 <span class="sd">        CLI-supplied file or directory paths.</span>
 <span class="sd">    console : Any</span>
-<span class="sd">        Console for user feedback.</span>
+<span class="sd">        Console for status and warning output.</span>
 <span class="sd">    rich_open : Callable[..., Any]</span>
 <span class="sd">        Context manager factory for reading files.</span>
 <span class="sd">    version : str | None</span>
@@ -411,21 +506,26 @@
 <span class="sd">        Path to an optional footer file.</span>
 <span class="sd">    working_dir : str</span>
 <span class="sd">        Base directory for relative paths.</span>
+<span class="sd">    error_console : Any</span>
+<span class="sd">        Console for error output. Defaults to ``console`` when None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
 <span class="sd">        Rendered release notes in RST.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">error_console</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">error_console</span> <span class="o">=</span> <span class="n">console</span>
     <span class="n">yaml_files</span> <span class="o">=</span> <span class="n">brassy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CLI</span><span class="o">.</span><span class="n">get_file_list_from_cli_input</span><span class="p">(</span>
         <span class="n">input_files_or_folders</span><span class="p">,</span>
         <span class="n">console</span><span class="p">,</span>
         <span class="n">working_dir</span><span class="o">=</span><span class="n">working_dir</span><span class="p">,</span>
+        <span class="n">error_console</span><span class="o">=</span><span class="n">error_console</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">brassy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">file_handler</span><span class="o">.</span><span class="n">read_yaml_files</span><span class="p">(</span><span class="n">yaml_files</span><span class="p">,</span> <span class="n">rich_open</span><span class="p">)</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">header</span><span class="p">,</span> <span class="n">footer</span> <span class="o">=</span> <span class="n">get_header_footer</span><span class="p">(</span>
         <span class="n">rich_open</span><span class="p">,</span>
@@ -439,6 +539,7 @@
         <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
         <span class="n">footer</span><span class="o">=</span><span class="n">footer</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">warn_on_missing_entry_fields</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">console</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">content</span></div>
 
 </pre></div>

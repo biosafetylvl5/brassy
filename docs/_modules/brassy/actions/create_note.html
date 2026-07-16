@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>brassy.actions.create_note &#8212; brassy 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for brassy.actions.create_note</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Create a release-note YAML template and optionally open it in an editor.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">editor_handler</span><span class="p">,</span>
+    <span class="n">file_handler</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_note">
+<a class="viewcode-back" href="../../../api.html#brassy.actions.create_note.create_note">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_note</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+    <span class="n">file_path_arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">console</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">open_editor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">editor_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">error_console</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a blank release-note YAML template and optionally open it.</span>
+
+<span class="sd">    The template is always created via</span>
+<span class="sd">    :func:`brassy.utils.file_handler.create_blank_template_yaml_file`. When</span>
+<span class="sd">    ``open_editor`` is ``True``, the resulting file is then launched in the</span>
+<span class="sd">    user&#39;s editor (resolved git-style by</span>
+<span class="sd">    :func:`brassy.utils.editor_handler.resolve_editor`).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_path_arg : str | None</span>
+<span class="sd">        The file path of the YAML template as passed via the CLI. ``None``</span>
+<span class="sd">        derives a name from the current git branch.</span>
+<span class="sd">    console : Any</span>
+<span class="sd">        A Rich console used for status messages.</span>
+<span class="sd">    working_dir : str</span>
+<span class="sd">        The working directory path. Defaults to the current directory &quot;.&quot;.</span>
+<span class="sd">    open_editor : bool</span>
+<span class="sd">        Whether to launch the editor on the created file. ``False`` (the</span>
+<span class="sd">        default) preserves the historical behaviour of ``-t``.</span>
+<span class="sd">    editor_override : str | None</span>
+<span class="sd">        An editor command that bypasses resolution, typically sourced from the</span>
+<span class="sd">        ``--editor`` CLI flag. ``None`` resolves the editor normally.</span>
+<span class="sd">    error_console : Any</span>
+<span class="sd">        A Rich console used for error messages. Defaults to ``console`` when</span>
+<span class="sd">        None.</span>
+<span class="sd">    force : bool</span>
+<span class="sd">        Whether to overwrite an existing template file. Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        ``0`` when the file was created. A nonzero editor exit code is</span>
+<span class="sd">        surfaced but does not fail the overall command because the template</span>
+<span class="sd">        was already written successfully.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The editor is launched in the foreground so that interactive editors</span>
+<span class="sd">    (``vim``, ``nano``, etc.) work correctly. A nonzero editor exit code is</span>
+<span class="sd">    reported as a warning rather than propagated, since the file creation</span>
+<span class="sd">    itself succeeded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">error_console</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">error_console</span> <span class="o">=</span> <span class="n">console</span>
+    <span class="n">yaml_path</span> <span class="o">=</span> <span class="n">file_handler</span><span class="o">.</span><span class="n">create_blank_template_yaml_file</span><span class="p">(</span>
+        <span class="n">file_path_arg</span><span class="p">,</span>
+        <span class="n">error_console</span><span class="p">,</span>
+        <span class="n">working_dir</span><span class="o">=</span><span class="n">working_dir</span><span class="p">,</span>
+        <span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">open_editor</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">editor_handler</span><span class="o">.</span><span class="n">resolve_editor</span><span class="p">(</span><span class="n">editor_override</span><span class="p">)</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[green]Created [bold]</span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2">[/], opening in &#39;</span><span class="si">{</span><span class="n">editor</span><span class="si">}</span><span class="s2">&#39;...&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">exit_code</span> <span class="o">=</span> <span class="n">editor_handler</span><span class="o">.</span><span class="n">launch_editor</span><span class="p">(</span><span class="n">yaml_path</span><span class="p">,</span> <span class="n">editor</span><span class="p">,</span> <span class="n">error_console</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">exit_code</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">exit_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[yellow]Editor exited with code </span><span class="si">{</span><span class="n">exit_code</span><span class="si">}</span><span class="s2">; the template at &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2"> was still created.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">brassy</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../brassy-in-ci.html">Release Notes Checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/index.html">Release Notes</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

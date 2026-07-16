@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>brassy.utils.editor_handler &#8212; brassy 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for brassy.utils.editor_handler</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Resolve and launch the user&#39;s preferred text editor (git-style).&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shlex</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.brassy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_git_core_editor</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the editor configured in git&#39;s ``core.editor`` setting, if any.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str | None</span>
+<span class="sd">        The value of ``git config --get core.editor``, or ``None`` when git</span>
+<span class="sd">        is unavailable or the setting is unset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="s2">&quot;--get&quot;</span><span class="p">,</span> <span class="s2">&quot;core.editor&quot;</span><span class="p">],</span>  <span class="c1"># noqa: S607</span>
+            <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">FileNotFoundError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">editor</span> <span class="ow">or</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="resolve_editor">
+<a class="viewcode-back" href="../../../api.html#brassy.utils.editor_handler.resolve_editor">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_editor</span><span class="p">(</span><span class="n">override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resolve which editor command to launch, in git-like priority order.</span>
+
+<span class="sd">    The lookup order is:</span>
+
+<span class="sd">    1. The ``override`` argument (typically from the ``--editor`` CLI flag).</span>
+<span class="sd">    2. The ``default_editor`` setting in the brassy configuration file.</span>
+<span class="sd">    3. The ``VISUAL`` environment variable.</span>
+<span class="sd">    4. The ``EDITOR`` environment variable.</span>
+<span class="sd">    5. The ``core.editor`` setting from the git configuration.</span>
+<span class="sd">    6. A platform default: ``notepad`` on Windows, ``vi`` elsewhere.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    override : str | None</span>
+<span class="sd">        An editor command supplied by the caller. When provided and non-empty,</span>
+<span class="sd">        it takes precedence over every other source. ``None`` or an empty</span>
+<span class="sd">        string is ignored.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        The editor command to launch, never empty.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">override</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">override</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Settings</span><span class="o">.</span><span class="n">default_editor</span><span class="p">,</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;VISUAL&quot;</span><span class="p">),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;EDITOR&quot;</span><span class="p">),</span>
+        <span class="n">_git_core_editor</span><span class="p">(),</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">candidate</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">candidate</span>
+    <span class="k">return</span> <span class="s2">&quot;notepad&quot;</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span> <span class="k">else</span> <span class="s2">&quot;vi&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="launch_editor">
+<a class="viewcode-back" href="../../../api.html#brassy.utils.editor_handler.launch_editor">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">launch_editor</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">editor</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">error_console</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Launch ``editor`` on ``path`` in the foreground and return its exit code.</span>
+
+<span class="sd">    The editor runs attached to the controlling terminal so that interactive</span>
+<span class="sd">    editors such as ``vim`` or ``nano`` function correctly. The ``editor``</span>
+<span class="sd">    string is split with :func:`shlex.split` so that flags (e.g.</span>
+<span class="sd">    ``code --wait``) are honoured.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Path</span>
+<span class="sd">        Path to the file the editor should open.</span>
+<span class="sd">    editor : str</span>
+<span class="sd">        The editor command (possibly with arguments) resolved by</span>
+<span class="sd">        :func:`resolve_editor`.</span>
+<span class="sd">    error_console : Any</span>
+<span class="sd">        A Rich console used to report errors when the editor command cannot be</span>
+<span class="sd">        executed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        The exit code returned by the editor process. ``1`` is returned when</span>
+<span class="sd">        the editor binary itself could not be found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">editor</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>  <span class="c1"># noqa: S603</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[bold red]Could not launch editor &#39;[bold]</span><span class="si">{</span><span class="n">editor</span><span class="si">}</span><span class="s2">[/]&#39;. &quot;</span>
+            <span class="s2">&quot;Is it installed and on your PATH?&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="open_file_in_editor">
+<a class="viewcode-back" href="../../../api.html#brassy.utils.editor_handler.open_file_in_editor">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open_file_in_editor</span><span class="p">(</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">error_console</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">editor_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resolve an editor and launch it on ``path``, returning the exit code.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Path</span>
+<span class="sd">        Path to the file to open.</span>
+<span class="sd">    error_console : Any</span>
+<span class="sd">        A Rich console used for error reporting.</span>
+<span class="sd">    editor_override : str | None</span>
+<span class="sd">        Optional editor command that bypasses resolution. ``None`` ignores the</span>
+<span class="sd">        argument and resolves the editor normally.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        The editor process exit code (``1`` if the editor could not launch).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">editor</span> <span class="o">=</span> <span class="n">resolve_editor</span><span class="p">(</span><span class="n">editor_override</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">launch_editor</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">editor</span><span class="p">,</span> <span class="n">error_console</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">brassy</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../brassy-in-ci.html">Release Notes Checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/index.html">Release Notes</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

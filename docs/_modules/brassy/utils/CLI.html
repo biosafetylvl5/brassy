@@ -45,12 +45,14 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pygit2</span><span class="w"> </span><span class="kn">import</span> <span class="n">GitError</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">rich_argparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichHelpFormatter</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">brassy.actions.build_release_notes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">brassy.actions.create_note</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">brassy.actions.init</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">brassy.actions.prune_yaml</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">brassy.utils.file_handler</span>
@@ -84,18 +86,47 @@
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Write template YAML to provided file.&quot;</span>
         <span class="o">+</span> <span class="s2">&quot; If folder provided, place template in folder with current &quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;git branch name as file name.&quot;</span><span class="p">,</span>
+        <span class="o">+</span> <span class="s2">&quot;git branch name as file name.&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; Existing files are not overwritten unless --force is passed.&quot;</span><span class="p">,</span>
         <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--force&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Overwrite the target file when writing a YAML template.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--editor&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Editor command to open the created template with (overrides&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; the &#39;default_editor&#39; setting, $VISUAL, $EDITOR and git&#39;s&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; core.editor).&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--no-open&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Do not open the template in an editor, even when the&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; &#39;auto_open_editor&#39; setting is enabled.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--get-changed-files&quot;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print git tracked file changes against main.&quot;</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print git tracked file changes against the base branch.&quot;</span>
         <span class="o">+</span> <span class="s2">&quot; If directory provided, use that directories checked-out branch.&quot;</span><span class="p">,</span>
         <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">SUPPRESS</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--base-branch&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Branch to diff against for --get-changed-files (overrides the&quot;</span>
+        <span class="o">+</span> <span class="s2">&quot; &#39;base_branch&#39; setting). Defaults to trying main, master, then trunk.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;input_files_or_folders&quot;</span><span class="p">,</span>
@@ -124,8 +155,8 @@
         <span class="s2">&quot;-nc&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--no-color&quot;</span><span class="p">,</span>
         <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">Settings</span><span class="o">.</span><span class="n">use_color</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Disable text formatting for CLI output.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Disable colors and other ANSI formatting in CLI output.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
@@ -214,7 +245,7 @@
 <a class="viewcode-back" href="../../../api.html#brassy.utils.CLI.print_version_and_exit">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">print_version_and_exit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Print version and exit with status code 0.&quot;&quot;&quot;</span>
-    <span class="n">messages</span><span class="o">.</span><span class="n">RichConsole</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brassy is at version </span><span class="si">{</span><span class="n">brassy</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">payload_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Brassy is at version </span><span class="si">{</span><span class="n">brassy</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 
@@ -240,7 +271,7 @@
 <span class="sd">    parser : argparse.ArgumentParser</span>
 <span class="sd">        The ArgumentParser object used to parse the command-line arguments.</span>
 <span class="sd">    console : Console</span>
-<span class="sd">        The rich console instance for output.</span>
+<span class="sd">        The rich console errors are reported on.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -250,12 +281,10 @@
     <span class="k">if</span> <span class="p">(</span>
         <span class="nb">bool</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">input_files_or_folders</span><span class="p">)</span>
         <span class="ow">or</span> <span class="s2">&quot;get_changed_files&quot;</span> <span class="ow">in</span> <span class="n">args</span>
+        <span class="ow">or</span> <span class="s2">&quot;write_yaml_template&quot;</span> <span class="ow">in</span> <span class="n">args</span>
         <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">init</span>
-        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">version</span>
+        <span class="ow">or</span> <span class="n">args</span><span class="o">.</span><span class="n">print_version</span>
     <span class="p">):</span>
-        <span class="k">return</span>
-
-    <span class="k">if</span> <span class="s2">&quot;write_yaml_template&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
         <span class="k">return</span>
 
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[bold red]Invalid arguments.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -316,8 +345,31 @@
     <span class="n">input_files_or_folders</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">console</span><span class="p">:</span> <span class="n">Console</span><span class="p">,</span>
     <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">error_console</span><span class="p">:</span> <span class="n">Console</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse CLI input string into full file paths.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse CLI input strings into full file paths.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_files_or_folders : list[str]</span>
+<span class="sd">        Paths to input files or folders provided on the command line.</span>
+<span class="sd">    console : Console</span>
+<span class="sd">        The rich console non-error output (such as the ``fail_on_empty_dir``</span>
+<span class="sd">        warning) is written to.</span>
+<span class="sd">    working_dir : str</span>
+<span class="sd">        The working directory used to resolve relative paths. Defaults to &quot;.&quot;.</span>
+<span class="sd">    error_console : Console | None</span>
+<span class="sd">        The rich console errors are written to. Defaults to ``console`` when</span>
+<span class="sd">        None.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[Path]</span>
+<span class="sd">        Resolved paths to the YAML files found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">error_console</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">error_console</span> <span class="o">=</span> <span class="n">console</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">yaml_files</span> <span class="o">=</span> <span class="n">get_yaml_files_from_input</span><span class="p">(</span>
             <span class="p">[</span>
@@ -330,7 +382,7 @@
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">FileExistsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">fail_on_empty_dir</span><span class="p">:</span>
-            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Invalid file or directory: [bold]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">)</span>
+            <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Invalid file or directory: [bold]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[yellow]Invalid file or directory: [bold]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">)</span>
@@ -339,10 +391,10 @@
             <span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Invalid file or directory: [bold]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">)</span>
+        <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Invalid file or directory: [bold]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/]&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">yaml_files</span></div>
 
@@ -354,13 +406,17 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate release notes from YAML files and write output file.&quot;&quot;&quot;</span>
     <span class="n">args</span><span class="p">,</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">parse_arguments</span><span class="p">()</span>
 
-    <span class="n">messages</span><span class="o">.</span><span class="n">setup_messages</span><span class="p">(</span><span class="n">enable_format</span><span class="o">=</span><span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_rich</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">)</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">setup_messages</span><span class="p">(</span>
+        <span class="n">enable_format</span><span class="o">=</span><span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_rich</span><span class="p">,</span>
+        <span class="n">quiet</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">Settings</span><span class="o">.</span><span class="n">use_color</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_color</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">console</span> <span class="o">=</span> <span class="n">messages</span><span class="o">.</span><span class="n">RichConsole</span>
-    <span class="n">printer</span> <span class="o">=</span> <span class="n">messages</span><span class="o">.</span><span class="n">print</span>
-    <span class="n">rich_open</span> <span class="o">=</span> <span class="n">messages</span><span class="o">.</span><span class="n">open</span>
+    <span class="n">error_console</span> <span class="o">=</span> <span class="n">messages</span><span class="o">.</span><span class="n">error_console</span>
+    <span class="n">rich_open</span> <span class="o">=</span> <span class="n">messages</span><span class="o">.</span><span class="n">open_with_progress</span>
 
-    <span class="n">exit_on_invalid_arguments</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">console</span><span class="p">)</span>
+    <span class="n">exit_on_invalid_arguments</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">error_console</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">print_version</span><span class="p">:</span>
         <span class="n">print_version_and_exit</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">init</span><span class="p">:</span>
@@ -371,18 +427,28 @@
             <span class="n">args</span><span class="o">.</span><span class="n">input_files_or_folders</span><span class="p">,</span>
             <span class="n">console</span><span class="p">,</span>
             <span class="n">args</span><span class="o">.</span><span class="n">yaml_dir</span><span class="p">,</span>
+            <span class="n">error_console</span><span class="o">=</span><span class="n">error_console</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="s2">&quot;write_yaml_template&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="n">brassy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">file_handler</span><span class="o">.</span><span class="n">create_blank_template_yaml_file</span><span class="p">(</span>
+        <span class="n">brassy</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">create_note</span><span class="o">.</span><span class="n">create_note</span><span class="p">(</span>
             <span class="n">args</span><span class="o">.</span><span class="n">write_yaml_template</span><span class="p">,</span>
             <span class="n">console</span><span class="p">,</span>
             <span class="n">working_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">yaml_dir</span><span class="p">,</span>
+            <span class="n">open_editor</span><span class="o">=</span><span class="n">Settings</span><span class="o">.</span><span class="n">auto_open_editor</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">no_open</span><span class="p">,</span>
+            <span class="n">editor_override</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">editor</span><span class="p">,</span>
+            <span class="n">error_console</span><span class="o">=</span><span class="n">error_console</span><span class="p">,</span>
+            <span class="n">force</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">force</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="s2">&quot;get_changed_files&quot;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-        <span class="n">brassy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">git_handler</span><span class="o">.</span><span class="n">print_out_git_changed_files</span><span class="p">(</span>
-            <span class="n">printer</span><span class="p">,</span>
-            <span class="n">repo_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">get_changed_files</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">get_changed_files</span> <span class="k">else</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">brassy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">git_handler</span><span class="o">.</span><span class="n">print_out_git_changed_files</span><span class="p">(</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">payload_print</span><span class="p">,</span>
+                <span class="n">repo_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">get_changed_files</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">get_changed_files</span> <span class="k">else</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+                <span class="n">base_branch</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">base_branch</span> <span class="ow">or</span> <span class="n">Settings</span><span class="o">.</span><span class="n">base_branch</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">GitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">input_files_or_folders</span><span class="p">:</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">brassy</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">build_release_notes</span><span class="o">.</span><span class="n">build_release_notes</span><span class="p">(</span>
             <span class="n">args</span><span class="o">.</span><span class="n">input_files_or_folders</span><span class="p">,</span>
@@ -393,17 +459,17 @@
             <span class="n">header_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">prefix_file</span><span class="p">,</span>
             <span class="n">footer_file</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">suffix_file</span><span class="p">,</span>
             <span class="n">working_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">yaml_dir</span><span class="p">,</span>
+            <span class="n">error_console</span><span class="o">=</span><span class="n">error_console</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">:</span>
             <span class="n">brassy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">file_handler</span><span class="o">.</span><span class="n">write_output_file</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
-                <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Wrote release notes to </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Wrote release notes to </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
                 <span class="s2">&quot;[green]Release notes built successfully. No output file provided.&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output_to_console</span><span class="p">:</span>
-            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">payload_print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span></div>

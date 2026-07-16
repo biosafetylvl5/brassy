@@ -45,6 +45,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">brassy.templates.settings_template</span><span class="w"> </span><span class="kn">import</span> <span class="n">SettingsTemplate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils.yaml_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_yaml</span>
 
 
 <div class="viewcode-block" id="get_git_repo_root">
@@ -176,9 +177,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">config_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
     <span class="n">default_settings</span> <span class="o">=</span> <span class="n">SettingsTemplate</span><span class="p">()</span>
-    <span class="n">config_dir</span> <span class="o">=</span> <span class="n">config_file</span><span class="o">.</span><span class="n">parent</span>
-    <span class="k">if</span> <span class="n">config_dir</span><span class="p">:</span>
-        <span class="n">config_dir</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">config_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">config_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">default_settings</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(),</span> <span class="n">f</span><span class="p">)</span></div>
 
@@ -203,18 +202,32 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    dict[str, Any]</span>
-<span class="sd">        Parsed configuration settings as a dictionary.</span>
+<span class="sd">        Parsed configuration settings as a dictionary. A missing or empty</span>
+<span class="sd">        file contributes an empty dictionary.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the file exists but does not contain a YAML mapping.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">config_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">config_file</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">load_yaml</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">config_file</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">create_file_if_not_exist</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">SettingsTemplate</span><span class="p">()</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">create_config_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">read_config_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="n">create_config_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">read_config_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># ValueError, not TypeError: malformed user input raises ValueError</span>
+        <span class="c1"># everywhere else in brassy (see yaml_handler.load_yaml).</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>  <span class="c1"># noqa: TRY004</span>
+            <span class="sa">f</span><span class="s2">&quot;Settings file </span><span class="si">{</span><span class="n">config_file</span><span class="si">}</span><span class="s2"> must contain a YAML mapping of settings.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">content</span></div>
 
 
 
@@ -283,6 +296,10 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Override dict values with case insensitive environment variables when available.</span>
 
+<span class="sd">    Every field of :class:`SettingsTemplate` is considered, so an environment</span>
+<span class="sd">    variable applies even when the setting is absent from the input dictionary</span>
+<span class="sd">    (for example when no configuration file exists).</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    input_dict : dict[str, Any]</span>
@@ -293,14 +310,11 @@
 <span class="sd">    dict[str, Any]</span>
 <span class="sd">        Updated settings dictionary with environment variable overrides.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">env_vars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
-    <span class="n">lower_env_vars</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> <span class="p">{</span><span class="s2">&quot;env_var&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">}</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">env_vars</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">input_dict</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">lower_env_vars</span><span class="p">:</span>
-            <span class="n">override</span> <span class="o">=</span> <span class="n">lower_env_vars</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
-            <span class="n">input_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">override</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+    <span class="n">lower_env_vars</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">SettingsTemplate</span><span class="o">.</span><span class="n">model_fields</span><span class="p">:</span>
+        <span class="n">prefixed_key</span> <span class="o">=</span> <span class="s2">&quot;brassy_&quot;</span> <span class="o">+</span> <span class="n">field_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">prefixed_key</span> <span class="ow">in</span> <span class="n">lower_env_vars</span><span class="p">:</span>
+            <span class="n">input_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">lower_env_vars</span><span class="p">[</span><span class="n">prefixed_key</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">input_dict</span></div>
 
 

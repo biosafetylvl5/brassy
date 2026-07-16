@@ -43,10 +43,59 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pygit2</span>
 
+<span class="c1"># Base branches tried, in order, when none is explicitly configured.</span>
+<span class="n">_DEFAULT_BASE_BRANCHES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;master&quot;</span><span class="p">,</span> <span class="s2">&quot;trunk&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_base_branch</span><span class="p">(</span>
+    <span class="n">repo</span><span class="p">:</span> <span class="n">pygit2</span><span class="o">.</span><span class="n">Repository</span><span class="p">,</span> <span class="n">base_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygit2</span><span class="o">.</span><span class="n">Branch</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resolve the base branch to diff against.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    repo : pygit2.Repository</span>
+<span class="sd">        The repository to look the branch up in.</span>
+<span class="sd">    base_branch : str | None</span>
+<span class="sd">        An explicit base branch name. When None, the branches in</span>
+<span class="sd">        ``_DEFAULT_BASE_BRANCHES`` are tried in order.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pygit2.Branch</span>
+<span class="sd">        The resolved base branch.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    pygit2.GitError</span>
+<span class="sd">        If the explicit branch is missing, or none of the default branches</span>
+<span class="sd">        exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">base_branch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="n">base_branch</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">pygit2</span><span class="o">.</span><span class="n">GitError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Base branch &#39;</span><span class="si">{</span><span class="n">base_branch</span><span class="si">}</span><span class="s2">&#39; not found in </span><span class="si">{</span><span class="n">repo</span><span class="o">.</span><span class="n">workdir</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">_DEFAULT_BASE_BRANCHES</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="n">candidate</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">continue</span>
+    <span class="n">tried</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_DEFAULT_BASE_BRANCHES</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="n">pygit2</span><span class="o">.</span><span class="n">GitError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;No base branch found (tried </span><span class="si">{</span><span class="n">tried</span><span class="si">}</span><span class="s2">). &quot;</span>
+        <span class="s2">&quot;Pass --base-branch or set the &#39;base_branch&#39; setting.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
 
 <div class="viewcode-block" id="get_git_status">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.git_handler.get_git_status">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_git_status</span><span class="p">(</span><span class="n">repo_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_git_status</span><span class="p">(</span>
+    <span class="n">repo_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">base_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve the status of files in the specified Git repository.</span>
 
@@ -54,6 +103,9 @@
 <span class="sd">    ----------</span>
 <span class="sd">    repo_path : str</span>
 <span class="sd">        The path to the Git repository. Defaults to the current directory.</span>
+<span class="sd">    base_branch : str | None</span>
+<span class="sd">        The branch to diff the current branch against. When None, brassy tries</span>
+<span class="sd">        ``main``, ``master``, then ``trunk``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -72,7 +124,8 @@
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    pygit2.GitError</span>
-<span class="sd">        If the repository path is not a git repository or does not have a HEAD.</span>
+<span class="sd">        If the repository path is not a git repository, has no HEAD, or no</span>
+<span class="sd">        base branch could be resolved.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Open the repository</span>
     <span class="n">repo</span> <span class="o">=</span> <span class="n">pygit2</span><span class="o">.</span><span class="n">Repository</span><span class="p">(</span><span class="n">repo_path</span><span class="p">)</span>
@@ -84,14 +137,14 @@
         <span class="k">raise</span> <span class="n">pygit2</span><span class="o">.</span><span class="n">GitError</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">repo_path</span><span class="si">}</span><span class="s2"> is not a git repo or does not have a head&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
-    <span class="c1"># Get the main branch reference</span>
-    <span class="n">main_branch</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">branches</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">]</span>
+    <span class="c1"># Get the base branch reference</span>
+    <span class="n">main_branch</span> <span class="o">=</span> <span class="n">_resolve_base_branch</span><span class="p">(</span><span class="n">repo</span><span class="p">,</span> <span class="n">base_branch</span><span class="p">)</span>
 
     <span class="c1"># Get the commit objects</span>
     <span class="n">current_commit</span> <span class="o">=</span> <span class="n">repo</span><span class="p">[</span><span class="n">current_branch</span><span class="o">.</span><span class="n">target</span><span class="p">]</span>
     <span class="n">main_commit</span> <span class="o">=</span> <span class="n">repo</span><span class="p">[</span><span class="n">main_branch</span><span class="o">.</span><span class="n">target</span><span class="p">]</span>
 
-    <span class="c1"># Get the diff between the current commit and the main branch commit</span>
+    <span class="c1"># Get the diff between the current commit and the base branch commit</span>
     <span class="n">diff</span> <span class="o">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">main_commit</span><span class="p">,</span> <span class="n">current_commit</span><span class="p">)</span>
 
     <span class="c1"># Prepare dictionaries to store file statuses</span>
@@ -125,7 +178,9 @@
 <div class="viewcode-block" id="print_out_git_changed_files">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.git_handler.print_out_git_changed_files">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">print_out_git_changed_files</span><span class="p">(</span>
-    <span class="n">print_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">repo_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">print_function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="n">repo_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">base_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Print out changes as detected by Git in format Brassy expects in changlogs.</span>
@@ -136,8 +191,11 @@
 <span class="sd">        A callable that takes a string and prints it.</span>
 <span class="sd">    repo_path : str</span>
 <span class="sd">        The path to the Git repository. Defaults to the current directory.</span>
+<span class="sd">    base_branch : str | None</span>
+<span class="sd">        The branch to diff against. When None, brassy tries ``main``,</span>
+<span class="sd">        ``master``, then ``trunk``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="n">get_git_status</span><span class="p">(</span><span class="n">repo_path</span><span class="o">=</span><span class="n">repo_path</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">get_git_status</span><span class="p">(</span><span class="n">repo_path</span><span class="o">=</span><span class="n">repo_path</span><span class="p">,</span> <span class="n">base_branch</span><span class="o">=</span><span class="n">base_branch</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
         <span class="n">print_function</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">status</span><span class="p">[</span><span class="n">entry</span><span class="p">]:</span>

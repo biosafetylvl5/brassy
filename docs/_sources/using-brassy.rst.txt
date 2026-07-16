@@ -21,6 +21,20 @@ branch name. You can also specify a name manually, and
     # or leave blank to name after current git branch
     brassy -t
 
+Passing an existing directory to ``-t`` places a template named after the
+current git branch inside that directory.
+
+If a file already exists at the target path, brassy will refuse to overwrite
+it and exit with an error, so you cannot accidentally destroy notes you have
+already written. Pass ``--force`` to overwrite an existing file on purpose.
+
+.. note::
+
+   Because the file name for ``-t`` is optional, it must directly follow
+   ``-t``; put other flags after it. ``brassy -t release-note.yaml --force``
+   overwrites the file, while ``brassy -t --force release-note.yaml`` writes
+   a branch-named template and treats ``release-note.yaml`` as a build input.
+
 By default, the yaml template will be populated with the following fields:
 
 .. runcmd:: python3 -c "from brassy.templates.release_yaml_template import categories; print('\n'.join(categories))"
@@ -75,14 +89,55 @@ For example:
         start: "10-10-1999"
         finish: "02-21-2026"
 
+Opening the template in an editor
+"""""""""""""""""""""""""""""""""
+
+Brassy can open the newly created template in your text editor, just like
+``git commit`` opens the commit message editor. This is controlled by the
+``auto_open_editor`` setting (``false`` by default). When set to ``true``
+in your ``.brassy`` file, running ``brassy -t`` will create the template
+and immediately launch your editor on it.
+
+.. code-block:: yaml
+
+    # .brassy
+    auto_open_editor: true
+
+The editor is resolved in the following order (the first match wins):
+
+1. The ``--editor`` CLI flag.
+2. The ``default_editor`` setting in your ``.brassy`` file.
+3. The ``VISUAL`` environment variable.
+4. The ``EDITOR`` environment variable.
+5. Git's ``core.editor`` configuration (``git config core.editor``).
+6. A platform default: ``notepad`` on Windows, ``vi`` elsewhere.
+
+You can override the editor for a single invocation with ``--editor``:
+
+.. code-block:: bash
+
+    brassy -t release-note.yaml --editor "code --wait"
+
+To suppress the editor for one invocation even when ``auto_open_editor``
+is enabled, pass ``--no-open``:
+
+.. code-block:: bash
+
+    brassy -t release-note.yaml --no-open
+
 Generating the changed files via ``git``
 """"""""""""""""""""""""""""""""""""""""
 
 You can run ``brassy`` with ``--get-changed-files`` (or ``-c``)
 to output the files that have been
-modified, added, deleted or moved in the current branch as compared to the main
+modified, added, deleted or moved in the current branch as compared to the base
 branch. It runs on the current directory by default,
 but it accepts a path as an argument.
+
+By default brassy diffs against the first of ``main``, ``master`` or ``trunk``
+that exists. Override this with the ``--base-branch`` flag or the
+``base_branch`` setting in your ``.brassy`` file. If none of these branches
+exist and none is configured, brassy exits with an error naming what it tried.
 
 For example, the output looks like this:
 
@@ -206,7 +261,8 @@ The template consists of five named sections that are rendered in order:
     The detailed change descriptions. This section is split into two parts:
     **category-level lines** (rendered once per category) and **entry-level
     lines** (rendered once per entry). The split occurs at the first line
-    containing ``{title}``, ``{description}``, or ``{file_change}``.
+    containing ``{title}``, ``{description}``, ``{file_change}``,
+    ``{issue}``, ``{issue_number}``, or ``{issue_url}``.
 
 ``footer``
     Appended after all entries. Contains ``{suffix_file}`` which is replaced
@@ -235,6 +291,12 @@ Available template variables
 | ``{release_version}``     | Release version string                      |
 +---------------------------+---------------------------------------------+
 | ``{release_date}``        | Release date string                         |
++---------------------------+---------------------------------------------+
+| ``{issue}``               | Formatted RST issue link (blank if none)    |
++---------------------------+---------------------------------------------+
+| ``{issue_number}``        | Issue number formatted as ``#N``            |
++---------------------------+---------------------------------------------+
+| ``{issue_url}``           | Issue URL string (blank if none)            |
 +---------------------------+---------------------------------------------+
 
 Default template
@@ -266,6 +328,8 @@ are category-level and which are entry-level in the ``entry`` section:
           - "-------------------------"
           - ""
           - "{description}"
+          - ""
+          - "{issue}"            # issue reference (per entry)
           - ""
           - "::"
           - ""
@@ -309,11 +373,12 @@ For example:
 
 links the change "Delete repo upon push" to issue #999 on the linked linux repo.
 
-.. warning::
+.. note::
 
-  Issue information isn't rendered in generated release notes by default.
-  You must (currently) change your release generation template to include
-  issue info in your release notes.
+   Issue information is rendered in the generated release notes using
+   the ``{issue}`` template variable.  The ``{issue_number}`` and
+   ``{issue_url}`` variables are also available if you need the raw
+   values.  See the template variables table above.
 
 Support for Internal Repos
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -374,10 +439,17 @@ Eg. ``brassy --prune fake_file.yaml``
 Controlling CLI Output
 ----------------------
 
-You can turn off fancy formatting (colors, bold, etc.)
+You can turn off fancy formatting (colors, bold, and every other ANSI escape)
 by using the ``--no-color``/``-nc`` flag.
 
-You can also turn off all non-error outputs by using the ``--quiet`` or ``-q`` flag.
+You can also turn off all non-error output by using the ``--quiet`` or ``-q``
+flag. Errors are written to standard error and are always shown, even under
+``--quiet``, so a failing command is never silent. Output you explicitly ask
+for -- ``--output-to-console``, ``--get-changed-files`` and ``--version`` --
+is written to standard output and is likewise still shown under ``--quiet``,
+which makes piping it into a file reliable::
+
+    brassy --quiet --output-to-console notes.yaml > release-notes.rst
 
 Help!
 -----

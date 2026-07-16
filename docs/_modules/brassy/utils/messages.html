@@ -31,10 +31,22 @@
           <div class="body" role="main">
             
   <h1>Source code for brassy.utils.messages</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Handle outputs/inputs to the CLI.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Handle outputs/inputs to the CLI.</span>
+
+<span class="sd">The CLI writes through three channels, set up by :func:`setup_messages`:</span>
+
+<span class="sd">- ``RichConsole`` -- ordinary status and warnings, on stdout. Silenced by</span>
+<span class="sd">  ``--quiet``.</span>
+<span class="sd">- ``error_console`` -- errors, on stderr. Never silenced, so failures remain</span>
+<span class="sd">  visible under ``--quiet``.</span>
+<span class="sd">- :func:`payload_print` -- data the user explicitly asked for</span>
+<span class="sd">  (``--output-to-console``, ``-c``, ``--version``), on stdout, unformatted and</span>
+<span class="sd">  never silenced.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
@@ -82,40 +94,57 @@
 
 <div class="viewcode-block" id="get_rich_opener">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.messages.get_rich_opener">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_rich_opener</span><span class="p">(</span><span class="n">no_format</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_rich_opener</span><span class="p">(</span>
+    <span class="n">console</span><span class="p">:</span> <span class="n">rich</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">Console</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">disable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Return opener function with or without a rich progress bar.</span>
+<span class="sd">    Return a file opener that renders a rich progress bar on ``console``.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    no_format : bool</span>
-<span class="sd">        If True, returns the opener function without any formatting.</span>
-<span class="sd">        If False, returns the opener function with formatting. Defaults to False.</span>
+<span class="sd">    console : rich.console.Console | None</span>
+<span class="sd">        Console the progress bar is rendered on. ``None`` lets rich fall back</span>
+<span class="sd">        to its global console, which is unaware of brassy&#39;s output settings.</span>
+<span class="sd">        Defaults to None.</span>
+<span class="sd">    disable : bool</span>
+<span class="sd">        Whether to suppress the progress display entirely. Defaults to False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Callable[..., Any]</span>
-<span class="sd">        The opener function for rich progress bar.</span>
+<span class="sd">        A context-manager factory with the call signature of</span>
+<span class="sd">        :func:`rich.progress.open`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">no_format</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rich</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">Progress</span><span class="p">()</span><span class="o">.</span><span class="n">open</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rich</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">open</span></div>
+    <span class="k">return</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">rich</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">open</span><span class="p">,</span> <span class="n">console</span><span class="o">=</span><span class="n">console</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="n">disable</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="setup_console">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.messages.setup_console">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">setup_console</span><span class="p">(</span><span class="n">no_format</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">quiet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">rich</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">Console</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_console</span><span class="p">(</span>
+    <span class="n">no_format</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">quiet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">color</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">stderr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">rich</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">Console</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set up and return the console for printing messages.</span>
+<span class="sd">    Set up and return a console for printing messages.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    no_format : bool</span>
-<span class="sd">        Whether to disable formatting. Defaults to False.</span>
+<span class="sd">        Whether to disable rich formatting (markup rendering stays on so that</span>
+<span class="sd">        markup tags are not printed literally). Defaults to False.</span>
 <span class="sd">    quiet : bool</span>
-<span class="sd">        Whether to suppress console output. Defaults to False.</span>
+<span class="sd">        Whether to suppress this console&#39;s output. Defaults to False.</span>
+<span class="sd">    color : bool</span>
+<span class="sd">        Whether to allow ANSI colour and styling. When False, or when</span>
+<span class="sd">        ``no_format`` is True, the console emits no escape sequences at all.</span>
+<span class="sd">        Defaults to True.</span>
+<span class="sd">    stderr : bool</span>
+<span class="sd">        Whether the console writes to stderr instead of stdout. Defaults to</span>
+<span class="sd">        False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -124,8 +153,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">no_format</span><span class="p">:</span>
         <span class="n">install_rich_tracebacks</span><span class="p">()</span>
-    <span class="n">console</span> <span class="o">=</span> <span class="n">rich_console</span><span class="p">(</span><span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span> <span class="n">no_color</span><span class="o">=</span><span class="p">(</span><span class="n">no_format</span> <span class="ow">or</span> <span class="n">quiet</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">console</span></div>
+    <span class="k">return</span> <span class="n">rich_console</span><span class="p">(</span>
+        <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span>
+        <span class="n">color_system</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span> <span class="k">if</span> <span class="p">(</span><span class="n">color</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no_format</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="n">stderr</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 
@@ -163,33 +195,58 @@
 
 
 
+<div class="viewcode-block" id="payload_print">
+<a class="viewcode-back" href="../../../api.html#brassy.utils.messages.payload_print">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">payload_print</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write requested program data to stdout, unformatted and never suppressed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    content : str</span>
+<span class="sd">        Text to write verbatim.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="setup_messages">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.messages.setup_messages">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">setup_messages</span><span class="p">(</span><span class="n">enable_format</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">quiet</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_messages</span><span class="p">(</span><span class="n">enable_format</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">quiet</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set up global objects for outputting messages to the CLI.</span>
+<span class="sd">    Set up the module-level output channels used by the CLI.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    enable_format : bool</span>
 <span class="sd">        Whether to enable rich formatting for output.</span>
 <span class="sd">    quiet : bool</span>
-<span class="sd">        Whether to suppress console output.</span>
+<span class="sd">        Whether to suppress ordinary (non-error) output.</span>
+<span class="sd">    color : bool</span>
+<span class="sd">        Whether to allow ANSI colour and styling. Defaults to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">global</span> <span class="nb">open</span>  <span class="c1"># noqa: PLW0603</span>
+    <span class="k">global</span> <span class="n">open_with_progress</span>  <span class="c1"># noqa: PLW0603</span>
     <span class="k">global</span> <span class="n">boolean_prompt</span>  <span class="c1"># noqa: PLW0603</span>
     <span class="k">global</span> <span class="n">RichConsole</span>  <span class="c1"># noqa: PLW0603</span>
-    <span class="k">global</span> <span class="nb">print</span>  <span class="c1"># noqa: PLW0603</span>
-    <span class="nb">open</span> <span class="o">=</span> <span class="n">get_rich_opener</span><span class="p">(</span><span class="n">no_format</span><span class="o">=</span><span class="ow">not</span> <span class="n">enable_format</span><span class="p">)</span>  <span class="c1"># noqa: A001</span>
-    <span class="n">RichConsole</span> <span class="o">=</span> <span class="n">setup_console</span><span class="p">(</span><span class="n">no_format</span><span class="o">=</span><span class="ow">not</span> <span class="n">enable_format</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">)</span>
-    <span class="nb">print</span> <span class="o">=</span> <span class="n">RichConsole</span><span class="o">.</span><span class="n">print</span> <span class="k">if</span> <span class="n">enable_format</span> <span class="k">else</span> <span class="nb">print</span>  <span class="c1"># noqa: A001</span>
+    <span class="k">global</span> <span class="n">error_console</span>  <span class="c1"># noqa: PLW0603</span>
+    <span class="n">RichConsole</span> <span class="o">=</span> <span class="n">setup_console</span><span class="p">(</span><span class="n">no_format</span><span class="o">=</span><span class="ow">not</span> <span class="n">enable_format</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">error_console</span> <span class="o">=</span> <span class="n">setup_console</span><span class="p">(</span>
+        <span class="n">no_format</span><span class="o">=</span><span class="ow">not</span> <span class="n">enable_format</span><span class="p">,</span>
+        <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">stderr</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">open_with_progress</span> <span class="o">=</span> <span class="n">get_rich_opener</span><span class="p">(</span>
+        <span class="n">console</span><span class="o">=</span><span class="n">RichConsole</span><span class="p">,</span>
+        <span class="n">disable</span><span class="o">=</span><span class="n">quiet</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">enable_format</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">boolean_prompt</span> <span class="o">=</span> <span class="n">get_boolean_prompt_function</span><span class="p">(</span><span class="n">enable_format</span><span class="o">=</span><span class="n">enable_format</span><span class="p">)</span></div>
 
 
 
-<span class="nb">open</span> <span class="o">=</span> <span class="n">get_rich_opener</span><span class="p">()</span>  <span class="c1"># noqa: A001</span>
 <span class="n">RichConsole</span> <span class="o">=</span> <span class="n">setup_console</span><span class="p">()</span>
-<span class="nb">print</span> <span class="o">=</span> <span class="n">RichConsole</span><span class="o">.</span><span class="n">print</span>  <span class="c1"># noqa: A001</span>
+<span class="n">error_console</span> <span class="o">=</span> <span class="n">setup_console</span><span class="p">(</span><span class="n">stderr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">open_with_progress</span> <span class="o">=</span> <span class="n">get_rich_opener</span><span class="p">(</span><span class="n">console</span><span class="o">=</span><span class="n">RichConsole</span><span class="p">)</span>
 <span class="n">boolean_prompt</span> <span class="o">=</span> <span class="n">get_boolean_prompt_function</span><span class="p">()</span>
 </pre></div>
 

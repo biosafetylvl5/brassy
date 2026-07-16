@@ -51,6 +51,18 @@ brassy<span class="w"> </span>-t<span class="w"> </span>release-note.yaml
 brassy<span class="w"> </span>-t
 </pre></div>
 </div>
+<p>Passing an existing directory to <code class="docutils literal notranslate"><span class="pre">-t</span></code> places a template named after the
+current git branch inside that directory.</p>
+<p>If a file already exists at the target path, brassy will refuse to overwrite
+it and exit with an error, so you cannot accidentally destroy notes you have
+already written. Pass <code class="docutils literal notranslate"><span class="pre">--force</span></code> to overwrite an existing file on purpose.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because the file name for <code class="docutils literal notranslate"><span class="pre">-t</span></code> is optional, it must directly follow
+<code class="docutils literal notranslate"><span class="pre">-t</span></code>; put other flags after it. <code class="docutils literal notranslate"><span class="pre">brassy</span> <span class="pre">-t</span> <span class="pre">release-note.yaml</span> <span class="pre">--force</span></code>
+overwrites the file, while <code class="docutils literal notranslate"><span class="pre">brassy</span> <span class="pre">-t</span> <span class="pre">--force</span> <span class="pre">release-note.yaml</span></code> writes
+a branch-named template and treats <code class="docutils literal notranslate"><span class="pre">release-note.yaml</span></code> as a build input.</p>
+</div>
 <p>By default, the yaml template will be populated with the following fields:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>bug fix
 enhancement
@@ -106,13 +118,47 @@ continuous integration
 <span class="w">    </span><span class="nt">finish</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;02-21-2026&quot;</span>
 </pre></div>
 </div>
+<section id="opening-the-template-in-an-editor">
+<h4>Opening the template in an editor<a class="headerlink" href="#opening-the-template-in-an-editor" title="Link to this heading">¶</a></h4>
+<p>Brassy can open the newly created template in your text editor, just like
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> opens the commit message editor. This is controlled by the
+<code class="docutils literal notranslate"><span class="pre">auto_open_editor</span></code> setting (<code class="docutils literal notranslate"><span class="pre">false</span></code> by default). When set to <code class="docutils literal notranslate"><span class="pre">true</span></code>
+in your <code class="docutils literal notranslate"><span class="pre">.brassy</span></code> file, running <code class="docutils literal notranslate"><span class="pre">brassy</span> <span class="pre">-t</span></code> will create the template
+and immediately launch your editor on it.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .brassy</span>
+<span class="nt">auto_open_editor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>The editor is resolved in the following order (the first match wins):</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--editor</span></code> CLI flag.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">default_editor</span></code> setting in your <code class="docutils literal notranslate"><span class="pre">.brassy</span></code> file.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">VISUAL</span></code> environment variable.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> environment variable.</p></li>
+<li><p>Git’s <code class="docutils literal notranslate"><span class="pre">core.editor</span></code> configuration (<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">core.editor</span></code>).</p></li>
+<li><p>A platform default: <code class="docutils literal notranslate"><span class="pre">notepad</span></code> on Windows, <code class="docutils literal notranslate"><span class="pre">vi</span></code> elsewhere.</p></li>
+</ol>
+<p>You can override the editor for a single invocation with <code class="docutils literal notranslate"><span class="pre">--editor</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brassy<span class="w"> </span>-t<span class="w"> </span>release-note.yaml<span class="w"> </span>--editor<span class="w"> </span><span class="s2">&quot;code --wait&quot;</span>
+</pre></div>
+</div>
+<p>To suppress the editor for one invocation even when <code class="docutils literal notranslate"><span class="pre">auto_open_editor</span></code>
+is enabled, pass <code class="docutils literal notranslate"><span class="pre">--no-open</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brassy<span class="w"> </span>-t<span class="w"> </span>release-note.yaml<span class="w"> </span>--no-open
+</pre></div>
+</div>
+</section>
 <section id="generating-the-changed-files-via-git">
 <h4>Generating the changed files via <code class="docutils literal notranslate"><span class="pre">git</span></code><a class="headerlink" href="#generating-the-changed-files-via-git" title="Link to this heading">¶</a></h4>
 <p>You can run <code class="docutils literal notranslate"><span class="pre">brassy</span></code> with <code class="docutils literal notranslate"><span class="pre">--get-changed-files</span></code> (or <code class="docutils literal notranslate"><span class="pre">-c</span></code>)
 to output the files that have been
-modified, added, deleted or moved in the current branch as compared to the main
+modified, added, deleted or moved in the current branch as compared to the base
 branch. It runs on the current directory by default,
 but it accepts a path as an argument.</p>
+<p>By default brassy diffs against the first of <code class="docutils literal notranslate"><span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">master</span></code> or <code class="docutils literal notranslate"><span class="pre">trunk</span></code>
+that exists. Override this with the <code class="docutils literal notranslate"><span class="pre">--base-branch</span></code> flag or the
+<code class="docutils literal notranslate"><span class="pre">base_branch</span></code> setting in your <code class="docutils literal notranslate"><span class="pre">.brassy</span></code> file. If none of these branches
+exist and none is configured, brassy exits with an error naming what it tried.</p>
 <p>For example, the output looks like this:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">brassy --get-changed-files</span>
 
@@ -153,7 +199,7 @@ brassy<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<spa
 </pre></div>
 </div>
 <p>The output will be:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2025-10-27)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version [UNKNOWN] (2026-07-16)</span>
 <span class="gh">**************************</span>
 
  <span class="m">*</span> <span class="ge">*Bug fix*</span>: Fixed a bug
@@ -165,6 +211,8 @@ brassy<span class="w"> </span>-o<span class="w"> </span>new-release-note.rst<spa
 <span class="gh">-------------------------</span>
 
 This bug was really annoying
+
+
 
 <span class="se">::</span>
 
@@ -181,7 +229,7 @@ This bug was really annoying
 </pre></div>
 </div>
 <p>Which would output:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2025-10-27)</span>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Version 1.0.0 (2026-07-16)</span>
 <span class="gh">**************************</span>
 
  <span class="m">*</span> <span class="ge">*Bug fix*</span>: Fixed a bug
@@ -193,6 +241,8 @@ This bug was really annoying
 <span class="gh">-------------------------</span>
 
 This bug was really annoying
+
+
 
 <span class="se">::</span>
 
@@ -223,6 +273,8 @@ with the <code class="docutils literal notranslate"><span class="pre">-d</span><
 <span class="gh">-------------------------</span>
 
 This bug was really annoying
+
+
 
 <span class="se">::</span>
 
@@ -271,7 +323,7 @@ This software is released via the FAKE license.
 
 
 
-Version [UNKNOWN] (2025-10-27)
+Version [UNKNOWN] (2026-07-16)
 **************************
 
  * *Bug fix*: Fixed a bug
@@ -283,6 +335,8 @@ Fixed a bug
 -------------------------
 
 This bug was really annoying
+
+
 
 ::
 
@@ -325,7 +379,8 @@ once per entry and is intended to repeat.</p>
 <dt><code class="docutils literal notranslate"><span class="pre">entry</span></code></dt><dd><p>The detailed change descriptions. This section is split into two parts:
 <strong>category-level lines</strong> (rendered once per category) and <strong>entry-level
 lines</strong> (rendered once per entry). The split occurs at the first line
-containing <code class="docutils literal notranslate"><span class="pre">{title}</span></code>, <code class="docutils literal notranslate"><span class="pre">{description}</span></code>, or <code class="docutils literal notranslate"><span class="pre">{file_change}</span></code>.</p>
+containing <code class="docutils literal notranslate"><span class="pre">{title}</span></code>, <code class="docutils literal notranslate"><span class="pre">{description}</span></code>, <code class="docutils literal notranslate"><span class="pre">{file_change}</span></code>,
+<code class="docutils literal notranslate"><span class="pre">{issue}</span></code>, <code class="docutils literal notranslate"><span class="pre">{issue_number}</span></code>, or <code class="docutils literal notranslate"><span class="pre">{issue_url}</span></code>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">footer</span></code></dt><dd><p>Appended after all entries. Contains <code class="docutils literal notranslate"><span class="pre">{suffix_file}</span></code> which is replaced
 with the contents of the file passed via <code class="docutils literal notranslate"><span class="pre">--suffix-file</span></code>.</p>
@@ -367,6 +422,15 @@ with the contents of the file passed via <code class="docutils literal notransla
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">{release_date}</span></code></p></td>
 <td><p>Release date string</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">{issue}</span></code></p></td>
+<td><p>Formatted RST issue link (blank if none)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">{issue_number}</span></code></p></td>
+<td><p>Issue number formatted as <code class="docutils literal notranslate"><span class="pre">#N</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">{issue_url}</span></code></p></td>
+<td><p>Issue URL string (blank if none)</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -395,6 +459,8 @@ are category-level and which are entry-level in the <code class="docutils litera
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;-------------------------&quot;</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;{description}&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;{issue}&quot;</span><span class="w">            </span><span class="c1"># issue reference (per entry)</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;&quot;</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;::&quot;</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;&quot;</span>
@@ -436,11 +502,12 @@ logic may change in future releases without backward compatibility.</p>
 </pre></div>
 </div>
 <p>links the change “Delete repo upon push” to issue #999 on the linked linux repo.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Issue information isn’t rendered in generated release notes by default.
-You must (currently) change your release generation template to include
-issue info in your release notes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Issue information is rendered in the generated release notes using
+the <code class="docutils literal notranslate"><span class="pre">{issue}</span></code> template variable.  The <code class="docutils literal notranslate"><span class="pre">{issue_number}</span></code> and
+<code class="docutils literal notranslate"><span class="pre">{issue_url}</span></code> variables are also available if you need the raw
+values.  See the template variables table above.</p>
 </div>
 <section id="support-for-internal-repos">
 <h3>Support for Internal Repos<a class="headerlink" href="#support-for-internal-repos" title="Link to this heading">¶</a></h3>
@@ -512,9 +579,17 @@ Eg. <code class="docutils literal notranslate"><span class="pre">brassy</span> <
 </section>
 <section id="controlling-cli-output">
 <h2>Controlling CLI Output<a class="headerlink" href="#controlling-cli-output" title="Link to this heading">¶</a></h2>
-<p>You can turn off fancy formatting (colors, bold, etc.)
+<p>You can turn off fancy formatting (colors, bold, and every other ANSI escape)
 by using the <code class="docutils literal notranslate"><span class="pre">--no-color</span></code>/<code class="docutils literal notranslate"><span class="pre">-nc</span></code> flag.</p>
-<p>You can also turn off all non-error outputs by using the <code class="docutils literal notranslate"><span class="pre">--quiet</span></code> or <code class="docutils literal notranslate"><span class="pre">-q</span></code> flag.</p>
+<p>You can also turn off all non-error output by using the <code class="docutils literal notranslate"><span class="pre">--quiet</span></code> or <code class="docutils literal notranslate"><span class="pre">-q</span></code>
+flag. Errors are written to standard error and are always shown, even under
+<code class="docutils literal notranslate"><span class="pre">--quiet</span></code>, so a failing command is never silent. Output you explicitly ask
+for – <code class="docutils literal notranslate"><span class="pre">--output-to-console</span></code>, <code class="docutils literal notranslate"><span class="pre">--get-changed-files</span></code> and <code class="docutils literal notranslate"><span class="pre">--version</span></code> –
+is written to standard output and is likewise still shown under <code class="docutils literal notranslate"><span class="pre">--quiet</span></code>,
+which makes piping it into a file reliable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brassy</span> <span class="o">--</span><span class="n">quiet</span> <span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">console</span> <span class="n">notes</span><span class="o">.</span><span class="n">yaml</span> <span class="o">&gt;</span> <span class="n">release</span><span class="o">-</span><span class="n">notes</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
 </section>
 <section id="help">
 <h2>Help!<a class="headerlink" href="#help" title="Link to this heading">¶</a></h2>
@@ -523,7 +598,8 @@ by using the <code class="docutils literal notranslate"><span class="pre">--no-c
 </pre></div>
 </div>
 <p>Which outputs:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: brassy [-h] [-t [WRITE_YAML_TEMPLATE]] [-c [GET_CHANGED_FILES]]
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: brassy [-h] [-t [WRITE_YAML_TEMPLATE]] [--force] [--editor EDITOR]
+              [--no-open] [-c [GET_CHANGED_FILES]] [--base-branch BASE_BRANCH]
               [-r VERSION] [-d RELEASE_DATE] [-nc] [-p PREFIX_FILE]
               [-s SUFFIX_FILE] [-o OUTPUT_FILE] [-yd YAML_DIR]
               [--output-to-console] [-nr] [-q] [-pr] [--init] [--version]
@@ -542,16 +618,29 @@ Options:
   -t, --write-yaml-template [WRITE_YAML_TEMPLATE]
                         Write template YAML to provided file. If folder
                         provided, place template in folder with current git
-                        branch name as file name.
+                        branch name as file name. Existing files are not
+                        overwritten unless --force is passed.
+  --force               Overwrite the target file when writing a YAML
+                        template.
+  --editor EDITOR       Editor command to open the created template with
+                        (overrides the &#39;default_editor&#39; setting, $VISUAL,
+                        $EDITOR and git&#39;s core.editor).
+  --no-open             Do not open the template in an editor, even when the
+                        &#39;auto_open_editor&#39; setting is enabled.
   -c, --get-changed-files [GET_CHANGED_FILES]
-                        Print git tracked file changes against main. If
-                        directory provided, use that directories checked-out
-                        branch.
+                        Print git tracked file changes against the base
+                        branch. If directory provided, use that directories
+                        checked-out branch.
+  --base-branch BASE_BRANCH
+                        Branch to diff against for --get-changed-files
+                        (overrides the &#39;base_branch&#39; setting). Defaults to
+                        trying main, master, then trunk.
   -r, --release-version VERSION
                         Version number of the release. Default is &#39;[UNKNOWN]&#39;.
   -d, --release-date RELEASE_DATE
                         Date of the release. Default is current system time.
-  -nc, --no-color       Disable text formatting for CLI output.
+  -nc, --no-color       Disable colors and other ANSI formatting in CLI
+                        output.
   -p, --prefix-file PREFIX_FILE
                         A header file to prepend to the release notes.
   -s, --suffix-file SUFFIX_FILE

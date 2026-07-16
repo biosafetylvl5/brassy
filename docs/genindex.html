@@ -42,6 +42,7 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -60,16 +61,29 @@
       <li><a href="api.html#brassy.templates.release_yaml_template.Files.added">added (brassy.templates.release_yaml_template.Files attribute)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.auto_open_editor">auto_open_editor (brassy.templates.settings_template.SettingsTemplate attribute)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.base_branch">base_branch (brassy.templates.settings_template.SettingsTemplate attribute)</a>
+</li>
       <li>
     brassy.actions.build_release_notes
 
       <ul>
         <li><a href="api.html#module-brassy.actions.build_release_notes">module</a>
+</li>
+      </ul></li>
+      <li>
+    brassy.actions.create_note
+
+      <ul>
+        <li><a href="api.html#module-brassy.actions.create_note">module</a>
 </li>
       </ul></li>
       <li>
@@ -117,6 +131,13 @@
 </li>
       </ul></li>
       <li>
+    brassy.utils.editor_handler
+
+      <ul>
+        <li><a href="api.html#module-brassy.utils.editor_handler">module</a>
+</li>
+      </ul></li>
+      <li>
     brassy.utils.file_handler
 
       <ul>
@@ -144,6 +165,13 @@
         <li><a href="api.html#module-brassy.utils.settings_manager">module</a>
 </li>
       </ul></li>
+      <li>
+    brassy.utils.yaml_handler
+
+      <ul>
+        <li><a href="api.html#module-brassy.utils.yaml_handler">module</a>
+</li>
+      </ul></li>
       <li><a href="api.html#brassy.actions.build_release_notes.build_release_notes">build_release_notes() (in module brassy.actions.build_release_notes)</a>
 </li>
   </ul></td>
@@ -158,6 +186,8 @@
 </li>
       <li><a href="api.html#brassy.templates.release_yaml_template.Files.check_at_least_one_field">check_at_least_one_field() (brassy.templates.release_yaml_template.Files method)</a>
 </li>
+      <li><a href="api.html#brassy.utils.yaml_handler.UniqueKeySafeLoader.construct_mapping">construct_mapping() (brassy.utils.yaml_handler.UniqueKeySafeLoader method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.templates.release_yaml_template.RelatedIssue.convert_empty_to_none">convert_empty_to_none() (brassy.templates.release_yaml_template.RelatedIssue class method)</a>
@@ -165,6 +195,8 @@
       <li><a href="api.html#brassy.utils.file_handler.create_blank_template_yaml_file">create_blank_template_yaml_file() (in module brassy.utils.file_handler)</a>
 </li>
       <li><a href="api.html#brassy.utils.settings_manager.create_config_file">create_config_file() (in module brassy.utils.settings_manager)</a>
+</li>
+      <li><a href="api.html#brassy.actions.create_note.create_note">create_note() (in module brassy.actions.create_note)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -177,6 +209,8 @@
       <li><a href="api.html#brassy.templates.release_yaml_template.DateRange">DateRange (class in brassy.templates.release_yaml_template)</a>
 </li>
       <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.default_description">default_description (brassy.templates.settings_template.SettingsTemplate attribute)</a>
+</li>
+      <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.default_editor">default_editor (brassy.templates.settings_template.SettingsTemplate attribute)</a>
 </li>
       <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.default_title">default_title (brassy.templates.settings_template.SettingsTemplate attribute)</a>
 </li>
@@ -192,13 +226,15 @@
 </li>
       <li><a href="api.html#brassy.actions.prune_yaml.direct_pruning_of_files">direct_pruning_of_files() (in module brassy.actions.prune_yaml)</a>
 </li>
+      <li><a href="api.html#brassy.utils.yaml_handler.DuplicateKeyError">DuplicateKeyError</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none">empty_str_to_none() (brassy.templates.release_yaml_template.ChangeItem method)</a>
+      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none">empty_str_to_none() (brassy.templates.release_yaml_template.ChangeItem class method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -291,12 +327,24 @@
   </ul></td>
 </tr></table>
 
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.utils.editor_handler.launch_editor">launch_editor() (in module brassy.utils.editor_handler)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.utils.yaml_handler.load_yaml">load_yaml() (in module brassy.utils.yaml_handler)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.utils.settings_manager.merge_and_validate_config_files">merge_and_validate_config_files() (in module brassy.utils.settings_manager)</a>
 </li>
-      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.model_config">model_config (brassy.templates.release_yaml_template.ChangeItem attribute)</a>
+      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.model_config">model_config (brassy.templates.release_yaml_template.ChangeItem attribute)</a>, <a href="api.html#id3">[1]</a>
 
       <ul>
         <li><a href="api.html#brassy.templates.release_yaml_template.DateRange.model_config">(brassy.templates.release_yaml_template.DateRange attribute)</a>
@@ -322,6 +370,8 @@
       <ul>
         <li><a href="api.html#module-brassy.actions.build_release_notes">brassy.actions.build_release_notes</a>
 </li>
+        <li><a href="api.html#module-brassy.actions.create_note">brassy.actions.create_note</a>
+</li>
         <li><a href="api.html#module-brassy.actions.init">brassy.actions.init</a>
 </li>
         <li><a href="api.html#module-brassy.actions.prune_yaml">brassy.actions.prune_yaml</a>
@@ -334,6 +384,8 @@
 </li>
         <li><a href="api.html#module-brassy.utils.CLI">brassy.utils.CLI</a>
 </li>
+        <li><a href="api.html#module-brassy.utils.editor_handler">brassy.utils.editor_handler</a>
+</li>
         <li><a href="api.html#module-brassy.utils.file_handler">brassy.utils.file_handler</a>
 </li>
         <li><a href="api.html#module-brassy.utils.git_handler">brassy.utils.git_handler</a>
@@ -341,6 +393,8 @@
         <li><a href="api.html#module-brassy.utils.messages">brassy.utils.messages</a>
 </li>
         <li><a href="api.html#module-brassy.utils.settings_manager">brassy.utils.settings_manager</a>
+</li>
+        <li><a href="api.html#module-brassy.utils.yaml_handler">brassy.utils.yaml_handler</a>
 </li>
       </ul></li>
   </ul></td>
@@ -361,6 +415,10 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.utils.editor_handler.open_file_in_editor">open_file_in_editor() (in module brassy.utils.editor_handler)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.utils.settings_manager.override_dict_with_environmental_variables">override_dict_with_environmental_variables() (in module brassy.utils.settings_manager)</a>
 </li>
   </ul></td>
@@ -372,6 +430,8 @@
       <li><a href="api.html#brassy.utils.CLI.parse_arguments">parse_arguments() (in module brassy.utils.CLI)</a>
 </li>
       <li><a href="api.html#brassy.templates.release_yaml_template.DateRange.parse_date">parse_date() (brassy.templates.release_yaml_template.DateRange class method)</a>
+</li>
+      <li><a href="api.html#brassy.utils.messages.payload_print">payload_print() (in module brassy.utils.messages)</a>
 </li>
       <li><a href="api.html#brassy.templates.settings_template.ReleaseTemplate.Config.populate_by_name">populate_by_name (brassy.templates.settings_template.ReleaseTemplate.Config attribute)</a>
 </li>
@@ -395,7 +455,7 @@
 </li>
       <li><a href="api.html#brassy.utils.file_handler.read_yaml_files">read_yaml_files() (in module brassy.utils.file_handler)</a>
 </li>
-      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.related_issue">related_issue (brassy.templates.release_yaml_template.ChangeItem attribute)</a>, <a href="api.html#id3">[1]</a>
+      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.related_issue">related_issue (brassy.templates.release_yaml_template.ChangeItem attribute)</a>, <a href="api.html#id4">[1]</a>
 </li>
       <li><a href="api.html#brassy.templates.release_yaml_template.RelatedInternalIssue">RelatedInternalIssue (class in brassy.templates.release_yaml_template)</a>
 </li>
@@ -412,6 +472,8 @@
       <li><a href="api.html#brassy.templates.settings_template.ReleaseTemplate.Config">ReleaseTemplate.Config (class in brassy.templates.settings_template)</a>
 </li>
       <li><a href="api.html#brassy.templates.release_yaml_template.RelatedIssue.repo_url">repo_url (brassy.templates.release_yaml_template.RelatedIssue attribute)</a>
+</li>
+      <li><a href="api.html#brassy.utils.editor_handler.resolve_editor">resolve_editor() (in module brassy.utils.editor_handler)</a>
 </li>
       <li><a href="api.html#brassy.brassy.run_from_CLI">run_from_CLI() (in module brassy.brassy)</a>
 
@@ -435,6 +497,8 @@
 </li>
       <li><a href="api.html#brassy.templates.release_yaml_template.DateRange.start">start (brassy.templates.release_yaml_template.DateRange attribute)</a>
 </li>
+      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.strip_whitespace_to_none">strip_whitespace_to_none() (brassy.templates.release_yaml_template.ChangeItem class method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -445,13 +509,17 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.title">title (brassy.templates.release_yaml_template.ChangeItem attribute)</a>, <a href="api.html#id4">[1]</a>
+      <li><a href="api.html#brassy.templates.release_yaml_template.ChangeItem.title">title (brassy.templates.release_yaml_template.ChangeItem attribute)</a>, <a href="api.html#id5">[1]</a>
 </li>
   </ul></td>
 </tr></table>
 
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.utils.yaml_handler.UniqueKeySafeLoader">UniqueKeySafeLoader (class in brassy.utils.yaml_handler)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.templates.settings_template.SettingsTemplate.use_color">use_color (brassy.templates.settings_template.SettingsTemplate attribute)</a>
 </li>
@@ -476,6 +544,10 @@
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#brassy.actions.build_release_notes.warn_on_missing_entry_fields">warn_on_missing_entry_fields() (in module brassy.actions.build_release_notes)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#brassy.utils.file_handler.write_output_file">write_output_file() (in module brassy.utils.file_handler)</a>
 </li>
