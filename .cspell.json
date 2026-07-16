@@ -23,7 +23,7 @@
     // Glob patterns for files and folders to ignore globally
     "ignorePaths": [
         // Project specific
-        "sphinx/source/api#",
+        "sphinx/source/api*",
         ".gitignore",
         // Common VCS/Dev environment folders
         "**/.env/**",
