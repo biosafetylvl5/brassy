@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date as Date  # noqa N812
-from typing import Any, Dict, List  # noqa: UP035
+from typing import Any
 
 import dateparser
 from pydantic import (
@@ -28,10 +28,10 @@ class InvalidDateValueError(ValueError):
 class Files(BaseModel):
     """Files model for validating files impacted in the changelog."""
 
-    deleted: List[str] = []  # noqa: UP006
-    moved: List[str] = []  # noqa: UP006
-    added: List[str] = []  # noqa: UP006
-    modified: List[str] = []  # noqa: UP006
+    deleted: list[str] = []
+    moved: list[str] = []
+    added: list[str] = []
+    modified: list[str] = []
 
     @model_validator(mode="after")
     def check_at_least_one_field(self) -> Files:
@@ -54,7 +54,7 @@ class RelatedInternalIssue(BaseModel):
 class RelatedIssue(BaseModel):
     """Pydantic class for validating related issue (eg. GitHub issue)."""
 
-    number: int | List[int] | None = None  # noqa: UP006
+    number: int | list[int] | None = None
     repo_url: HttpUrl | None = None
 
     @field_validator("repo_url", mode="before")
@@ -188,7 +188,7 @@ class ChangeItem(BaseModel):
         return self
 
 
-class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):  # noqa: UP006
+class ReleaseNote(RootModel[dict[str, list[ChangeItem]]]):
     """ReleaseNote is a root model for Release Notes.
 
     It contains a dictionary that maps category names to lists of ChangeItems.

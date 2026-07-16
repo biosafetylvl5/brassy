@@ -1,43 +1,44 @@
 """Build release note output."""
 
-# ruff: noqa: UP006, UP035, UP045
-
 from __future__ import annotations
 
 import sys
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any
 
 import brassy
 from brassy.brassy import Settings
 from brassy.utils.messages import RichConsole as console  # noqa: N813
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 
 def get_header_footer(
     rich_open: Callable[..., Any],
-    header_file: Optional[str] = None,
-    footer_file: Optional[str] = None,
-) -> Tuple[Optional[str], Optional[str]]:
+    header_file: str | None = None,
+    footer_file: str | None = None,
+) -> tuple[str | None, str | None]:
     """Read optional header and footer content.
 
     Parameters
     ----------
     rich_open : Callable[..., Any]
         Context manager factory for reading files.
-    header_file : Optional[str]
+    header_file : str | None
         Path to header file.
-    footer_file : Optional[str]
+    footer_file : str | None
         Path to footer file.
 
     Returns
     -------
-    Optional[str]
+    str | None
         Header content or None.
-    Optional[str]
+    str | None
         Footer content or None.
     """
 
-    def get_file(file: Optional[str]) -> Optional[str]:
+    def get_file(file: str | None) -> str | None:
         if not file:
             return None
         with rich_open(file, "r", description=f"Reading {file}") as open_file:
@@ -47,13 +48,13 @@ def get_header_footer(
 
 
 def find_duplicate_titles(
-    data: Dict[str, List[Dict[str, Any]]],
+    data: dict[str, list[dict[str, Any]]],
 ) -> bool:
     """Detect duplicate titles across changelog entries.
 
     Parameters
     ----------
-    data : Dict[str, List[Dict[str, Any]]]
+    data : dict[str, list[dict[str, Any]]]
         Mapping of categories to lists of changelog entries.
 
     Returns
@@ -67,7 +68,7 @@ def find_duplicate_titles(
 
 def format_files_changed_entry(
     detailed: bool,  # noqa: ARG001 TODO: Fix this unused arg
-    entry: Dict[str, Any],
+    entry: dict[str, Any],
 ) -> str:
     """Format an RST block describing changed files for an entry.
 
@@ -75,7 +76,7 @@ def format_files_changed_entry(
     ----------
     detailed : bool
         Unused flag kept for compatibility.
-    entry : Dict[str, Any]
+    entry : dict[str, Any]
         Changelog entry containing file changes.
 
     Returns
@@ -95,17 +96,17 @@ def format_files_changed_entry(
 
 
 def generate_file_change_section_list_of_strings(
-    entry: Dict[str, Any],
+    entry: dict[str, Any],
     line: str,
     category: str,
     title: str,
     description: str,
-) -> List[str]:
+) -> list[str]:
     """Create file-specific section lines for a changelog entry.
 
     Parameters
     ----------
-    entry : Dict[str, Any]
+    entry : dict[str, Any]
         Changelog entry with file change data.
     line : str
         Template string for the section line.
@@ -118,7 +119,7 @@ def generate_file_change_section_list_of_strings(
 
     Returns
     -------
-    List[str]
+    list[str]
         Section lines formatted per file change.
     """
     lines = []
@@ -156,8 +157,8 @@ _ENTRY_KEYWORDS = (*_ENTRY_BODY_KEYWORDS, "{file}", "{change_type}")
 
 
 def _split_template_lines(
-    section_lines: List[str],
-) -> Tuple[List[str], List[str]]:
+    section_lines: list[str],
+) -> tuple[list[str], list[str]]:
     """Split template lines into category-level and entry-level parts.
 
     The split occurs at the first line that contains {title}, {description},
@@ -167,14 +168,14 @@ def _split_template_lines(
 
     Parameters
     ----------
-    section_lines : List[str]
+    section_lines : list[str]
         Template lines for a section.
 
     Returns
     -------
-    List[str]
+    list[str]
         Category-level template lines.
-    List[str]
+    list[str]
         Entry-level template lines.
     """
     for i, line in enumerate(section_lines):
@@ -184,28 +185,28 @@ def _split_template_lines(
 
 
 def generate_section_string(  # noqa: PLR0913,PLR0912 TODO: Fix complexity of this function
-    section_lines: List[str],
-    changelog_entries: Dict[str, List[Dict[str, Any]]],
+    section_lines: list[str],
+    changelog_entries: dict[str, list[dict[str, Any]]],
     release_date: str,
     version: str,
-    footer: Optional[str],
-    header: Optional[str],
+    footer: str | None,
+    header: str | None,
 ) -> str:
     """Render a changelog section from templates and entries.
 
     Parameters
     ----------
-    section_lines : List[str]
+    section_lines : list[str]
         Template lines for the section.
-    changelog_entries : Dict[str, List[Dict[str, Any]]]
+    changelog_entries : dict[str, list[dict[str, Any]]]
         Mapping of categories to changelog entries.
     release_date : str
         Release date string.
     version : str
         Release version string.
-    footer : Optional[str]
+    footer : str | None
         Footer content appended to templates.
-    header : Optional[str]
+    header : str | None
         Header content prepended to templates.
 
     Returns
@@ -266,25 +267,25 @@ def generate_section_string(  # noqa: PLR0913,PLR0912 TODO: Fix complexity of th
 
 
 def format_release_notes(
-    data: Dict[str, List[Dict[str, Any]]],
-    version: Optional[str],
-    release_date: Optional[str] = None,
-    header: Optional[str] = None,
-    footer: Optional[str] = None,
+    data: dict[str, list[dict[str, Any]]],
+    version: str | None,
+    release_date: str | None = None,
+    header: str | None = None,
+    footer: str | None = None,
 ) -> str:
     """Generate release notes content from parsed changelog data.
 
     Parameters
     ----------
-    data : Dict[str, List[Dict[str, Any]]]
+    data : dict[str, list[dict[str, Any]]]
         Parsed changelog entries grouped by category.
-    version : Optional[str]
+    version : str | None
         Release version string.
-    release_date : Optional[str]
+    release_date : str | None
         Release date override in ISO format. Defaults to today's date.
-    header : Optional[str]
+    header : str | None
         Optional header content.
-    footer : Optional[str]
+    footer : str | None
         Optional footer content.
 
     Returns
@@ -328,32 +329,32 @@ def format_release_notes(
 
 
 def build_release_notes(  # noqa PLR0913
-    input_files_or_folders: List[str],
+    input_files_or_folders: list[str],
     console: Any,
     rich_open: Callable[..., Any],
-    version: Optional[str] = None,
-    release_date: Optional[str] = None,
-    header_file: Optional[str] = None,
-    footer_file: Optional[str] = None,
+    version: str | None = None,
+    release_date: str | None = None,
+    header_file: str | None = None,
+    footer_file: str | None = None,
     working_dir: str = ".",
 ) -> str:
     """Build release notes by reading YAML files and templates.
 
     Parameters
     ----------
-    input_files_or_folders : List[str]
+    input_files_or_folders : list[str]
         CLI-supplied file or directory paths.
     console : Any
         Console for user feedback.
     rich_open : Callable[..., Any]
         Context manager factory for reading files.
-    version : Optional[str]
+    version : str | None
         Release version string.
-    release_date : Optional[str]
+    release_date : str | None
         Release date override in ISO format.
-    header_file : Optional[str]
+    header_file : str | None
         Path to an optional header file.
-    footer_file : Optional[str]
+    footer_file : str | None
         Path to an optional footer file.
     working_dir : str
         Base directory for relative paths.

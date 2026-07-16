@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Union  # noqa: UP035
+from typing import Any
 
 import platformdirs
 import pygit2
@@ -90,7 +90,7 @@ def get_site_config_file_path(app_name: str) -> Path:
     return Path(platformdirs.site_config_dir(app_name)) / "site.config"
 
 
-def get_config_files(app_name: str) -> List[Path]:  # noqa: UP006
+def get_config_files(app_name: str) -> list[Path]:
     """
     Get configuration file paths in increasing precedence.
 
@@ -134,9 +134,9 @@ def create_config_file(config_file: Path) -> None:
 
 
 def read_config_file(
-    config_file: Union[Path, str],  # noqa: UP007
+    config_file: Path | str,
     create_file_if_not_exist: bool = False,
-) -> Dict[str, Any]:  # noqa: UP006
+) -> dict[str, Any]:
     """
     Read and parse a YAML configuration file.
 
@@ -165,8 +165,8 @@ def read_config_file(
 
 
 def merge_and_validate_config_files(
-    config_files: List[Path],  # noqa: UP006
-) -> Dict[str, Any]:  # noqa: UP006
+    config_files: list[Path],
+) -> dict[str, Any]:
     """
     Merge settings from multiple config files and validate them.
 
@@ -199,7 +199,7 @@ def merge_and_validate_config_files(
     return settings
 
 
-def get_settings_from_config_files(app_name: str) -> Dict[str, Any]:  # noqa: UP006
+def get_settings_from_config_files(app_name: str) -> dict[str, Any]:
     """
     Retrieve settings from configuration files without env overrides.
 
@@ -217,8 +217,8 @@ def get_settings_from_config_files(app_name: str) -> Dict[str, Any]:  # noqa: UP
 
 
 def override_dict_with_environmental_variables(
-    input_dict: Dict[str, Any],  # noqa: UP006
-) -> Dict[str, Any]:  # noqa: UP006
+    input_dict: dict[str, Any],
+) -> dict[str, Any]:
     """Override dict values with case insensitive environment variables when available.
 
     Parameters
