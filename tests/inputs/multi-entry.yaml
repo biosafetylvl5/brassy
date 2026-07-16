@@ -1,0 +1,65 @@
+bug fix:
+- title: 'Fixed crash on app startup'
+  description: |
+    The app no longer crashes when started with no arguments.
+  files:
+    deleted: []
+    moved: []
+    added: []
+    modified:
+    - 'src/startup.py'
+  related-issue:
+    number: 100
+    repo_url: 'https://github.com/example/repo/issues/100'
+  date:
+    start: '2024-01-15'
+    finish: '2024-01-16'
+- title: 'Fixed off-by-one in parser'
+  description: |
+    Loop bound corrected in the YAML parser.
+  files:
+    deleted: []
+    moved: []
+    added: []
+    modified:
+    - 'src/parser.py'
+  related-issue:
+    number: 101
+    repo_url: 'https://github.com/example/repo/issues/101'
+  date:
+    start: '2024-01-17'
+    finish: '2024-01-18'
+
+enhancement:
+- title: 'Added dark mode'
+  description: |
+    Users can now switch to a dark color scheme.
+  files:
+    deleted: []
+    moved: []
+    added:
+    - 'src/themes/dark.py'
+    modified:
+    - 'src/main.py'
+  related-issue:
+    number: 200
+    repo_url: 'https://github.com/example/repo/issues/200'
+  date:
+    start: '2024-02-01'
+    finish: '2024-02-05'
+- title: 'Added export to JSON'
+  description: |
+    Release notes can now be exported in JSON format.
+  files:
+    deleted: []
+    moved: []
+    added:
+    - 'src/export/json.py'
+    modified:
+    - 'src/export/__init__.py'
+  related-issue:
+    number: 201
+    repo_url: 'https://github.com/example/repo/issues/201'
+  date:
+    start: '2024-02-06'
+    finish: '2024-02-10'

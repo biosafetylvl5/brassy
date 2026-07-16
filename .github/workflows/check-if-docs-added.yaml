@@ -28,8 +28,9 @@ jobs:
 
       # This step checks if any modified release notes contain keys indicating a 
       # feature, enhancement, or deprecation. 
-      # If such keys are found, it enforces that at least one documentation (.rst) file within the 
-      # docs/ directory must also be modified in the same pull request, failing the check otherwise.
+      # If such keys are found, it enforces that at least one documentation file
+      # under docs/ or sphinx/source/ must also be modified in the same pull
+      # request, failing the check otherwise.
       # Aka.... if there is a new feature OR a deprecation the docs MUST be edited in some way.
       - name: Check release notes for feature changes, and then require docs updates if found
         env:
@@ -40,7 +41,7 @@ jobs:
           KEYS=("feature" "enhancement" "deprecation")
           CHANGED_FILES=$(git diff --name-only "$commit_hash" HEAD)
           CHANGED_FEATURE_FILES=$(echo "${CHANGED_FILES}" | grep '^sphinx/source/releases/latest/.*\.yaml$' || true) # Get release note changes
-          CHANGED_DOC_FILES=$(echo "${CHANGED_FILES}" | grep '^docs/.*\.rst$' || true) # Get changed rst files in docs
+          CHANGED_DOC_FILES=$(echo "${CHANGED_FILES}" | grep -E '^(docs/|sphinx/source/.*\.rst$)' || true) # Get changed docs and RST sources
       
           if [ -z "${CHANGED_FEATURE_FILES}" ]; then
             echo "No YAML files in 'sphinx/source/releases/latest/' were changed. Skipping doc check."
@@ -61,7 +62,7 @@ jobs:
     
             if [ "$KEY_FOUND" = true ]; then
               if [ -z "${CHANGED_DOC_FILES}" ]; then
-                echo "Error: The file '$file' contains a top-level key from [${KEYS[*]}], but no .rst documentation was modified in 'docs/'."
+                echo "Error: The file '$file' contains a top-level key from [${KEYS[*]}], but no documentation was modified in 'docs/' or 'sphinx/source/'."
                 echo "Please update the relevant .rst documentation in 'docs/' to document your changes."
                 exit 1
               fi

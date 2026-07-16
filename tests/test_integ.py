@@ -53,7 +53,7 @@ def test_help(monkeypatch):  # noqa: ARG001
 @pytest.mark.integration
 @pytest.mark.parametrize(
     "input_file",
-    ["barebones", "mostly-featured", "fully-featured", "real-world"],
+    ["barebones", "mostly-featured", "fully-featured", "real-world", "multi-entry"],
 )
 def test_build_on_test_files(input_file):
     """Build outputs for predefined test inputs.
@@ -113,6 +113,7 @@ def test_pruning():
         assert list(to_prune.open()) == list(
             (valid_outputs_path / "pruned.yaml").open(),
         )
+
 
 def test_template_output():
     """Test outputting a template file.

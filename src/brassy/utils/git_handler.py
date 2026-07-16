@@ -1,31 +1,43 @@
 """Handle Git-related functionality."""
+
+from __future__ import annotations
+
 import string
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 import pygit2
 
 
-def get_git_status(repo_path="."):
+def get_git_status(repo_path: str = ".") -> dict[str, list[Any]]:
     """
     Retrieve the status of files in the specified Git repository.
 
     Parameters
     ----------
-    repo_path : str, optional
+    repo_path : str
         The path to the Git repository. Defaults to the current directory.
 
     Returns
     -------
-    dict
+    dict[str, list[Any]]
         A dictionary with the following keys:
 
-        - 'added': list of str
+        - added : list of str
             List of file paths for files that have been added.
-        - 'modified': list of str
+        - modified : list of str
             List of file paths for files that have been modified.
-        - 'deleted': list of str
+        - deleted : list of str
             List of file paths for files that have been deleted.
-        - 'renamed': list of str
-            List of file paths for files that have been renamed.
+        - moved : list of tuple
+            List of (old_path, new_path) tuples for renamed files.
+
+    Raises
+    ------
+    pygit2.GitError
+        If the repository path is not a git repository or does not have a HEAD.
     """
     # Open the repository
     repo = pygit2.Repository(repo_path)
@@ -74,8 +86,19 @@ def get_git_status(repo_path="."):
     }
 
 
-def print_out_git_changed_files(print_function, repo_path="."):
-    """Print out changes as detected by Git in format Brassy expects in changlogs."""
+def print_out_git_changed_files(
+    print_function: Callable[[str], None], repo_path: str = ".",
+) -> None:
+    """
+    Print out changes as detected by Git in format Brassy expects in changlogs.
+
+    Parameters
+    ----------
+    print_function : Callable[[str], None]
+        A callable that takes a string and prints it.
+    repo_path : str
+        The path to the Git repository. Defaults to the current directory.
+    """
     status = get_git_status(repo_path=repo_path)
     for entry in status:
         print_function(f"    {entry}:")
@@ -83,13 +106,13 @@ def print_out_git_changed_files(print_function, repo_path="."):
             print_function(f"    - '{file}'")
 
 
-def get_current_git_branch(sanitize=True):
+def get_current_git_branch(sanitize: bool = True) -> str:
     """
     Get the current dirs git branch name.
 
     Parameters
     ----------
-    sanitize : bool, optional
+    sanitize : bool
         If True, sanitize branch name as a valid file name before returning.
 
     Returns

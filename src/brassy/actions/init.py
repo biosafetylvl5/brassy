@@ -1,19 +1,17 @@
 """Initialize brassy with config file."""
 
+from __future__ import annotations
+
 import brassy
 from brassy.brassy import Settings
 
 
-def init():
+def init() -> None:
     """
     Initialize configuration files for the application.
 
     This function creates site and user configuration files, and optionally
     a project configuration file based on user input.
-
-    Returns
-    -------
-    None
 
     Examples
     --------

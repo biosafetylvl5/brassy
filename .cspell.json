@@ -14,6 +14,7 @@
         "Unagi",
         "Kyoshi",
         "unagi",
+        "integ",
     ],
     // --- File/Folder Exclusions ---
     // Glob patterns for files and folders to ignore globally
@@ -40,9 +41,12 @@
         // Build artifacts
         "**/build/**",
         "**/dist/**",
-        "**/docs/_build/**", // Sphinx build output
+        "**/docs/**", // Sphinx build output
         "**/htmlcov/**", // Coverage reports
         ".pytest_cache/**",
+        "docs/_modules/**",
+        "docs/_static/**",
+        "docs/_sources/**",
         // Data / Assets (adjust patterns as needed)
         "**/test/**",
         // Lock files and logs
