@@ -101,7 +101,7 @@ def get_config_files(app_name: str) -> list[Path]:
 
     Returns
     -------
-    List[Path]
+    list[Path]
         List of configuration file paths. Site, user, then project.
     """
     config_files = []
@@ -142,14 +142,14 @@ def read_config_file(
 
     Parameters
     ----------
-    config_file : Union[Path, str]
+    config_file : Path | str
         Path to the configuration file.
     create_file_if_not_exist : bool
         Creates file if it doesn't exist
 
     Returns
     -------
-    Dict[str, Any]
+    dict[str, Any]
         Parsed configuration settings as a dictionary.
     """
     config_file = Path(config_file)
@@ -172,12 +172,12 @@ def merge_and_validate_config_files(
 
     Parameters
     ----------
-    config_files : List[Path]
+    config_files : list[Path]
         Paths to configuration files. Later files override earlier ones.
 
     Returns
     -------
-    Dict[str, Any]
+    dict[str, Any]
         Merged and validated configuration settings.
 
     Raises
@@ -210,7 +210,7 @@ def get_settings_from_config_files(app_name: str) -> dict[str, Any]:
 
     Returns
     -------
-    Dict[str, Any]
+    dict[str, Any]
         Configuration settings merged from files.
     """
     return merge_and_validate_config_files(get_config_files(app_name))
@@ -223,12 +223,12 @@ def override_dict_with_environmental_variables(
 
     Parameters
     ----------
-    input_dict : Dict[str, Any]
+    input_dict : dict[str, Any]
         Original settings dictionary.
 
     Returns
     -------
-    Dict[str, Any]
+    dict[str, Any]
         Updated settings dictionary with environment variable overrides.
     """
     env_vars = dict(os.environ)

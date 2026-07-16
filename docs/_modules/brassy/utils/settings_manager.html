@@ -37,7 +37,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>  <span class="c1"># noqa: UP035</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">platformdirs</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pygit2</span>
@@ -137,7 +137,7 @@
 
 <div class="viewcode-block" id="get_config_files">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.settings_manager.get_config_files">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_config_files</span><span class="p">(</span><span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>  <span class="c1"># noqa: UP006</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_config_files</span><span class="p">(</span><span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get configuration file paths in increasing precedence.</span>
 
@@ -148,7 +148,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    List[Path]</span>
+<span class="sd">    list[Path]</span>
 <span class="sd">        List of configuration file paths. Site, user, then project.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">config_files</span> <span class="o">=</span> <span class="p">[]</span>
@@ -187,22 +187,22 @@
 <div class="viewcode-block" id="read_config_file">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.settings_manager.read_config_file">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_config_file</span><span class="p">(</span>
-    <span class="n">config_file</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>  <span class="c1"># noqa: UP007</span>
+    <span class="n">config_file</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">create_file_if_not_exist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># noqa: UP006</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read and parse a YAML configuration file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    config_file : Union[Path, str]</span>
+<span class="sd">    config_file : Path | str</span>
 <span class="sd">        Path to the configuration file.</span>
 <span class="sd">    create_file_if_not_exist : bool</span>
 <span class="sd">        Creates file if it doesn&#39;t exist</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Dict[str, Any]</span>
+<span class="sd">    dict[str, Any]</span>
 <span class="sd">        Parsed configuration settings as a dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">config_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
@@ -221,19 +221,19 @@
 <div class="viewcode-block" id="merge_and_validate_config_files">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.settings_manager.merge_and_validate_config_files">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">merge_and_validate_config_files</span><span class="p">(</span>
-    <span class="n">config_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>  <span class="c1"># noqa: UP006</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># noqa: UP006</span>
+    <span class="n">config_files</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Merge settings from multiple config files and validate them.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    config_files : List[Path]</span>
+<span class="sd">    config_files : list[Path]</span>
 <span class="sd">        Paths to configuration files. Later files override earlier ones.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Dict[str, Any]</span>
+<span class="sd">    dict[str, Any]</span>
 <span class="sd">        Merged and validated configuration settings.</span>
 
 <span class="sd">    Raises</span>
@@ -258,7 +258,7 @@
 
 <div class="viewcode-block" id="get_settings_from_config_files">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.settings_manager.get_settings_from_config_files">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_settings_from_config_files</span><span class="p">(</span><span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># noqa: UP006</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_settings_from_config_files</span><span class="p">(</span><span class="n">app_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Retrieve settings from configuration files without env overrides.</span>
 
@@ -269,7 +269,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Dict[str, Any]</span>
+<span class="sd">    dict[str, Any]</span>
 <span class="sd">        Configuration settings merged from files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">merge_and_validate_config_files</span><span class="p">(</span><span class="n">get_config_files</span><span class="p">(</span><span class="n">app_name</span><span class="p">))</span></div>
@@ -279,18 +279,18 @@
 <div class="viewcode-block" id="override_dict_with_environmental_variables">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.settings_manager.override_dict_with_environmental_variables">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">override_dict_with_environmental_variables</span><span class="p">(</span>
-    <span class="n">input_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>  <span class="c1"># noqa: UP006</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># noqa: UP006</span>
+    <span class="n">input_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Override dict values with case insensitive environment variables when available.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    input_dict : Dict[str, Any]</span>
+<span class="sd">    input_dict : dict[str, Any]</span>
 <span class="sd">        Original settings dictionary.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Dict[str, Any]</span>
+<span class="sd">    dict[str, Any]</span>
 <span class="sd">        Updated settings dictionary with environment variable overrides.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">env_vars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>

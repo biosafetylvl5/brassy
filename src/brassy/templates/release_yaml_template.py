@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date as Date  # noqa N812
-from typing import Any
+from typing import Any, Dict, List  # noqa: UP035
 
 import dateparser
 from pydantic import (
@@ -188,7 +188,7 @@ class ChangeItem(BaseModel):
         return self
 
 
-class ReleaseNote(RootModel[dict[str, list[ChangeItem]]]):
+class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):  # noqa: UP006
     """ReleaseNote is a root model for Release Notes.
 
     It contains a dictionary that maps category names to lists of ChangeItems.

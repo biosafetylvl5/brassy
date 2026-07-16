@@ -44,6 +44,9 @@
         "**/docs/_build/**", // Sphinx build output
         "**/htmlcov/**", // Coverage reports
         ".pytest_cache/**",
+        "docs/_modules/**",
+        "docs/_static/**",
+        "docs/_sources/**",
         // Data / Assets (adjust patterns as needed)
         "**/test/**",
         // Lock files and logs

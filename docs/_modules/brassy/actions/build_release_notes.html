@@ -33,46 +33,47 @@
   <h1>Source code for brassy.actions.build_release_notes</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Build release note output.&quot;&quot;&quot;</span>
 
-<span class="c1"># ruff: noqa: UP006, UP035, UP045</span>
-
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">brassy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">brassy.brassy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichConsole</span> <span class="k">as</span> <span class="n">console</span>  <span class="c1"># noqa: N813</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 
 
 <div class="viewcode-block" id="get_header_footer">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.get_header_footer">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_header_footer</span><span class="p">(</span>
     <span class="n">rich_open</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">header_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">footer_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">header_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">footer_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read optional header and footer content.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    rich_open : Callable[..., Any]</span>
 <span class="sd">        Context manager factory for reading files.</span>
-<span class="sd">    header_file : Optional[str]</span>
+<span class="sd">    header_file : str | None</span>
 <span class="sd">        Path to header file.</span>
-<span class="sd">    footer_file : Optional[str]</span>
+<span class="sd">    footer_file : str | None</span>
 <span class="sd">        Path to footer file.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Optional[str]</span>
+<span class="sd">    str | None</span>
 <span class="sd">        Header content or None.</span>
-<span class="sd">    Optional[str]</span>
+<span class="sd">    str | None</span>
 <span class="sd">        Footer content or None.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="k">with</span> <span class="n">rich_open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Reading </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">open_file</span><span class="p">:</span>
@@ -85,13 +86,13 @@
 <div class="viewcode-block" id="find_duplicate_titles">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.find_duplicate_titles">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">find_duplicate_titles</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Detect duplicate titles across changelog entries.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : Dict[str, List[Dict[str, Any]]]</span>
+<span class="sd">    data : dict[str, list[dict[str, Any]]]</span>
 <span class="sd">        Mapping of categories to lists of changelog entries.</span>
 
 <span class="sd">    Returns</span>
@@ -108,7 +109,7 @@
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.format_files_changed_entry">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_files_changed_entry</span><span class="p">(</span>
     <span class="n">detailed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>  <span class="c1"># noqa: ARG001 TODO: Fix this unused arg</span>
-    <span class="n">entry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format an RST block describing changed files for an entry.</span>
 
@@ -116,7 +117,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    detailed : bool</span>
 <span class="sd">        Unused flag kept for compatibility.</span>
-<span class="sd">    entry : Dict[str, Any]</span>
+<span class="sd">    entry : dict[str, Any]</span>
 <span class="sd">        Changelog entry containing file changes.</span>
 
 <span class="sd">    Returns</span>
@@ -139,17 +140,17 @@
 <div class="viewcode-block" id="generate_file_change_section_list_of_strings">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.generate_file_change_section_list_of_strings">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_file_change_section_list_of_strings</span><span class="p">(</span>
-    <span class="n">entry</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">entry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create file-specific section lines for a changelog entry.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    entry : Dict[str, Any]</span>
+<span class="sd">    entry : dict[str, Any]</span>
 <span class="sd">        Changelog entry with file change data.</span>
 <span class="sd">    line : str</span>
 <span class="sd">        Template string for the section line.</span>
@@ -162,7 +163,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    List[str]</span>
+<span class="sd">    list[str]</span>
 <span class="sd">        Section lines formatted per file change.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
@@ -201,8 +202,8 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_split_template_lines</span><span class="p">(</span>
-    <span class="n">section_lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="n">section_lines</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Split template lines into category-level and entry-level parts.</span>
 
 <span class="sd">    The split occurs at the first line that contains {title}, {description},</span>
@@ -212,14 +213,14 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    section_lines : List[str]</span>
+<span class="sd">    section_lines : list[str]</span>
 <span class="sd">        Template lines for a section.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    List[str]</span>
+<span class="sd">    list[str]</span>
 <span class="sd">        Category-level template lines.</span>
-<span class="sd">    List[str]</span>
+<span class="sd">    list[str]</span>
 <span class="sd">        Entry-level template lines.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">section_lines</span><span class="p">):</span>
@@ -231,28 +232,28 @@
 <div class="viewcode-block" id="generate_section_string">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.generate_section_string">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_section_string</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913,PLR0912 TODO: Fix complexity of this function</span>
-    <span class="n">section_lines</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">changelog_entries</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
+    <span class="n">section_lines</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">changelog_entries</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
     <span class="n">release_date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">footer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">header</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">footer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">header</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Render a changelog section from templates and entries.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    section_lines : List[str]</span>
+<span class="sd">    section_lines : list[str]</span>
 <span class="sd">        Template lines for the section.</span>
-<span class="sd">    changelog_entries : Dict[str, List[Dict[str, Any]]]</span>
+<span class="sd">    changelog_entries : dict[str, list[dict[str, Any]]]</span>
 <span class="sd">        Mapping of categories to changelog entries.</span>
 <span class="sd">    release_date : str</span>
 <span class="sd">        Release date string.</span>
 <span class="sd">    version : str</span>
 <span class="sd">        Release version string.</span>
-<span class="sd">    footer : Optional[str]</span>
+<span class="sd">    footer : str | None</span>
 <span class="sd">        Footer content appended to templates.</span>
-<span class="sd">    header : Optional[str]</span>
+<span class="sd">    header : str | None</span>
 <span class="sd">        Header content prepended to templates.</span>
 
 <span class="sd">    Returns</span>
@@ -316,25 +317,25 @@
 <div class="viewcode-block" id="format_release_notes">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.format_release_notes">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_release_notes</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
-    <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">release_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">header</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">footer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">release_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">header</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">footer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate release notes content from parsed changelog data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : Dict[str, List[Dict[str, Any]]]</span>
+<span class="sd">    data : dict[str, list[dict[str, Any]]]</span>
 <span class="sd">        Parsed changelog entries grouped by category.</span>
-<span class="sd">    version : Optional[str]</span>
+<span class="sd">    version : str | None</span>
 <span class="sd">        Release version string.</span>
-<span class="sd">    release_date : Optional[str]</span>
+<span class="sd">    release_date : str | None</span>
 <span class="sd">        Release date override in ISO format. Defaults to today&#39;s date.</span>
-<span class="sd">    header : Optional[str]</span>
+<span class="sd">    header : str | None</span>
 <span class="sd">        Optional header content.</span>
-<span class="sd">    footer : Optional[str]</span>
+<span class="sd">    footer : str | None</span>
 <span class="sd">        Optional footer content.</span>
 
 <span class="sd">    Returns</span>
@@ -381,32 +382,32 @@
 <div class="viewcode-block" id="build_release_notes">
 <a class="viewcode-back" href="../../../api.html#brassy.actions.build_release_notes.build_release_notes">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">build_release_notes</span><span class="p">(</span>  <span class="c1"># noqa PLR0913</span>
-    <span class="n">input_files_or_folders</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">input_files_or_folders</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
     <span class="n">console</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
     <span class="n">rich_open</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">version</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">release_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">header_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">footer_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">release_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">header_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">footer_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Build release notes by reading YAML files and templates.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    input_files_or_folders : List[str]</span>
+<span class="sd">    input_files_or_folders : list[str]</span>
 <span class="sd">        CLI-supplied file or directory paths.</span>
 <span class="sd">    console : Any</span>
 <span class="sd">        Console for user feedback.</span>
 <span class="sd">    rich_open : Callable[..., Any]</span>
 <span class="sd">        Context manager factory for reading files.</span>
-<span class="sd">    version : Optional[str]</span>
+<span class="sd">    version : str | None</span>
 <span class="sd">        Release version string.</span>
-<span class="sd">    release_date : Optional[str]</span>
+<span class="sd">    release_date : str | None</span>
 <span class="sd">        Release date override in ISO format.</span>
-<span class="sd">    header_file : Optional[str]</span>
+<span class="sd">    header_file : str | None</span>
 <span class="sd">        Path to an optional header file.</span>
-<span class="sd">    footer_file : Optional[str]</span>
+<span class="sd">    footer_file : str | None</span>
 <span class="sd">        Path to an optional footer file.</span>
 <span class="sd">    working_dir : str</span>
 <span class="sd">        Base directory for relative paths.</span>
