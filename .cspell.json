@@ -41,7 +41,7 @@
         // Build artifacts
         "**/build/**",
         "**/dist/**",
-        "**/docs/_build/**", // Sphinx build output
+        "**/docs/**", // Sphinx build output
         "**/htmlcov/**", // Coverage reports
         ".pytest_cache/**",
         "docs/_modules/**",
