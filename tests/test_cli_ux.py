@@ -7,6 +7,8 @@ against the contract rather than against any particular fix: the intent is
 that they pass once the defect is addressed, whichever way it is addressed.
 """
 
+# cSpell:ignore titel
+
 import os
 import subprocess
 import tempfile
