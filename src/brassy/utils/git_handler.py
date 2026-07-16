@@ -10,8 +10,57 @@ if TYPE_CHECKING:
 
 import pygit2
 
+# Base branches tried, in order, when none is explicitly configured.
+_DEFAULT_BASE_BRANCHES = ("main", "master", "trunk")
 
-def get_git_status(repo_path: str = ".") -> dict[str, list[Any]]:
+
+def _resolve_base_branch(
+    repo: pygit2.Repository, base_branch: str | None,
+) -> pygit2.Branch:
+    """
+    Resolve the base branch to diff against.
+
+    Parameters
+    ----------
+    repo : pygit2.Repository
+        The repository to look the branch up in.
+    base_branch : str | None
+        An explicit base branch name. When None, the branches in
+        ``_DEFAULT_BASE_BRANCHES`` are tried in order.
+
+    Returns
+    -------
+    pygit2.Branch
+        The resolved base branch.
+
+    Raises
+    ------
+    pygit2.GitError
+        If the explicit branch is missing, or none of the default branches
+        exist.
+    """
+    if base_branch is not None:
+        try:
+            return repo.branches[base_branch]
+        except KeyError as e:
+            raise pygit2.GitError(
+                f"Base branch '{base_branch}' not found in {repo.workdir}.",
+            ) from e
+    for candidate in _DEFAULT_BASE_BRANCHES:
+        try:
+            return repo.branches[candidate]
+        except KeyError:
+            continue
+    tried = ", ".join(_DEFAULT_BASE_BRANCHES)
+    raise pygit2.GitError(
+        f"No base branch found (tried {tried}). "
+        "Pass --base-branch or set the 'base_branch' setting.",
+    )
+
+
+def get_git_status(
+    repo_path: str = ".", base_branch: str | None = None,
+) -> dict[str, list[Any]]:
     """
     Retrieve the status of files in the specified Git repository.
 
@@ -19,6 +68,9 @@ def get_git_status(repo_path: str = ".") -> dict[str, list[Any]]:
     ----------
     repo_path : str
         The path to the Git repository. Defaults to the current directory.
+    base_branch : str | None
+        The branch to diff the current branch against. When None, brassy tries
+        ``main``, ``master``, then ``trunk``.
 
     Returns
     -------
@@ -37,7 +89,8 @@ def get_git_status(repo_path: str = ".") -> dict[str, list[Any]]:
     Raises
     ------
     pygit2.GitError
-        If the repository path is not a git repository or does not have a HEAD.
+        If the repository path is not a git repository, has no HEAD, or no
+        base branch could be resolved.
     """
     # Open the repository
     repo = pygit2.Repository(repo_path)
@@ -49,14 +102,14 @@ def get_git_status(repo_path: str = ".") -> dict[str, list[Any]]:
         raise pygit2.GitError(
             f"{repo_path} is not a git repo or does not have a head") from e
 
-    # Get the main branch reference
-    main_branch = repo.branches["main"]
+    # Get the base branch reference
+    main_branch = _resolve_base_branch(repo, base_branch)
 
     # Get the commit objects
     current_commit = repo[current_branch.target]
     main_commit = repo[main_branch.target]
 
-    # Get the diff between the current commit and the main branch commit
+    # Get the diff between the current commit and the base branch commit
     diff = repo.diff(main_commit, current_commit)
 
     # Prepare dictionaries to store file statuses
@@ -87,7 +140,9 @@ def get_git_status(repo_path: str = ".") -> dict[str, list[Any]]:
 
 
 def print_out_git_changed_files(
-    print_function: Callable[[str], None], repo_path: str = ".",
+    print_function: Callable[[str], None],
+    repo_path: str = ".",
+    base_branch: str | None = None,
 ) -> None:
     """
     Print out changes as detected by Git in format Brassy expects in changlogs.
@@ -98,8 +153,11 @@ def print_out_git_changed_files(
         A callable that takes a string and prints it.
     repo_path : str
         The path to the Git repository. Defaults to the current directory.
+    base_branch : str | None
+        The branch to diff against. When None, brassy tries ``main``,
+        ``master``, then ``trunk``.
     """
-    status = get_git_status(repo_path=repo_path)
+    status = get_git_status(repo_path=repo_path, base_branch=base_branch)
     for entry in status:
         print_function(f"    {entry}:")
         for file in status[entry]:

@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+from brassy.utils.yaml_handler import load_yaml
 
 
 def prune_empty(
@@ -82,7 +85,7 @@ def prune_yaml_file(
     """
     yaml_file_path = Path(yaml_file_path)
     with yaml_file_path.open("r+") as file:
-        content = yaml.safe_load(file)
+        content = load_yaml(file, str(yaml_file_path))
         file.seek(0)
         file.write(
             yaml.dump(
@@ -96,7 +99,10 @@ def prune_yaml_file(
 
 
 def direct_pruning_of_files(
-    input_files_or_folders: list[str], console: Any, working_dir: str,
+    input_files_or_folders: list[str],
+    console: Any,
+    working_dir: str,
+    error_console: Any = None,
 ) -> None:
     """
     Prune empty values from YAML files specified by input paths.
@@ -106,9 +112,11 @@ def direct_pruning_of_files(
     input_files_or_folders : list[str]
         A list of file paths or directories containing YAML files to prune.
     console : Any
-        An object used for printing messages to the console.
+        An object used for printing status messages to the console.
     working_dir : str
         The working directory path.
+    error_console : Any
+        An object used for printing errors. Defaults to ``console`` when None.
 
     Notes
     -----
@@ -123,10 +131,17 @@ def direct_pruning_of_files(
     """
     import brassy.utils.CLI  # noqa: PLC0415 # here to prevent circular import
 
+    if error_console is None:
+        error_console = console
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
         input_files_or_folders,
         console,
         working_dir=working_dir,
+        error_console=error_console,
     )
     for yaml_file in yaml_files:
-        prune_yaml_file(yaml_file, console)
+        try:
+            prune_yaml_file(yaml_file, console)
+        except ValueError as e:
+            error_console.print(f"[red]{e}")
+            sys.exit(1)

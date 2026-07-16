@@ -11,7 +11,7 @@ from pygit2 import GitError
 
 from brassy.brassy import Settings
 from brassy.templates.release_yaml_template import ReleaseNote
-from brassy.utils import git_handler
+from brassy.utils import git_handler, yaml_handler
 
 
 def get_yaml_template_path(
@@ -35,7 +35,7 @@ def get_yaml_template_path(
 
     """
     if working_dir is None:
-        working_dir = Path.getcwd()
+        working_dir = Path.cwd()
     if file_path_arg is None:
         filename = Path(f"{git_handler.get_current_git_branch()}.yaml")
         return working_dir / filename
@@ -48,8 +48,11 @@ def get_yaml_template_path(
 
 
 def create_blank_template_yaml_file(
-    file_path_arg: str | None, console: Any, working_dir: str = ".",
-) -> None:
+    file_path_arg: str | None,
+    error_console: Any,
+    working_dir: str = ".",
+    force: bool = False,
+) -> Path:
     """
     Create a blank YAML template file with a predefined structure.
 
@@ -60,12 +63,22 @@ def create_blank_template_yaml_file(
     Parameters
     ----------
     file_path_arg : str | None
-        The file path of the YAML template as passed via the CLI.
-    console : Any
-        A Rich Console object used for displaying messages and errors to the
-        user.
+        The file path of the YAML template as passed via the CLI. An existing
+        directory places a template named after the current git branch inside
+        that directory.
+    error_console : Any
+        A Rich Console object used for displaying errors to the user.
     working_dir : str
-        The working directory path. Defaults to the current directory "..
+        The working directory path. Defaults to the current directory ".".
+    force : bool
+        Whether to overwrite an existing file at the target path. When False
+        (the default), an existing file is left untouched and the program
+        exits with an error.
+
+    Returns
+    -------
+    Path
+        The path of the YAML template file that was created.
 
     Notes
     -----
@@ -94,11 +107,21 @@ def create_blank_template_yaml_file(
     }
     try:
         yaml_template_path = get_yaml_template_path(file_path_arg, working_dir)
+        if Path(yaml_template_path).is_dir():
+            yaml_template_path = Path(yaml_template_path) / (
+                f"{git_handler.get_current_git_branch()}.yaml"
+            )
     except GitError:
-        console.print(
+        error_console.print(
             "[bold red]Could not find a git repo. Please run in a "
             + "git repo or pass a file path for the yaml template "
             + "(eg '-t /path/to/file.yaml').",
+        )
+        sys.exit(1)
+    if Path(yaml_template_path).exists() and not force:
+        error_console.print(
+            f"[bold red]{yaml_template_path} already exists. "
+            + "Pass --force to overwrite it.",
         )
         sys.exit(1)
     with Path(yaml_template_path).open("w") as file:
@@ -110,6 +133,7 @@ def create_blank_template_yaml_file(
         if Settings.description_populates_with_pipe:
             yaml_text = yaml_text.replace(pipe_replace_string, "|\n    replace_me")
         file.write(yaml_text)
+    return Path(yaml_template_path)
 
 
 def value_error_on_invalid_yaml(
@@ -135,8 +159,7 @@ def value_error_on_invalid_yaml(
     try:
         ReleaseNote(**content)
     except Exception as e:
-
-        raise ValueError(f"Could not validate file {file_path}") from e
+        raise ValueError(f"Could not validate file {file_path}:\n{e}") from e
 
 
 def read_yaml_files(
@@ -171,7 +194,7 @@ def read_yaml_files(
     data: dict[str, Any] = {}
     for file_path in input_files:
         with rich_open(file_path, "r", description=f"Reading {file_path}") as file:
-            content = yaml.safe_load(file)
+            content = yaml_handler.load_yaml(file, file_path)
             value_error_on_invalid_yaml(content, file_path)
             for category, entries in content.items():
                 filtered_entries = [
