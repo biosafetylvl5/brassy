@@ -135,6 +135,9 @@ def generate_file_change_section_list_of_strings(
     return lines
 
 
+_ENTRY_BODY_KEYWORDS = ("{title}", "{description}", "{file_change}")
+
+
 def _split_template_lines(section_lines):
     """Split template lines into category-level and entry-level parts.
 
@@ -153,9 +156,8 @@ def _split_template_lines(section_lines):
     tuple of (list of str, list of str)
         (category_lines, entry_lines)
     """
-    entry_keywords = ("{title}", "{description}", "{file_change}")
     for i, line in enumerate(section_lines):
-        if any(kw in line for kw in entry_keywords):
+        if any(kw in line for kw in _ENTRY_BODY_KEYWORDS):
             return section_lines[:i], section_lines[i:]
     return section_lines, []
 
