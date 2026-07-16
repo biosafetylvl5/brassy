@@ -1,0 +1,24 @@
+enhancement:
+- title: 'Group entries under a single category heading'
+  description: |
+    When a category contains multiple change entries, the category heading
+    (e.g., "Bug fix") is now rendered once with all entries grouped
+    beneath it, instead of repeating the heading per entry.
+    The output template now distinguishes between category-level lines
+    (rendered once per category) and entry-level lines (rendered per
+    entry) based on which template variables each line contains.
+  files:
+    modified:
+    - 'src/brassy/actions/build_release_notes.py'
+    - 'tests/test_integ.py'
+    - 'sphinx/source/using-brassy.rst'
+    added:
+    - 'tests/inputs/multi-entry.yaml'
+    - 'tests/outputs/multi-entry.rst'
+    - 'tests/test_generate_section_string.py'
+  related-issue:
+    number: 64
+    repo_url: 'https://github.com/biosafetylvl5/brassy/issues/64'
+  date:
+    start: null
+    finish: null

@@ -135,6 +135,31 @@ def generate_file_change_section_list_of_strings(
     return lines
 
 
+def _split_template_lines(section_lines):
+    """Split template lines into category-level and entry-level parts.
+
+    The split occurs at the first line that contains {title}, {description},
+    or {file_change}. Lines before that point are category-level (rendered
+    once per category); lines from that point onward are entry-level
+    (rendered per entry).
+
+    Parameters
+    ----------
+    section_lines : list of str
+        Template lines for a section.
+
+    Returns
+    -------
+    tuple of (list of str, list of str)
+        (category_lines, entry_lines)
+    """
+    entry_keywords = ("{title}", "{description}", "{file_change}")
+    for i, line in enumerate(section_lines):
+        if any(kw in line for kw in entry_keywords):
+            return section_lines[:i], section_lines[i:]
+    return section_lines, []
+
+
 def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of this function
     section_lines,
     changelog_entries,
@@ -171,20 +196,25 @@ def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of thi
         for k in ["title", "description", "file_change", "file", "change_type"]
     ]
     if any(keyword in line for keyword in entry_keywords for line in section_lines):
+        category_lines, entry_lines = _split_template_lines(section_lines)
         for category, entries in changelog_entries.items():
-            for entry in entries:
-                if not entry["title"] and not entry["description"]:
-                    continue
+            valid_entries = [e for e in entries if e["title"] or e["description"]]
+            if not valid_entries:
+                continue
+            for line in category_lines:
+                lines.append(line.format(change_type=category.capitalize()))
+            for idx, entry in enumerate(valid_entries):
+                if idx > 0 and category_lines:
+                    lines.append("")
                 if entry["title"]:
-                    title = entry["title"]
-                    title = title.capitalize()
+                    title = entry["title"].capitalize()
                 else:
                     title = Settings.default_title
                 if entry["description"]:
                     description = entry["description"]
                 else:
                     description = Settings.default_description
-                for line in section_lines:
+                for line in entry_lines:
                     if "{file_change}" in line:
                         lines.extend(
                             generate_file_change_section_list_of_strings(

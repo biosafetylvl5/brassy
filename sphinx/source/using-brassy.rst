@@ -181,6 +181,111 @@ Would output:
 
 .. literalinclude :: ./examples/basic-usage/new-release-note-header-footer
 
+Customizing Output Templates
+----------------------------
+
+Brassy uses an internal template to control how release notes are rendered.
+The default template produces standard RST output with a version title, a
+summary list, and detailed sections for each change category. You can
+override this template in your ``.brassy`` configuration file.
+
+The template consists of five named sections that are rendered in order:
+
+``header``
+    Prepended before the release title. Contains ``{prefix_file}`` which
+    is replaced with the contents of the file passed via ``--prefix-file``.
+
+``title``
+    The release version heading (e.g. "Version 1.0.0 (2024-10-14)").
+
+``summary``
+    A bullet list of changes, one line per entry. This section is rendered
+    once per entry and is intended to repeat.
+
+``entry``
+    The detailed change descriptions. This section is split into two parts:
+    **category-level lines** (rendered once per category) and **entry-level
+    lines** (rendered once per entry). The split occurs at the first line
+    containing ``{title}``, ``{description}``, or ``{file_change}``.
+
+``footer``
+    Appended after all entries. Contains ``{suffix_file}`` which is replaced
+    with the contents of the file passed via ``--suffix-file``.
+
+Available template variables
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
++---------------------------+---------------------------------------------+
+| Variable                  | Replaced with                               |
++===========================+=============================================+
+| ``{change_type}``         | Capitalized category name (e.g. "Bug fix")  |
++---------------------------+---------------------------------------------+
+| ``{title}``               | The change entry title                      |
++---------------------------+---------------------------------------------+
+| ``{description}``         | The change entry description                |
++---------------------------+---------------------------------------------+
+| ``{file_change}``         | File change type (added, deleted, etc.)     |
++---------------------------+---------------------------------------------+
+| ``{file}``                | The file path                               |
++---------------------------+---------------------------------------------+
+| ``{prefix_file}``         | Header file content                         |
++---------------------------+---------------------------------------------+
+| ``{suffix_file}``         | Footer file content                         |
++---------------------------+---------------------------------------------+
+| ``{release_version}``     | Release version string                      |
++---------------------------+---------------------------------------------+
+| ``{release_date}``        | Release date string                         |
++---------------------------+---------------------------------------------+
+
+Default template
+^^^^^^^^^^^^^^^^
+
+The default template is shown below with annotations marking which lines
+are category-level and which are entry-level in the ``entry`` section:
+
+.. code-block:: yaml
+
+    templates:
+      release-template:
+        - header:
+          - "{prefix_file}"
+          - ""
+        - title:
+          - ""
+          - "Version {release_version} ({release_date})"
+          - "**************************"
+          - ""
+        - summary:
+          - " * *{change_type}*: {title}"
+        - entry:
+          - ""                   # category heading (once per category)
+          - "{change_type}"      # category heading
+          - "==========="        # category heading
+          - ""                   # category heading
+          - "{title}"            # entry content (per entry)
+          - "-------------------------"
+          - ""
+          - "{description}"
+          - ""
+          - "::"
+          - ""
+          - "     {file_change}: {file}"
+        - footer:
+          - ""
+          - "{suffix_file}"
+
+.. note::
+
+   The ``{file}`` variable must appear on a line that also contains
+   ``{file_change}`` (or another entry-level variable) to be treated
+   as entry-level. Using ``{file}`` without ``{file_change}`` may leave
+   it unformatted in custom templates.
+
+.. note::
+
+   Template customization is an alpha feature. The schema and rendering
+   logic may change in future releases without backward compatibility.
+
 Related Issue
 -------------
 
