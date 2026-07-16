@@ -1,0 +1,152 @@
+bug fix:
+- title: 'Keep errors visible under --quiet and stop the progress bar leaking'
+  description: |
+    Errors are now written to standard error on a console that --quiet never
+    silences, so a failing command is no longer silent in scripts and CI.
+    The reading progress bar is bound to the quiet-aware console, so --quiet
+    suppresses it instead of letting it through. Output explicitly requested
+    with --output-to-console, --get-changed-files and --version is written to
+    standard output and survives --quiet, which makes piping it reliable.
+  files:
+    modified:
+    - 'src/brassy/utils/messages.py'
+    - 'src/brassy/utils/CLI.py'
+    - 'src/brassy/actions/build_release_notes.py'
+    - 'sphinx/source/using-brassy.rst'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Make --no-color actually disable ANSI formatting'
+  description: |
+    The --no-color/-nc flag was parsed but never applied, and its default was
+    inverted so it read as enabled even when absent. It now defaults to off,
+    is honoured, and strips every ANSI escape (colour and bold) rather than
+    colour alone.
+  files:
+    modified:
+    - 'src/brassy/utils/CLI.py'
+    - 'src/brassy/utils/messages.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Refuse to overwrite an existing release note without --force'
+  description: |
+    Writing a YAML template with -t no longer silently overwrites a file that
+    already exists; brassy exits with an error instead. Pass --force to
+    overwrite on purpose. This protects notes derived from the current branch
+    name, which land on the same path on every run.
+  files:
+    modified:
+    - 'src/brassy/utils/file_handler.py'
+    - 'src/brassy/actions/create_note.py'
+    - 'src/brassy/utils/CLI.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Reject unrecognized fields and report the offending one'
+  description: |
+    Release-note entries now reject unknown keys, so a misspelled field such
+    as "titel" is reported by name instead of being silently ignored while its
+    value is dropped. The underlying validation error is included in the
+    message rather than discarded. A dict-safe validator no longer raises a
+    bare KeyError when a required key is absent.
+  files:
+    modified:
+    - 'src/brassy/templates/release_yaml_template.py'
+    - 'src/brassy/utils/file_handler.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Resolve the base branch instead of assuming main'
+  description: |
+    --get-changed-files no longer crashes with a raw traceback on repositories
+    whose base branch is not called main. Brassy tries main, master then trunk,
+    and accepts a --base-branch flag or a base_branch setting to override the
+    choice. When no base branch can be found it exits with a clear message.
+  files:
+    modified:
+    - 'src/brassy/utils/git_handler.py'
+    - 'src/brassy/utils/CLI.py'
+    - 'src/brassy/templates/settings_template.py'
+    - 'sphinx/source/using-brassy.rst'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Fix config file creation and settings precedence'
+  description: |
+    Creating a config file no longer raises AttributeError when the parent
+    directory is missing, so init works again. A missing configuration file no
+    longer contributes a full set of defaults that reset settings from
+    higher-precedence files, and environment variable overrides now apply even
+    when no config file exists.
+  files:
+    modified:
+    - 'src/brassy/utils/settings_manager.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Survive empty config files and support directories for -t'
+  description: |
+    An empty or comments-only configuration file no longer crashes every
+    brassy command with a TypeError; it now contributes no settings, exactly
+    like a missing file, and a config file that is not a YAML mapping produces
+    an error naming the offending file. Passing an existing directory to -t
+    now places a branch-named template inside it, as the help text has always
+    promised, instead of refusing with a misleading suggestion to use --force.
+    The documentation now also notes that flags such as --force must come
+    after the file name given to -t.
+  files:
+    modified:
+    - 'src/brassy/utils/settings_manager.py'
+    - 'src/brassy/utils/file_handler.py'
+    - 'sphinx/source/using-brassy.rst'
+    - 'tests/brassy/utils/test_settings_manager.py'
+    - 'tests/test_cli_ux.py'
+    - '.gitignore'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Fix Path.cwd fallback and correct a malformed test fixture'
+  description: |
+    Resolving a template path with no working directory used a non-existent
+    Path.getcwd method; it now uses Path.cwd. The fully-featured test fixture
+    had mis-indented file keys that silently dropped changed files, now
+    corrected along with its golden output.
+  files:
+    modified:
+    - 'src/brassy/utils/file_handler.py'
+    - 'tests/inputs/fully-featured.yaml'
+    - 'tests/outputs/fully-featured.rst'
+    added:
+    - 'tests/test_cli_ux.py'
+    - 'tests/brassy/utils/test_CLI.py'
+    - 'tests/brassy/utils/test_file_handler.py'
+    - 'tests/brassy/utils/test_settings_manager.py'
+    - 'sphinx/source/releases/latest/fix-cli-output-and-safety.yaml'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null

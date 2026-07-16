@@ -1,0 +1,31 @@
+bug fix:
+- title: 'Reject duplicate keys in YAML files instead of silently dropping data'
+  description: |
+    Brassy now fails with a clear error when a YAML file declares the same key
+    twice, rather than silently keeping only the last occurrence.
+    Previously a release note that declared a category such as ``bug fix:``
+    twice would build successfully while quietly discarding every entry in the
+    first block, because PyYAML keeps only the last of a set of duplicate keys.
+    ``--prune`` was affected the same way, and rewrites files in place, so the
+    discarded entries were destroyed on disk.
+    The error names the file, the duplicated key, and the line of both
+    occurrences. It applies at every nesting level and to every YAML file
+    brassy reads, including ``.brassy`` configuration files.
+    As part of the same change, malformed YAML now reports a readable error
+    instead of an unhandled traceback.
+  files:
+    modified:
+    - 'src/brassy/utils/file_handler.py'
+    - 'src/brassy/utils/settings_manager.py'
+    - 'src/brassy/actions/prune_yaml.py'
+    - 'sphinx/source/api.rst'
+    - 'tests/test_integ.py'
+    added:
+    - 'src/brassy/utils/yaml_handler.py'
+    - 'tests/brassy/utils/test_yaml_handler.py'
+  related-issue:
+    number: 2
+    repo_url: 'https://github.com/biosafetylvl5/brassy/issues/2'
+  date:
+    start: null
+    finish: null

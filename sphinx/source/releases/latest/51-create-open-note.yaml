@@ -1,0 +1,30 @@
+enhancement:
+- title: 'Open created release-note templates in an editor'
+  description: |
+    Brassy can now open a newly created YAML template in the user's text
+    editor, similar to how ``git commit`` opens the commit message editor.
+    Enable the new ``auto_open_editor`` setting (``false`` by default) in
+    the ``.brassy`` file, and ``brassy -t`` will launch the resolved editor
+    on the created template.
+    The editor is resolved in git-like priority order: the ``--editor``
+    CLI flag, the ``default_editor`` setting, ``$VISUAL``, ``$EDITOR``, git's
+    ``core.editor``, then a platform default (``notepad`` on Windows,
+    ``vi`` elsewhere).
+    Use ``--no-open`` to suppress the editor for a single invocation.
+  files:
+    modified:
+    - 'src/brassy/utils/CLI.py'
+    - 'src/brassy/utils/file_handler.py'
+    - 'src/brassy/templates/settings_template.py'
+    - 'sphinx/source/using-brassy.rst'
+    - 'sphinx/source/api.rst'
+    - 'tests/test_integ.py'
+    added:
+    - 'src/brassy/utils/editor_handler.py'
+    - 'src/brassy/actions/create_note.py'
+  related-issue:
+    number: 51
+    repo_url: 'https://github.com/biosafetylvl5/brassy/issues/51'
+  date:
+    start: null
+    finish: null
