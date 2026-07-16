@@ -141,7 +141,7 @@ class ChangeItem(BaseModel):
     ----------
     model_config : ConfigDict
         Pydantic configuration. Forbids unknown fields so that misspelled keys
-        (e.g. ``titel``) are reported rather than silently ignored.
+        are reported rather than silently ignored.
     title : str | None
         The title of the change item. Must be at least 1 character long if provided.
         Whitespace is stripped.
