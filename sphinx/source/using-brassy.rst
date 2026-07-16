@@ -240,7 +240,7 @@ Available template variables
 Default template
 ^^^^^^^^^^^^^^^^
 
-The default template is shown below with annotations marking which lines
+Here is the default template. It is shown with annotations marking which lines
 are category-level and which are entry-level in the ``entry`` section:
 
 .. code-block:: yaml
@@ -278,10 +278,10 @@ are category-level and which are entry-level in the ``entry`` section:
 
    The ``{file}`` variable must appear on a line that also contains
    ``{file_change}`` (or another entry-level variable) to be treated
-   as entry-level. Using ``{file}`` without ``{file_change}`` may leave
-   it unformatted in custom templates.
+   as entry-level. Please do not use ``{file}`` without 
+   ``{file_change}`` in custom templates.
 
-.. note::
+.. warning::
 
    Template customization is an alpha feature. The schema and rendering
    logic may change in future releases without backward compatibility.
