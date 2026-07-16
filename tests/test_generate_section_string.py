@@ -235,7 +235,12 @@ class TestGenerateSectionString:
 
     def test_header_footer_version_date_substitution(self):
         """Post-processing substitutes header, footer, version, and date."""
-        lines = ["{prefix_file}", "{suffix_file}", "{release_version}", "{release_date}"]
+        lines = [
+            "{prefix_file}",
+            "{suffix_file}",
+            "{release_version}",
+            "{release_date}",
+        ]
         entries = {}
         result = generate_section_string(
             lines, entries, "2025-06-01", "2.0", "footer_text", "header_text",

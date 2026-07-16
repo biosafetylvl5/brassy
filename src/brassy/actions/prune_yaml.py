@@ -1,26 +1,31 @@
 """Provides functions for 'pruning' yaml of extra and empty fields."""
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import Any
 
 import yaml
 
 
-def prune_empty(data, prune_lists=True, key=""):
+def prune_empty(
+    data: Any, prune_lists: bool = True, key: str = "",
+) -> Any:
     """
     Recursively remove empty values from a nested dictionary or list.
 
     Parameters
     ----------
-    data : dict or list
+    data : Any
         The data structure to prune.
-    prune_lists : bool, optional
+    prune_lists : bool
         Indicates whether to prune empty lists. Currently unused.
-    key : str, optional
+    key : str
         The key associated with the current data item, used for special cases.
 
     Returns
     -------
-    dict or list or None
+    Any
         The pruned data structure, or None if it is empty.
 
     Notes
@@ -52,7 +57,9 @@ def prune_empty(data, prune_lists=True, key=""):
         return data
 
 
-def prune_yaml_file(yaml_file_path, console):
+def prune_yaml_file(
+    yaml_file_path: str, console: Any,
+) -> None:
     """
     Prune empty values from a YAML file and overwrite it with the pruned content.
 
@@ -60,12 +67,8 @@ def prune_yaml_file(yaml_file_path, console):
     ----------
     yaml_file_path : str
         The file path to the YAML file to be pruned.
-    console : Console
+    console : Any
         An object used for printing messages to the console.
-
-    Returns
-    -------
-    None
 
     Notes
     -----
@@ -92,22 +95,20 @@ def prune_yaml_file(yaml_file_path, console):
     console.print(f"Pruned {yaml_file_path}")
 
 
-def direct_pruning_of_files(input_files_or_folders, console, working_dir):
+def direct_pruning_of_files(
+    input_files_or_folders: list[str], console: Any, working_dir: str,
+) -> None:
     """
     Prune empty values from YAML files specified by input paths.
 
     Parameters
     ----------
-    input_files_or_folders : list of str
+    input_files_or_folders : list[str]
         A list of file paths or directories containing YAML files to prune.
-    console : Console
+    console : Any
         An object used for printing messages to the console.
     working_dir : str
         The working directory path.
-
-    Returns
-    -------
-    None
 
     Notes
     -----

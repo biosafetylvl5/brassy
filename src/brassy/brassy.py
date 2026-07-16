@@ -7,8 +7,13 @@ from brassy.utils import settings_manager
 Settings = settings_manager.get_settings("brassy")
 
 
-def run_from_CLI(): # noqa: N802
-    """Run brassy via the CLI."""
+def run_from_CLI() -> None:  # noqa: N802
+    """Run brassy via the CLI.
+
+    Returns
+    -------
+    None
+    """
     from brassy.utils import CLI  # noqa: PLC0415 # here to prevent circular import
     CLI.run_from_CLI()
 

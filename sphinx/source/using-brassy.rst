@@ -278,7 +278,7 @@ are category-level and which are entry-level in the ``entry`` section:
 
    The ``{file}`` variable must appear on a line that also contains
    ``{file_change}`` (or another entry-level variable) to be treated
-   as entry-level. Please do not use ``{file}`` without 
+   as entry-level. Please do not use ``{file}`` without
    ``{file_change}`` in custom templates.
 
 .. warning::

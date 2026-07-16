@@ -1,7 +1,10 @@
 """Handle file system I/O."""
 
+from __future__ import annotations
+
 import sys
 from pathlib import Path
+from typing import Any
 
 import yaml
 from pygit2 import GitError
@@ -11,16 +14,24 @@ from brassy.templates.release_yaml_template import ReleaseNote
 from brassy.utils import git_handler
 
 
-def get_yaml_template_path(file_path_arg, working_dir=None):
+def get_yaml_template_path(
+    file_path_arg: str | None, working_dir: str | None = None,
+) -> Path:
     """
     Return path of the YAML template file based on the given file path argument.
 
-    Args:
-        file_path_arg (str): The file path argument provided by the user.
+    Parameters
+    ----------
+    file_path_arg : str | None
+        The file path argument provided by the user.
+    working_dir : str | None
+        The working directory path. Defaults to None, which uses the
+        current working directory.
 
     Returns
     -------
-        str: The path of the YAML template file.
+    Path
+        The path of the YAML template file.
 
     """
     if working_dir is None:
@@ -36,33 +47,30 @@ def get_yaml_template_path(file_path_arg, working_dir=None):
     return working_dir / file_path_arg
 
 
-def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
+def create_blank_template_yaml_file(
+    file_path_arg: str | None, console: Any, working_dir: str = ".",
+) -> None:
     """
     Create a blank YAML template file with a predefined structure.
 
     This function generates a YAML file at the specified path with a default
-    template. It handles special characters required for YAML compatibility and writes
-    the file to disk.
+    template. It handles special characters required for YAML compatibility and
+    writes the file to disk.
 
     Parameters
     ----------
-    file_path_arg : str
+    file_path_arg : str | None
         The file path of the YAML template as passed via the CLI.
-    console : rich.console.Console
-        A Rich Console object used for displaying messages and errors to the user.
-    working_dir : str, optional
-        The working directory path. Defaults to the current directory ".".
-
-    Raises
-    ------
-    SystemExit
-        If a Git repo is not found in the current working directory and no file path
-        is provided, the program exits with an error message.
+    console : Any
+        A Rich Console object used for displaying messages and errors to the
+        user.
+    working_dir : str
+        The working directory path. Defaults to the current directory "..
 
     Notes
     -----
-    This function performs a string replacement to insert a "|" due to an issue with
-    YAML's handling of pipe symbols. For more details, see:
+    This function performs a string replacement to insert a "|" due to an
+    issue with YAML's handling of pipe symbols. For more details, see:
     https://github.com/yaml/pyyaml/pull/822
     """
     pipe_replace_string = "REPLACE_ME_WITH_PIPE"
@@ -104,13 +112,15 @@ def create_blank_template_yaml_file(file_path_arg, console, working_dir="."):
         file.write(yaml_text)
 
 
-def value_error_on_invalid_yaml(content, file_path):
+def value_error_on_invalid_yaml(
+    content: dict[str, Any] | None, file_path: str,
+) -> None:
     """
     Check if the YAML content follows the correct schema.
 
     Parameters
     ----------
-    content : dict
+    content : dict[str, Any] | None
         Parsed content of the YAML file.
     file_path : str
         Path to the YAML file.
@@ -129,18 +139,22 @@ def value_error_on_invalid_yaml(content, file_path):
         raise ValueError(f"Could not validate file {file_path}") from e
 
 
-def read_yaml_files(input_files, rich_open):
+def read_yaml_files(
+    input_files: list[str], rich_open: Any,
+) -> dict[str, Any]:
     """
     Read and parse the given list of YAML files.
 
     Parameters
     ----------
-    input_files : list
+    input_files : list[str]
         List of paths to the YAML files.
+    rich_open : Any
+        A Rich progress-aware file open function (``rich.progress.open``).
 
     Returns
     -------
-    dict
+    dict[str, Any]
         Parsed content of all YAML files categorized by type of change.
 
     Examples
@@ -154,7 +168,7 @@ def read_yaml_files(input_files, rich_open):
         ]
     }
     """
-    data = {}
+    data: dict[str, Any] = {}
     for file_path in input_files:
         with rich_open(file_path, "r", description=f"Reading {file_path}") as file:
             content = yaml.safe_load(file)
@@ -172,7 +186,7 @@ def read_yaml_files(input_files, rich_open):
     return data
 
 
-def write_output_file(output_file, content):
+def write_output_file(output_file: str, content: str) -> None:
     """
     Write the formatted release notes to the output file.
 

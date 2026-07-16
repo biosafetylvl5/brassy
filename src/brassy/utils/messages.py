@@ -1,6 +1,12 @@
 """Handle outputs/inputs to the CLI."""
 
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 import rich
 import rich.progress
@@ -12,19 +18,19 @@ from rich.traceback import install as install_rich_tracebacks
 logging.captureWarnings(True)
 
 
-def init_logger(use_rich):
+def init_logger(use_rich: bool) -> logging.Logger:
     """
     Initialize and configure the logger.
 
     Parameters
     ----------
     use_rich : bool
-        If True, sets up rich logging else use standard stream logging
+        If True, sets up rich logging else use standard stream logging.
 
     Returns
     -------
-    logger : logging.Logger
-        The configured logger instance
+    logging.Logger
+        The configured logger instance.
     """
     logger = logging.getLogger("build_docs")
     if use_rich:
@@ -38,18 +44,20 @@ def init_logger(use_rich):
     return logger
 
 
-def get_rich_opener(no_format=False):
+def get_rich_opener(no_format: bool = False) -> Callable[..., Any]:
     """
     Return opener function with or without a rich progress bar.
 
-    Args:
-        no_format (bool, optional):
-            If True, returns the opener function without any formatting.
-            If False, returns the opener function with formatting. Defaults to False.
+    Parameters
+    ----------
+    no_format : bool
+        If True, returns the opener function without any formatting.
+        If False, returns the opener function with formatting. Defaults to False.
 
     Returns
     -------
-        function: The opener function for rich progress bar.
+    Callable[..., Any]
+        The opener function for rich progress bar.
     """
     if no_format:
         return rich.progress.Progress().open
@@ -57,17 +65,21 @@ def get_rich_opener(no_format=False):
         return rich.progress.open
 
 
-def setup_console(no_format=False, quiet=False):
+def setup_console(no_format: bool = False, quiet: bool = False) -> rich.console.Console:
     """
     Set up and return the console for printing messages.
 
-    Args:
-        no_format (bool, optional): Whether to disable formatting. Defaults to False.
-        quiet (bool, optional): Whether to suppress console output. Defaults to False.
+    Parameters
+    ----------
+    no_format : bool
+        Whether to disable formatting. Defaults to False.
+    quiet : bool
+        Whether to suppress console output. Defaults to False.
 
     Returns
     -------
-        Console: The configured rich console object.
+    rich.console.Console
+        The configured rich console object.
     """
     if not no_format:
         install_rich_tracebacks()
@@ -75,8 +87,20 @@ def setup_console(no_format=False, quiet=False):
     return console
 
 
-def get_boolean_prompt_function(enable_format=True):
-    """Return a function that prompts Y/N and returns True/False."""
+def get_boolean_prompt_function(enable_format: bool = True) -> Callable[[str], bool]:
+    """
+    Return a function that prompts Y/N and returns True/False.
+
+    Parameters
+    ----------
+    enable_format : bool
+        If True, uses rich's Confirm.ask. If False, uses a plain input prompt.
+
+    Returns
+    -------
+    Callable[[str], bool]
+        A function that takes a question string and returns a boolean.
+    """
     if enable_format:
         return Confirm.ask
     else:
@@ -94,8 +118,17 @@ def get_boolean_prompt_function(enable_format=True):
         return bool_prompt
 
 
-def setup_messages(enable_format, quiet):
-    """Set up global objects for outputting messages to the CLI."""
+def setup_messages(enable_format: bool, quiet: bool) -> None:
+    """
+    Set up global objects for outputting messages to the CLI.
+
+    Parameters
+    ----------
+    enable_format : bool
+        Whether to enable rich formatting for output.
+    quiet : bool
+        Whether to suppress console output.
+    """
     global open  # noqa: PLW0603
     global boolean_prompt  # noqa: PLW0603
     global RichConsole  # noqa: PLW0603

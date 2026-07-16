@@ -4,12 +4,18 @@ Brassy can be run without this file, and importing it brassy without it should
 allow users to call brassy without the CLI
 """
 
+from __future__ import annotations
+
 import argparse
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from rich_argparse import RichHelpFormatter
+
+if TYPE_CHECKING:
+    from rich.console import Console
 
 import brassy.actions.build_release_notes
 import brassy.actions.init
@@ -22,13 +28,14 @@ from brassy.utils.settings_manager import get_settings
 Settings = get_settings("brassy")
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """
     Return ArgumentParser for CLI.
 
     Returns
     -------
-        argparse.ArgumentParser: The ArgumentParser object with predefined arguments.
+    argparse.ArgumentParser
+        The ArgumentParser object with predefined arguments.
     """
     parser = argparse.ArgumentParser(
         description="Generate release notes from YAML files."
@@ -149,7 +156,7 @@ def get_parser():
     return parser
 
 
-def parse_arguments():
+def parse_arguments() -> tuple[argparse.Namespace, argparse.ArgumentParser]:
     """
     Parse command line arguments for input folder and output file.
 
@@ -157,18 +164,24 @@ def parse_arguments():
     -------
     argparse.Namespace
         Parsed arguments containing input_folder and output_file.
+    argparse.ArgumentParser
+        The parser instance.
     """
     parser = get_parser()
     return parser.parse_args(), parser
 
 
-def print_version_and_exit():
+def print_version_and_exit() -> None:
     """Print version and exit with status code 0."""
     messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
     sys.exit(0)
 
 
-def exit_on_invalid_arguments(args, parser, console):
+def exit_on_invalid_arguments(
+    args: argparse.Namespace,
+    parser: argparse.ArgumentParser,
+    console: Console,
+) -> None:
     """
     Validate the argparse arguments.
 
@@ -180,9 +193,15 @@ def exit_on_invalid_arguments(args, parser, console):
     ----------
     args : argparse.Namespace
         Parsed arguments.
-
     parser : argparse.ArgumentParser
         The ArgumentParser object used to parse the command-line arguments.
+    console : Console
+        The rich console instance for output.
+
+    Returns
+    -------
+    None
+        Exits the program if arguments are invalid, otherwise returns None.
     """
     if (
         bool(args.input_files_or_folders)
@@ -200,24 +219,28 @@ def exit_on_invalid_arguments(args, parser, console):
     sys.exit(1)
 
 
-def get_yaml_files_from_input(input_files_or_folders):
+def get_yaml_files_from_input(input_files_or_folders: list[Path]) -> list[Path]:
     """
     Get a list of YAML files from the given input files or folders.
 
     Parameters
     ----------
-    input_files_or_folders : list
+    input_files_or_folders : list[Path]
         List of paths to input files or folders.
 
     Returns
     -------
-    list
+    list[Path]
         List of paths to YAML files.
 
     Raises
     ------
     ValueError
-        If a file is not a YAML file or if no YAML files are found in a directory.
+        If a file is not a YAML file.
+    FileExistsError
+        If no YAML files are found in a directory.
+    FileNotFoundError
+        If the provided path does not exist.
     """
     yaml_files = []
     for path in input_files_or_folders:
@@ -239,7 +262,11 @@ def get_yaml_files_from_input(input_files_or_folders):
     return yaml_files
 
 
-def get_file_list_from_cli_input(input_files_or_folders, console, working_dir="."):
+def get_file_list_from_cli_input(
+    input_files_or_folders: list[str],
+    console: Console,
+    working_dir: str = ".",
+) -> list[Path]:
     """Parse CLI input string into full file paths."""
     try:
         yaml_files = get_yaml_files_from_input(
@@ -270,7 +297,7 @@ def get_file_list_from_cli_input(input_files_or_folders, console, working_dir=".
     return yaml_files
 
 
-def run_from_CLI(): # noqa: N802
+def run_from_CLI() -> None:  # noqa: N802
     """Generate release notes from YAML files and write output file."""
     args, parser = parse_arguments()
 

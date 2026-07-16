@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date as Date  # noqa N812
-from typing import Dict, List  # noqa: UP035
+from typing import Any, Dict, List  # noqa: UP035
 
 import dateparser
 from pydantic import (
@@ -34,7 +34,7 @@ class Files(BaseModel):
     modified: List[str] = []  # noqa: UP006
 
     @model_validator(mode="after")
-    def check_at_least_one_field(self):
+    def check_at_least_one_field(self) -> Files:
         """Verify that at least one file is provided."""
         if not any(
             getattr(self, field) for field in ["deleted", "moved", "added", "modified"]
@@ -59,7 +59,7 @@ class RelatedIssue(BaseModel):
 
     @field_validator("repo_url", mode="before")
     @classmethod
-    def convert_empty_to_none(cls, value):
+    def convert_empty_to_none(cls, value: Any) -> Any | None:
         """Convert empty strings to None for URL validation."""
         if value == "":
             return None
@@ -74,23 +74,27 @@ class DateRange(BaseModel):
 
     @field_validator("start", "finish", mode="before")
     @classmethod
-    def parse_date(cls, value):
+    def parse_date(cls, value: Any) -> Date | None:
         """
         Parse and validate date values.
 
         Converts various date formats to a Date object, handling strings,
         Date objects, and None values.
 
-        Args:
-            value: Input to parse (Date, None, or string)
+        Parameters
+        ----------
+        value : Any
+            Input to parse (Date, None, or string).
 
         Returns
         -------
-            Date or None: Parsed date or None for empty values
+        Date | None
+            Parsed date or None for empty values.
 
         Raises
         ------
-            InvalidDateValue: If the value cannot be parsed as a valid date
+        InvalidDateValueError
+            If the value cannot be parsed as a valid date
         """
         # Already correct type or None
         if value is None or isinstance(value, Date):
@@ -119,7 +123,7 @@ class DateRange(BaseModel):
         raise InvalidDateValueError(f"Unsupported value type: {type(value)}")
 
     @model_validator(mode="after")
-    def validate_date_range(self):
+    def validate_date_range(self) -> DateRange:
         """Validate that finish date is not before start date if both are set."""
         if self.start and self.finish and self.finish < self.start:
             raise ValueError("Finish date cannot be before start date")
@@ -132,21 +136,21 @@ class ChangeItem(BaseModel):
     This class provides a structured way to represent changes with associated metadata
     such as title, description, affected files, related issues, and date range.
 
-    Parameters
+    Attributes
     ----------
-    title : str or None, optional
+    title : str | None
         The title of the change item. Must be at least 1 character long if provided.
         Whitespace is stripped.
-    description : str or None, optional
+    description : str | None
         A detailed description of the change.
         Must be at least 1 character long if provided.
         Whitespace is stripped.
     files : Files
         The files affected by this change.
-    related_issue : RelatedIssue, RelatedInternalIssue, or None, optional
+    related_issue : RelatedIssue | RelatedInternalIssue | None
         An issue related to this change. Aliased as "related-issue" in serialized form.
         Default is None.
-    date : DateRange or None, optional
+    date : DateRange | None
         The date range associated with this change. Default is None.
 
     Notes
@@ -166,7 +170,7 @@ class ChangeItem(BaseModel):
     date: DateRange | None = None
 
     @model_validator(mode="before")
-    def empty_str_to_none(self):
+    def empty_str_to_none(self) -> ChangeItem:
         """
         Convert empty strings to None for 'title' and 'description' attributes.
 
@@ -175,8 +179,8 @@ class ChangeItem(BaseModel):
 
         Returns
         -------
-        self : object
-        Returns the instance itself to allow for method chaining.
+        ChangeItem
+            The instance itself to allow for method chaining.
         """
         for value in ["title", "description"]:
             if self[value] == "":

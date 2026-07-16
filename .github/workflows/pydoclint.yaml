@@ -26,4 +26,4 @@ jobs:
 
       - name: Run PyDocLint
         run: |
-          pydoclint $(git ls-files '*.py') --style=numpy
+          pydoclint $(git ls-files '*.py' | grep -v '^tests/') --style=numpy

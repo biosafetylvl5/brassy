@@ -1,32 +1,43 @@
 """Build release note output."""
 
+# ruff: noqa: UP006, UP035, UP045
+
+from __future__ import annotations
+
 import sys
 from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import brassy
 from brassy.brassy import Settings
 from brassy.utils.messages import RichConsole as console  # noqa: N813
 
 
-def get_header_footer(rich_open, header_file=None, footer_file=None):
+def get_header_footer(
+    rich_open: Callable[..., Any],
+    header_file: Optional[str] = None,
+    footer_file: Optional[str] = None,
+) -> Tuple[Optional[str], Optional[str]]:
     """Read optional header and footer content.
 
     Parameters
     ----------
-    rich_open : Callable
+    rich_open : Callable[..., Any]
         Context manager factory for reading files.
-    header_file : str or None, optional
+    header_file : Optional[str]
         Path to header file.
-    footer_file : str or None, optional
+    footer_file : Optional[str]
         Path to footer file.
 
     Returns
     -------
-    tuple of str or None
-        Header and footer content or None when unavailable.
+    Optional[str]
+        Header content or None.
+    Optional[str]
+        Footer content or None.
     """
 
-    def get_file(file):
+    def get_file(file: Optional[str]) -> Optional[str]:
         if not file:
             return None
         with rich_open(file, "r", description=f"Reading {file}") as open_file:
@@ -35,12 +46,14 @@ def get_header_footer(rich_open, header_file=None, footer_file=None):
     return get_file(header_file), get_file(footer_file)
 
 
-def find_duplicate_titles(data):
+def find_duplicate_titles(
+    data: Dict[str, List[Dict[str, Any]]],
+) -> bool:
     """Detect duplicate titles across changelog entries.
 
     Parameters
     ----------
-    data : dict
+    data : Dict[str, List[Dict[str, Any]]]
         Mapping of categories to lists of changelog entries.
 
     Returns
@@ -52,14 +65,17 @@ def find_duplicate_titles(data):
     return len(set(titles)) != len(titles)
 
 
-def format_files_changed_entry(detailed, entry): # noqa: ARG001 TODO: Fix this unused arg
+def format_files_changed_entry(
+    detailed: bool,  # noqa: ARG001 TODO: Fix this unused arg
+    entry: Dict[str, Any],
+) -> str:
     """Format an RST block describing changed files for an entry.
 
     Parameters
     ----------
     detailed : bool
         Unused flag kept for compatibility.
-    entry : dict
+    entry : Dict[str, Any]
         Changelog entry containing file changes.
 
     Returns
@@ -79,17 +95,17 @@ def format_files_changed_entry(detailed, entry): # noqa: ARG001 TODO: Fix this u
 
 
 def generate_file_change_section_list_of_strings(
-    entry,
-    line,
-    category,
-    title,
-    description,
-):
+    entry: Dict[str, Any],
+    line: str,
+    category: str,
+    title: str,
+    description: str,
+) -> List[str]:
     """Create file-specific section lines for a changelog entry.
 
     Parameters
     ----------
-    entry : dict
+    entry : Dict[str, Any]
         Changelog entry with file change data.
     line : str
         Template string for the section line.
@@ -102,7 +118,7 @@ def generate_file_change_section_list_of_strings(
 
     Returns
     -------
-    list of str
+    List[str]
         Section lines formatted per file change.
     """
     lines = []
@@ -136,9 +152,12 @@ def generate_file_change_section_list_of_strings(
 
 
 _ENTRY_BODY_KEYWORDS = ("{title}", "{description}", "{file_change}")
+_ENTRY_KEYWORDS = (*_ENTRY_BODY_KEYWORDS, "{file}", "{change_type}")
 
 
-def _split_template_lines(section_lines):
+def _split_template_lines(
+    section_lines: List[str],
+) -> Tuple[List[str], List[str]]:
     """Split template lines into category-level and entry-level parts.
 
     The split occurs at the first line that contains {title}, {description},
@@ -148,13 +167,15 @@ def _split_template_lines(section_lines):
 
     Parameters
     ----------
-    section_lines : list of str
+    section_lines : List[str]
         Template lines for a section.
 
     Returns
     -------
-    tuple of (list of str, list of str)
-        (category_lines, entry_lines)
+    List[str]
+        Category-level template lines.
+    List[str]
+        Entry-level template lines.
     """
     for i, line in enumerate(section_lines):
         if any(kw in line for kw in _ENTRY_BODY_KEYWORDS):
@@ -162,29 +183,29 @@ def _split_template_lines(section_lines):
     return section_lines, []
 
 
-def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of this function
-    section_lines,
-    changelog_entries,
-    release_date,
-    version,
-    footer,
-    header,
-):
+def generate_section_string(  # noqa: PLR0913,PLR0912 TODO: Fix complexity of this function
+    section_lines: List[str],
+    changelog_entries: Dict[str, List[Dict[str, Any]]],
+    release_date: str,
+    version: str,
+    footer: Optional[str],
+    header: Optional[str],
+) -> str:
     """Render a changelog section from templates and entries.
 
     Parameters
     ----------
-    section_lines : list of str
+    section_lines : List[str]
         Template lines for the section.
-    changelog_entries : dict
+    changelog_entries : Dict[str, List[Dict[str, Any]]]
         Mapping of categories to changelog entries.
     release_date : str
         Release date string.
     version : str
         Release version string.
-    footer : str or None
+    footer : Optional[str]
         Footer content appended to templates.
-    header : str or None
+    header : Optional[str]
         Header content prepended to templates.
 
     Returns
@@ -193,11 +214,7 @@ def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of thi
         Rendered section content.
     """
     lines = []
-    entry_keywords = [
-        "{" + k + "}"
-        for k in ["title", "description", "file_change", "file", "change_type"]
-    ]
-    if any(keyword in line for keyword in entry_keywords for line in section_lines):
+    if any(keyword in line for keyword in _ENTRY_KEYWORDS for line in section_lines):
         category_lines, entry_lines = _split_template_lines(section_lines)
         for category, entries in changelog_entries.items():
             valid_entries = [e for e in entries if e["title"] or e["description"]]
@@ -248,20 +265,26 @@ def generate_section_string( # noqa: PLR0913,PLR0912 TODO: Fix complexity of thi
     return "\n".join(lines)
 
 
-def format_release_notes(data, version, release_date=None, header=None, footer=None):
+def format_release_notes(
+    data: Dict[str, List[Dict[str, Any]]],
+    version: Optional[str],
+    release_date: Optional[str] = None,
+    header: Optional[str] = None,
+    footer: Optional[str] = None,
+) -> str:
     """Generate release notes content from parsed changelog data.
 
     Parameters
     ----------
-    data : dict
+    data : Dict[str, List[Dict[str, Any]]]
         Parsed changelog entries grouped by category.
-    version : str or None
+    version : Optional[str]
         Release version string.
-    release_date : str or None, optional
+    release_date : Optional[str]
         Release date override in ISO format. Defaults to today's date.
-    header : str or None, optional
+    header : Optional[str]
         Optional header content.
-    footer : str or None, optional
+    footer : Optional[str]
         Optional footer content.
 
     Returns
@@ -304,35 +327,35 @@ def format_release_notes(data, version, release_date=None, header=None, footer=N
     return formatted_string.strip()
 
 
-def build_release_notes( # noqa PLR0913
-    input_files_or_folders,
-    console,
-    rich_open,
-    version=None,
-    release_date=None,
-    header_file=None,
-    footer_file=None,
-    working_dir=".",
-):
+def build_release_notes(  # noqa PLR0913
+    input_files_or_folders: List[str],
+    console: Any,
+    rich_open: Callable[..., Any],
+    version: Optional[str] = None,
+    release_date: Optional[str] = None,
+    header_file: Optional[str] = None,
+    footer_file: Optional[str] = None,
+    working_dir: str = ".",
+) -> str:
     """Build release notes by reading YAML files and templates.
 
     Parameters
     ----------
-    input_files_or_folders : list of str
+    input_files_or_folders : List[str]
         CLI-supplied file or directory paths.
-    console : Console
+    console : Any
         Console for user feedback.
-    rich_open : Callable
+    rich_open : Callable[..., Any]
         Context manager factory for reading files.
-    version : str or None, optional
+    version : Optional[str]
         Release version string.
-    release_date : str or None, optional
+    release_date : Optional[str]
         Release date override in ISO format.
-    header_file : str or None, optional
+    header_file : Optional[str]
         Path to an optional header file.
-    footer_file : str or None, optional
+    footer_file : Optional[str]
         Path to an optional footer file.
-    working_dir : str, optional
+    working_dir : str
         Base directory for relative paths.
 
     Returns

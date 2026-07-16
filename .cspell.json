@@ -14,6 +14,7 @@
         "Unagi",
         "Kyoshi",
         "unagi",
+        "integ",
     ],
     // --- File/Folder Exclusions ---
     // Glob patterns for files and folders to ignore globally
