@@ -1,0 +1,22 @@
+continuous integration:
+- title: 'Add a manually-dispatched release workflow'
+  description: |
+    A new GitHub Actions workflow ("Release") automates cutting a release. On
+    manual dispatch with a version number it builds the release notes for that
+    version from the accumulated YAML in sphinx/source/releases/latest/, moves
+    those notes into archive-<version>/, bumps the package version, rebuilds the
+    committed docs, commits the result to a release/v<version> branch, publishes
+    the package to PyPI with a token, tags v<version>, and opens a pull request
+    into main. The releases index now uses a globbed toctree so each new
+    version page is listed automatically without editing the index.
+  files:
+    added:
+    - '.github/workflows/release.yaml'
+    modified:
+    - 'sphinx/source/releases/index.rst'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
