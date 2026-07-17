@@ -363,88 +363,34 @@ itself succeeded.</p>
 <p>A model representing a change “item”, or an atomic change.</p>
 <p>This class provides a structured way to represent changes with associated metadata
 such as title, description, affected files, related issues, and date range.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_config" title="Link to this definition">¶</a></dt>
-<dd><p>Pydantic configuration. Forbids unknown fields so that misspelled keys
-are reported rather than silently ignored.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ConfigDict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.title">
-<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.title" title="Link to this definition">¶</a></dt>
-<dd><p>The title of the change item. Must be at least 1 character long if provided.
-Whitespace is stripped.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str | None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.description">
-<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.description" title="Link to this definition">¶</a></dt>
-<dd><p>A detailed description of the change.
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_config</strong> (<em>ConfigDict</em>) – Pydantic configuration. Forbids unknown fields so that misspelled keys
+are reported rather than silently ignored.</p></li>
+<li><p><strong>title</strong> (<em>str</em><em> | </em><em>None</em>) – The title of the change item. Must be at least 1 character long if provided.
+Whitespace is stripped.</p></li>
+<li><p><strong>description</strong> (<em>str</em><em> | </em><em>None</em>) – A detailed description of the change.
 Must be at least 1 character long if provided.
-Whitespace is stripped.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str | None</p>
+Whitespace is stripped.</p></li>
+<li><p><strong>files</strong> (<a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files"><em>Files</em></a>) – The files affected by this change.</p></li>
+<li><p><strong>related_issue</strong> (<a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><em>RelatedIssue</em></a><em> | </em><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><em>RelatedInternalIssue</em></a><em> | </em><em>None</em>) – An issue related to this change. Aliased as “related-issue” in serialized form.
+Default is None.</p></li>
+<li><p><strong>date</strong> (<a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><em>DateRange</em></a><em> | </em><em>None</em>) – The date range associated with this change. Default is None.</p></li>
+</ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.files">
-<span class="sig-name descname"><span class="pre">files</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.files" title="Link to this definition">¶</a></dt>
-<dd><p>The files affected by this change.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files">Files</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.related_issue">
-<span class="sig-name descname"><span class="pre">related_issue</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.related_issue" title="Link to this definition">¶</a></dt>
-<dd><p>An issue related to this change. Aliased as “related-issue” in serialized form.
-Default is None.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue">RelatedIssue</a> | <a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue">RelatedInternalIssue</a> | None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.date">
-<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.date" title="Link to this definition">¶</a></dt>
-<dd><p>The date range associated with this change. Default is None.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange">DateRange</a> | None</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p class="rubric">Notes</p>
 <p>Empty strings for ‘title’ and ‘description’ are automatically converted to None
 during validation.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">date</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><span class="pre">DateRange</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.date">
+<span class="sig-name descname"><span class="pre">date</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.DateRange" title="brassy.templates.release_yaml_template.DateRange"><span class="pre">DateRange</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.date" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.description" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -469,19 +415,19 @@ filter in <code class="docutils literal notranslate"><span class="pre">read_yaml
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-name descname"><span class="pre">files</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files"><span class="pre">Files</span></a></span><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.files">
+<span class="sig-name descname"><span class="pre">files</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.Files" title="brassy.templates.release_yaml_template.Files"><span class="pre">Files</span></a></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.files" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ConfigDict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'extra':</span> <span class="pre">'forbid'}</span></span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ConfigDict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'extra':</span> <span class="pre">'forbid'}</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_config" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">related_issue</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><span class="pre">RelatedIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><span class="pre">RelatedInternalIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.related_issue">
+<span class="sig-name descname"><span class="pre">related_issue</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><span class="pre">RelatedIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><span class="pre">RelatedInternalIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.related_issue" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -491,8 +437,8 @@ filter in <code class="docutils literal notranslate"><span class="pre">read_yaml
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-name descname"><span class="pre">title</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.title">
+<span class="sig-name descname"><span class="pre">title</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.title" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1662,7 +1608,7 @@ silently loses the first block of entries. This loader raises instead.</p>
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |

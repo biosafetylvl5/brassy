@@ -23,8 +23,8 @@ Create a workflow file that uses this reusable action:
 
     jobs:
       check-release-notes:
-        uses: biosafetylvl5/brassy/.github/workflows/reusable-check-release-notes.yaml@main # you should specify a
-        commit here
+        # you should specify a commit here instead of a branch
+        uses: biosafetylvl5/brassy/.github/workflows/reusable-check-release-notes.yaml@main
         with:
           release_notes_dir: 'sphinx/source/releases'
           latest_notes_dir: 'sphinx/source/releases/latest'
@@ -151,7 +151,7 @@ No YAML Changes Detected
 If the action fails with "No YAML release note changes detected":
 
 1. Add a new release note file in the ``latest_notes_dir`` directory using brassy
-3. Ensure the file has the correct extension (``.yaml`` or ``.yml``)
+2. Ensure the file has the correct extension (``.yaml`` or ``.yml``)
 
 RST Changes Detected
 ^^^^^^^^^^^^^^^^^^^^
@@ -159,7 +159,7 @@ RST Changes Detected
 If the action fails with "Release note RST changes detected":
 
 1. Check that you have not accidentally modified RST release files directly in a branch that isn't a release branch
-3. If you need to edit RST files directly, set ``allow_rst_edits: true``
+2. If you need to edit RST files directly, set ``allow_rst_edits: true``
 
 Contributing
 ------------

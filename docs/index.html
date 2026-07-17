@@ -34,7 +34,19 @@
             
   <section id="welcome-to-brassy-s-documentation">
 <h1>Welcome to brassy’s documentation!<a class="headerlink" href="#welcome-to-brassy-s-documentation" title="Link to this heading">¶</a></h1>
-<p>Base init, sets __version__.</p>
+<p><strong>brassy</strong> (Build Release Assembler for Sane Software with YAML) builds release
+notes from small, per-change YAML files instead of one shared changelog. Each
+contributor adds a YAML note describing their change – title, description,
+files touched, and an optional related issue – alongside their pull request,
+so there is no single changelog file for everyone to merge-conflict over.
+When it’s time to cut a release, brassy reads every note and renders them into
+a single formatted RST document.</p>
+<p>Install it with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>brassy
+</pre></div>
+</div>
+<p>Then see <a class="reference internal" href="using-brassy.html"><span class="doc">Using Brassy</span></a> to get started, or <a class="reference internal" href="brassy-in-ci.html"><span class="doc">Release Notes Checker</span></a> to enforce
+that every pull request adds a release note.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="using-brassy.html">Using Brassy</a><ul>
@@ -137,7 +149,7 @@
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |

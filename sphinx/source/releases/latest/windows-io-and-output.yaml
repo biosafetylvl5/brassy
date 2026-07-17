@@ -1,0 +1,36 @@
+bug fix:
+- title: 'Read and write files as UTF-8 on every platform'
+  description: |
+    Brassy now reads and writes all of its files (release notes, generated
+    RST, YAML templates, pruned notes, and the config file) with an explicit
+    UTF-8 encoding instead of the interpreter's locale-dependent default. On
+    Windows that default is cp1252, so notes containing non-ASCII characters
+    were previously mis-decoded or failed to build; output is now identical
+    across Linux, macOS and Windows.
+  files:
+    modified:
+    - 'src/brassy/utils/file_handler.py'
+    - 'src/brassy/utils/settings_manager.py'
+    - 'src/brassy/actions/build_release_notes.py'
+    - 'src/brassy/actions/prune_yaml.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null
+- title: 'Keep the template status line from wrapping on long paths'
+  description: |
+    The "Created ..., opening in ..." message printed after generating a
+    template is now emitted with soft wrapping, so it stays on a single line
+    instead of being broken mid-phrase when the file path is long (as with
+    Windows temporary paths under an 80-column captured console).
+  files:
+    modified:
+    - 'src/brassy/actions/create_note.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null

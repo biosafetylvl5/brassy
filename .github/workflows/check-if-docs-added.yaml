@@ -17,14 +17,14 @@ jobs:
       contents: read
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Install yq (for YAML parsing)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y yq
+          sudo wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
 
       # This step checks if any modified release notes contain keys indicating a 
       # feature, enhancement, or deprecation. 
