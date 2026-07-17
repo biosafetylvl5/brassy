@@ -46,8 +46,12 @@ jobs:
             echo "::error::Release ${VERSION} already exists."
             exit 1
           fi
-          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
-            echo "::error::Tag v${VERSION} already exists."
+          if git ls-remote --exit-code --tags origin "v${VERSION}" >/dev/null 2>&1; then
+            echo "::error::Tag v${VERSION} already exists on the remote."
+            exit 1
+          fi
+          if git ls-remote --exit-code --heads origin "release/v${VERSION}" >/dev/null 2>&1; then
+            echo "::error::Branch release/v${VERSION} already exists on the remote — delete it or bump the version, then re-run."
             exit 1
           fi
 
@@ -88,21 +92,23 @@ jobs:
       - name: Rebuild committed docs
         run: cd sphinx && make pages
 
-      - name: Commit release
+      - name: Commit release (local only)
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "Release v${VERSION}"
-          git push origin "release/v${VERSION}"
 
+      # Publish BEFORE pushing anything: a failed upload then leaves no remote
+      # branch or tag behind, so the workflow can simply be re-run.
       - name: Build and publish to PyPI
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         run: poetry publish --build
 
-      - name: Tag the release
+      - name: Push release branch and tag
         run: |
+          git push origin "release/v${VERSION}"
           git tag "v${VERSION}"
           git push origin "v${VERSION}"
 
