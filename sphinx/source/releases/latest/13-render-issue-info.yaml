@@ -1,0 +1,27 @@
+enhancement:
+- title: 'Render issue information and number in exported RST'
+  description: |
+    The related-issue field from release note YAML files is now rendered
+    in the generated RST output. Three new template variables are
+    available: {issue}, {issue_number}, and {issue_url}. The default
+    template includes the issue reference between the description and
+    the file-change listing.
+  files:
+    modified:
+    - 'src/brassy/actions/build_release_notes.py'
+    - 'src/brassy/templates/settings_template.py'
+    - 'sphinx/source/using-brassy.rst'
+    - 'tests/test_generate_section_string.py'
+    - 'tests/outputs/barebones.rst'
+    - 'tests/outputs/fully-featured.rst'
+    - 'tests/outputs/mostly-featured.rst'
+    - 'tests/outputs/multi-entry.rst'
+    - 'tests/outputs/real-world.rst'
+    added:
+    - 'sphinx/source/releases/latest/13-render-issue-info.yaml'
+  related-issue:
+    number: 13
+    repo_url: 'https://github.com/biosafetylvl5/brassy/issues/13'
+  date:
+    start: null
+    finish: null

@@ -79,6 +79,8 @@
 <span class="sd">    - &quot;&quot;</span>
 <span class="sd">    - &quot;{description}&quot;</span>
 <span class="sd">    - &quot;&quot;</span>
+<span class="sd">    - &quot;{issue}&quot;</span>
+<span class="sd">    - &quot;&quot;</span>
 <span class="sd">    - &quot;::&quot;</span>
 <span class="sd">    - &quot;&quot;</span>
 <span class="sd">    - &quot;     {file_change}: {file}&quot;</span>
@@ -111,6 +113,8 @@
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;</span><span class="si">{description}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="si">{issue}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;::&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;     </span><span class="si">{file_change}</span><span class="s2">: </span><span class="si">{file}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -128,6 +132,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pydantic model for settings file.&quot;&quot;&quot;</span>
 
     <span class="n">use_color</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">base_branch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">default_yaml_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">change_categories</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
         <span class="s2">&quot;bug fix&quot;</span><span class="p">,</span>
@@ -146,7 +151,9 @@
     <span class="n">valid_fields</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;files&quot;</span><span class="p">,</span> <span class="s2">&quot;related-issue&quot;</span><span class="p">]</span>
     <span class="n">valid_changes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;deleted&quot;</span><span class="p">,</span> <span class="s2">&quot;moved&quot;</span><span class="p">,</span> <span class="s2">&quot;added&quot;</span><span class="p">,</span> <span class="s2">&quot;modified&quot;</span><span class="p">]</span>
     <span class="n">enable_experimental_features</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">templates</span><span class="p">:</span> <span class="n">ReleaseTemplate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">DefaultTemplate</span></div>
+    <span class="n">templates</span><span class="p">:</span> <span class="n">ReleaseTemplate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">DefaultTemplate</span>
+    <span class="n">default_editor</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">auto_open_editor</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 </pre></div>
 

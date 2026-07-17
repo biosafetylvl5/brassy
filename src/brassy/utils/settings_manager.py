@@ -12,6 +12,7 @@ import yaml
 from pydantic import ValidationError
 
 from brassy.templates.settings_template import SettingsTemplate
+from brassy.utils.yaml_handler import load_yaml
 
 
 def get_git_repo_root(path: str = ".") -> Path:
@@ -126,9 +127,7 @@ def create_config_file(config_file: Path) -> None:
     """
     config_file = Path(config_file)
     default_settings = SettingsTemplate()
-    config_dir = config_file.parent
-    if config_dir:
-        config_dir.makedirs(exist_ok=True, parents=True)
+    config_file.parent.mkdir(parents=True, exist_ok=True)
     with config_file.open("w") as f:
         yaml.dump(default_settings.model_dump(), f)
 
@@ -150,18 +149,32 @@ def read_config_file(
     Returns
     -------
     dict[str, Any]
-        Parsed configuration settings as a dictionary.
+        Parsed configuration settings as a dictionary. A missing or empty
+        file contributes an empty dictionary.
+
+    Raises
+    ------
+    ValueError
+        If the file exists but does not contain a YAML mapping.
     """
     config_file = Path(config_file)
     try:
         with config_file.open() as f:
-            return yaml.safe_load(f)
+            content = load_yaml(f, config_file)
     except FileNotFoundError:
         if not create_file_if_not_exist:
-            return SettingsTemplate().model_dump()
-        else:
-            create_config_file(config_file)
-            return read_config_file(config_file)
+            return {}
+        create_config_file(config_file)
+        return read_config_file(config_file)
+    if content is None:
+        return {}
+    if not isinstance(content, dict):
+        # ValueError, not TypeError: malformed user input raises ValueError
+        # everywhere else in brassy (see yaml_handler.load_yaml).
+        raise ValueError(  # noqa: TRY004
+            f"Settings file {config_file} must contain a YAML mapping of settings.",
+        )
+    return content
 
 
 def merge_and_validate_config_files(
@@ -221,6 +234,10 @@ def override_dict_with_environmental_variables(
 ) -> dict[str, Any]:
     """Override dict values with case insensitive environment variables when available.
 
+    Every field of :class:`SettingsTemplate` is considered, so an environment
+    variable applies even when the setting is absent from the input dictionary
+    (for example when no configuration file exists).
+
     Parameters
     ----------
     input_dict : dict[str, Any]
@@ -231,14 +248,11 @@ def override_dict_with_environmental_variables(
     dict[str, Any]
         Updated settings dictionary with environment variable overrides.
     """
-    env_vars = dict(os.environ)
-    lower_env_vars = {
-        key.lower(): {"env_var": key, "value": value} for key, value in env_vars.items()
-    }
-    for key in input_dict:
-        if key.lower() in lower_env_vars:
-            override = lower_env_vars[key.lower()]
-            input_dict[key] = override["value"]
+    lower_env_vars = {key.lower(): value for key, value in os.environ.items()}
+    for field_name in SettingsTemplate.model_fields:
+        prefixed_key = "brassy_" + field_name.lower()
+        if prefixed_key in lower_env_vars:
+            input_dict[field_name] = lower_env_vars[prefixed_key]
     return input_dict
 
 

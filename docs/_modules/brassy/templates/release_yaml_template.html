@@ -41,6 +41,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">dateparser</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">BaseModel</span><span class="p">,</span>
+    <span class="n">ConfigDict</span><span class="p">,</span>
     <span class="n">Field</span><span class="p">,</span>
     <span class="n">HttpUrl</span><span class="p">,</span>
     <span class="n">RootModel</span><span class="p">,</span>
@@ -200,6 +201,9 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
+<span class="sd">    model_config : ConfigDict</span>
+<span class="sd">        Pydantic configuration. Forbids unknown fields so that misspelled keys</span>
+<span class="sd">        (e.g. ``titel``) are reported rather than silently ignored.</span>
 <span class="sd">    title : str | None</span>
 <span class="sd">        The title of the change item. Must be at least 1 character long if provided.</span>
 <span class="sd">        Whitespace is stripped.</span>
@@ -221,35 +225,57 @@
 <span class="sd">    during validation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">strip_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">model_config</span><span class="p">:</span> <span class="n">ConfigDict</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">)</span>
+
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">files</span><span class="p">:</span> <span class="n">Files</span>
     <span class="n">related_issue</span><span class="p">:</span> <span class="n">RelatedIssue</span> <span class="o">|</span> <span class="n">RelatedInternalIssue</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;related-issue&quot;</span><span class="p">,</span>
-        <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">date</span><span class="p">:</span> <span class="n">DateRange</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
+<div class="viewcode-block" id="ChangeItem.strip_whitespace_to_none">
+<a class="viewcode-back" href="../../../api.html#brassy.templates.release_yaml_template.ChangeItem.strip_whitespace_to_none">[docs]</a>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">strip_whitespace_to_none</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Strip whitespace from strings and convert empty results to None.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">stripped</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">stripped</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
 <div class="viewcode-block" id="ChangeItem.empty_str_to_none">
 <a class="viewcode-back" href="../../../api.html#brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none">[docs]</a>
     <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">empty_str_to_none</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChangeItem</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">empty_str_to_none</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert empty strings to None for &#39;title&#39; and &#39;description&#39; attributes.</span>
+<span class="sd">        Convert empty &#39;title&#39;/&#39;description&#39; strings to None, mutating in place.</span>
 
-<span class="sd">        This method checks if the &#39;title&#39; or &#39;description&#39; attributes of the object</span>
-<span class="sd">        are empty strings and converts them to None if they are.</span>
+<span class="sd">        The in-place mutation is load-bearing, not an accident: callers keep</span>
+<span class="sd">        using the same parsed mapping after validation, and the blank-entry</span>
+<span class="sd">        filter in ``read_yaml_files`` treats ``&quot;&quot;`` (drop the entry) and</span>
+<span class="sd">        ``None`` (keep it, render with defaults) differently.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : Any</span>
+<span class="sd">            The raw input for the change item, typically a mapping.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        ChangeItem</span>
-<span class="sd">            The instance itself to allow for method chaining.</span>
+<span class="sd">        Any</span>
+<span class="sd">            The input with empty &#39;title&#39;/&#39;description&#39; strings converted to None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">data</span></div>
 </div>
 
 

@@ -12,12 +12,14 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from pygit2 import GitError
 from rich_argparse import RichHelpFormatter
 
 if TYPE_CHECKING:
     from rich.console import Console
 
 import brassy.actions.build_release_notes
+import brassy.actions.create_note
 import brassy.actions.init
 import brassy.actions.prune_yaml
 import brassy.utils.file_handler
@@ -49,18 +51,47 @@ def get_parser() -> argparse.ArgumentParser:
         type=str,
         help="Write template YAML to provided file."
         + " If folder provided, place template in folder with current "
-        + "git branch name as file name.",
+        + "git branch name as file name."
+        + " Existing files are not overwritten unless --force is passed.",
         nargs="?",
         default=argparse.SUPPRESS,
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        default=False,
+        help="Overwrite the target file when writing a YAML template.",
+    )
+    parser.add_argument(
+        "--editor",
+        type=str,
+        default=None,
+        help="Editor command to open the created template with (overrides"
+        + " the 'default_editor' setting, $VISUAL, $EDITOR and git's"
+        + " core.editor).",
+    )
+    parser.add_argument(
+        "--no-open",
+        action="store_true",
+        default=False,
+        help="Do not open the template in an editor, even when the"
+        + " 'auto_open_editor' setting is enabled.",
     )
     parser.add_argument(
         "-c",
         "--get-changed-files",
         type=str,
-        help="Print git tracked file changes against main."
+        help="Print git tracked file changes against the base branch."
         + " If directory provided, use that directories checked-out branch.",
         nargs="?",
         default=argparse.SUPPRESS,
+    )
+    parser.add_argument(
+        "--base-branch",
+        type=str,
+        default=None,
+        help="Branch to diff against for --get-changed-files (overrides the"
+        + " 'base_branch' setting). Defaults to trying main, master, then trunk.",
     )
     parser.add_argument(
         "input_files_or_folders",
@@ -89,8 +120,8 @@ def get_parser() -> argparse.ArgumentParser:
         "-nc",
         "--no-color",
         action="store_true",
-        default=Settings.use_color,
-        help="Disable text formatting for CLI output.",
+        default=False,
+        help="Disable colors and other ANSI formatting in CLI output.",
     )
     parser.add_argument(
         "-p",
@@ -173,7 +204,7 @@ def parse_arguments() -> tuple[argparse.Namespace, argparse.ArgumentParser]:
 
 def print_version_and_exit() -> None:
     """Print version and exit with status code 0."""
-    messages.RichConsole.print(f"Brassy is at version {brassy.__version__}")
+    messages.payload_print(f"Brassy is at version {brassy.__version__}")
     sys.exit(0)
 
 
@@ -196,7 +227,7 @@ def exit_on_invalid_arguments(
     parser : argparse.ArgumentParser
         The ArgumentParser object used to parse the command-line arguments.
     console : Console
-        The rich console instance for output.
+        The rich console errors are reported on.
 
     Returns
     -------
@@ -206,12 +237,10 @@ def exit_on_invalid_arguments(
     if (
         bool(args.input_files_or_folders)
         or "get_changed_files" in args
+        or "write_yaml_template" in args
         or args.init
-        or args.version
+        or args.print_version
     ):
-        return
-
-    if "write_yaml_template" in args:
         return
 
     console.print("[bold red]Invalid arguments.\n")
@@ -266,8 +295,31 @@ def get_file_list_from_cli_input(
     input_files_or_folders: list[str],
     console: Console,
     working_dir: str = ".",
+    error_console: Console | None = None,
 ) -> list[Path]:
-    """Parse CLI input string into full file paths."""
+    """
+    Parse CLI input strings into full file paths.
+
+    Parameters
+    ----------
+    input_files_or_folders : list[str]
+        Paths to input files or folders provided on the command line.
+    console : Console
+        The rich console non-error output (such as the ``fail_on_empty_dir``
+        warning) is written to.
+    working_dir : str
+        The working directory used to resolve relative paths. Defaults to ".".
+    error_console : Console | None
+        The rich console errors are written to. Defaults to ``console`` when
+        None.
+
+    Returns
+    -------
+    list[Path]
+        Resolved paths to the YAML files found.
+    """
+    if error_console is None:
+        error_console = console
     try:
         yaml_files = get_yaml_files_from_input(
             [
@@ -280,7 +332,7 @@ def get_file_list_from_cli_input(
         )
     except FileExistsError as e:
         if Settings.fail_on_empty_dir:
-            console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
+            error_console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
             sys.exit(1)
         else:
             console.print(f"[yellow]Invalid file or directory: [bold]{e}[/]")
@@ -289,10 +341,10 @@ def get_file_list_from_cli_input(
             )
             sys.exit(0)
     except FileNotFoundError as e:
-        console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
+        error_console.print(f"[red]Invalid file or directory: [bold]{e}[/]")
         sys.exit(1)
     except ValueError as e:
-        console.print(f"[red]{e}")
+        error_console.print(f"[red]{e}")
         sys.exit(1)
     return yaml_files
 
@@ -301,13 +353,17 @@ def run_from_CLI() -> None:  # noqa: N802
     """Generate release notes from YAML files and write output file."""
     args, parser = parse_arguments()
 
-    messages.setup_messages(enable_format=not args.no_rich, quiet=args.quiet)
+    messages.setup_messages(
+        enable_format=not args.no_rich,
+        quiet=args.quiet,
+        color=Settings.use_color and not args.no_color,
+    )
 
     console = messages.RichConsole
-    printer = messages.print
-    rich_open = messages.open
+    error_console = messages.error_console
+    rich_open = messages.open_with_progress
 
-    exit_on_invalid_arguments(args, parser, console)
+    exit_on_invalid_arguments(args, parser, error_console)
     if args.print_version:
         print_version_and_exit()
     elif args.init:
@@ -318,18 +374,28 @@ def run_from_CLI() -> None:  # noqa: N802
             args.input_files_or_folders,
             console,
             args.yaml_dir,
+            error_console=error_console,
         )
     elif "write_yaml_template" in args:
-        brassy.utils.file_handler.create_blank_template_yaml_file(
+        brassy.actions.create_note.create_note(
             args.write_yaml_template,
             console,
             working_dir=args.yaml_dir,
+            open_editor=Settings.auto_open_editor and not args.no_open,
+            editor_override=args.editor,
+            error_console=error_console,
+            force=args.force,
         )
     elif "get_changed_files" in args:
-        brassy.utils.git_handler.print_out_git_changed_files(
-            printer,
-            repo_path=args.get_changed_files if args.get_changed_files else ".",
-        )
+        try:
+            brassy.utils.git_handler.print_out_git_changed_files(
+                messages.payload_print,
+                repo_path=args.get_changed_files if args.get_changed_files else ".",
+                base_branch=args.base_branch or Settings.base_branch,
+            )
+        except GitError as e:
+            error_console.print(f"[red]{e}")
+            sys.exit(1)
     elif args.input_files_or_folders:
         content = brassy.actions.build_release_notes.build_release_notes(
             args.input_files_or_folders,
@@ -340,17 +406,17 @@ def run_from_CLI() -> None:  # noqa: N802
             header_file=args.prefix_file,
             footer_file=args.suffix_file,
             working_dir=args.yaml_dir,
+            error_console=error_console,
         )
         if args.output_file:
             brassy.utils.file_handler.write_output_file(args.output_file, content)
-            if not args.quiet:
-                console.print(f"[green]Wrote release notes to {args.output_file}")
-        elif not args.quiet:
+            console.print(f"[green]Wrote release notes to {args.output_file}")
+        else:
             console.print(
                 "[green]Release notes built successfully. No output file provided.",
             )
         if args.output_to_console:
-            console.print(content)
+            messages.payload_print(content)
 
     else:
         parser.print_help()

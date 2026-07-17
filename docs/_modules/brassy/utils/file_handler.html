@@ -44,7 +44,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">brassy.brassy</span><span class="w"> </span><span class="kn">import</span> <span class="n">Settings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">brassy.templates.release_yaml_template</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReleaseNote</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">git_handler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">brassy.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">git_handler</span><span class="p">,</span> <span class="n">yaml_handler</span>
 
 
 <div class="viewcode-block" id="get_yaml_template_path">
@@ -70,7 +70,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">working_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">working_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">working_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">file_path_arg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">git_handler</span><span class="o">.</span><span class="n">get_current_git_branch</span><span class="p">()</span><span class="si">}</span><span class="s2">.yaml&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">working_dir</span> <span class="o">/</span> <span class="n">filename</span>
@@ -86,8 +86,11 @@
 <div class="viewcode-block" id="create_blank_template_yaml_file">
 <a class="viewcode-back" href="../../../api.html#brassy.utils.file_handler.create_blank_template_yaml_file">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_blank_template_yaml_file</span><span class="p">(</span>
-    <span class="n">file_path_arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">console</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">file_path_arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">error_console</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a blank YAML template file with a predefined structure.</span>
 
@@ -98,12 +101,22 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    file_path_arg : str | None</span>
-<span class="sd">        The file path of the YAML template as passed via the CLI.</span>
-<span class="sd">    console : Any</span>
-<span class="sd">        A Rich Console object used for displaying messages and errors to the</span>
-<span class="sd">        user.</span>
+<span class="sd">        The file path of the YAML template as passed via the CLI. An existing</span>
+<span class="sd">        directory places a template named after the current git branch inside</span>
+<span class="sd">        that directory.</span>
+<span class="sd">    error_console : Any</span>
+<span class="sd">        A Rich Console object used for displaying errors to the user.</span>
 <span class="sd">    working_dir : str</span>
-<span class="sd">        The working directory path. Defaults to the current directory &quot;..</span>
+<span class="sd">        The working directory path. Defaults to the current directory &quot;.&quot;.</span>
+<span class="sd">    force : bool</span>
+<span class="sd">        Whether to overwrite an existing file at the target path. When False</span>
+<span class="sd">        (the default), an existing file is left untouched and the program</span>
+<span class="sd">        exits with an error.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Path</span>
+<span class="sd">        The path of the YAML template file that was created.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -132,11 +145,21 @@
     <span class="p">}</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">yaml_template_path</span> <span class="o">=</span> <span class="n">get_yaml_template_path</span><span class="p">(</span><span class="n">file_path_arg</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">yaml_template_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">git_handler</span><span class="o">.</span><span class="n">get_current_git_branch</span><span class="p">()</span><span class="si">}</span><span class="s2">.yaml&quot;</span>
+            <span class="p">)</span>
     <span class="k">except</span> <span class="n">GitError</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+        <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
             <span class="s2">&quot;[bold red]Could not find a git repo. Please run in a &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;git repo or pass a file path for the yaml template &quot;</span>
             <span class="o">+</span> <span class="s2">&quot;(eg &#39;-t /path/to/file.yaml&#39;).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+        <span class="n">error_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[bold red]</span><span class="si">{</span><span class="n">yaml_template_path</span><span class="si">}</span><span class="s2"> already exists. &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;Pass --force to overwrite it.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
@@ -147,7 +170,8 @@
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">Settings</span><span class="o">.</span><span class="n">description_populates_with_pipe</span><span class="p">:</span>
             <span class="n">yaml_text</span> <span class="o">=</span> <span class="n">yaml_text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">pipe_replace_string</span><span class="p">,</span> <span class="s2">&quot;|</span><span class="se">\n</span><span class="s2">    replace_me&quot;</span><span class="p">)</span>
-        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">yaml_text</span><span class="p">)</span></div>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">yaml_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span></div>
 
 
 
@@ -176,8 +200,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ReleaseNote</span><span class="p">(</span><span class="o">**</span><span class="n">content</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not validate file </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not validate file </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span></div>
 
 
 
@@ -215,7 +238,7 @@
     <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">input_files</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">rich_open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Reading </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="n">content</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">yaml_handler</span><span class="o">.</span><span class="n">load_yaml</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
             <span class="n">value_error_on_invalid_yaml</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">filtered_entries</span> <span class="o">=</span> <span class="p">[</span>

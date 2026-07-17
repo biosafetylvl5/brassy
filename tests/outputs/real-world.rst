@@ -11,6 +11,8 @@ Pydantic coverage-checker plugin model
 
 NO DESCRIPTION
 
+
+
 ::
 
      added: docs/source/releases/latest/obp-coverage-checkers.yaml

@@ -44,14 +44,15 @@
 <p>Provides functions for ‘pruning’ yaml of extra and empty fields.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.prune_yaml.direct_pruning_of_files">
-<span class="sig-prename descclassname"><span class="pre">brassy.actions.prune_yaml.</span></span><span class="sig-name descname"><span class="pre">direct_pruning_of_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/actions/prune_yaml.html#direct_pruning_of_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.prune_yaml.direct_pruning_of_files" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">brassy.actions.prune_yaml.</span></span><span class="sig-name descname"><span class="pre">direct_pruning_of_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/actions/prune_yaml.html#direct_pruning_of_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.prune_yaml.direct_pruning_of_files" title="Link to this definition">¶</a></dt>
 <dd><p>Prune empty values from YAML files specified by input paths.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_files_or_folders</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A list of file paths or directories containing YAML files to prune.</p></li>
-<li><p><strong>console</strong> (<em>Any</em>) – An object used for printing messages to the console.</p></li>
+<li><p><strong>console</strong> (<em>Any</em>) – An object used for printing status messages to the console.</p></li>
 <li><p><strong>working_dir</strong> (<em>str</em>) – The working directory path.</p></li>
+<li><p><strong>error_console</strong> (<em>Any</em>) – An object used for printing errors. Defaults to <code class="docutils literal notranslate"><span class="pre">console</span></code> when None.</p></li>
 </ul>
 </dd>
 </dl>
@@ -126,19 +127,20 @@ and writes the pruned content back to the same file.</p>
 <p>Build release note output.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.actions.build_release_notes.build_release_notes">
-<span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">build_release_notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rich_open</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#build_release_notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.build_release_notes" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">build_release_notes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rich_open</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">release_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">footer_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#build_release_notes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.build_release_notes" title="Link to this definition">¶</a></dt>
 <dd><p>Build release notes by reading YAML files and templates.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_files_or_folders</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – CLI-supplied file or directory paths.</p></li>
-<li><p><strong>console</strong> (<em>Any</em>) – Console for user feedback.</p></li>
+<li><p><strong>console</strong> (<em>Any</em>) – Console for status and warning output.</p></li>
 <li><p><strong>rich_open</strong> (<em>Callable</em><em>[</em><em>...</em><em>, </em><em>Any</em><em>]</em>) – Context manager factory for reading files.</p></li>
 <li><p><strong>version</strong> (<em>str</em><em> | </em><em>None</em>) – Release version string.</p></li>
 <li><p><strong>release_date</strong> (<em>str</em><em> | </em><em>None</em>) – Release date override in ISO format.</p></li>
 <li><p><strong>header_file</strong> (<em>str</em><em> | </em><em>None</em>) – Path to an optional header file.</p></li>
 <li><p><strong>footer_file</strong> (<em>str</em><em> | </em><em>None</em>) – Path to an optional footer file.</p></li>
 <li><p><strong>working_dir</strong> (<em>str</em>) – Base directory for relative paths.</p></li>
+<li><p><strong>error_console</strong> (<em>Any</em>) – Console for error output. Defaults to <code class="docutils literal notranslate"><span class="pre">console</span></code> when None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -279,6 +281,20 @@ and writes the pruned content back to the same file.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.actions.build_release_notes.warn_on_missing_entry_fields">
+<span class="sig-prename descclassname"><span class="pre">brassy.actions.build_release_notes.</span></span><span class="sig-name descname"><span class="pre">warn_on_missing_entry_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/actions/build_release_notes.html#warn_on_missing_entry_fields"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.build_release_notes.warn_on_missing_entry_fields" title="Link to this definition">¶</a></dt>
+<dd><p>Warn when rendered notes still contain placeholder titles or descriptions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>str</em>) – Rendered release notes to inspect.</p></li>
+<li><p><strong>console</strong> (<em>Any</em>) – Console for user feedback.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-brassy.actions.init">
 <span id="initialize"></span><h4>Initialize<a class="headerlink" href="#module-brassy.actions.init" title="Link to this heading">¶</a></h4>
@@ -297,6 +313,43 @@ a project configuration file based on user input.</p>
 </dd></dl>
 
 </section>
+<section id="module-brassy.actions.create_note">
+<span id="create-note"></span><h4>Create Note<a class="headerlink" href="#module-brassy.actions.create_note" title="Link to this heading">¶</a></h4>
+<p>Create a release-note YAML template and optionally open it in an editor.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.actions.create_note.create_note">
+<span class="sig-prename descclassname"><span class="pre">brassy.actions.create_note.</span></span><span class="sig-name descname"><span class="pre">create_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">open_editor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editor_override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/actions/create_note.html#create_note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.actions.create_note.create_note" title="Link to this definition">¶</a></dt>
+<dd><p>Create a blank release-note YAML template and optionally open it.</p>
+<p>The template is always created via
+<a class="reference internal" href="#brassy.utils.file_handler.create_blank_template_yaml_file" title="brassy.utils.file_handler.create_blank_template_yaml_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">brassy.utils.file_handler.create_blank_template_yaml_file()</span></code></a>. When
+<code class="docutils literal notranslate"><span class="pre">open_editor</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resulting file is then launched in the
+user’s editor (resolved git-style by
+<a class="reference internal" href="#brassy.utils.editor_handler.resolve_editor" title="brassy.utils.editor_handler.resolve_editor"><code class="xref py py-func docutils literal notranslate"><span class="pre">brassy.utils.editor_handler.resolve_editor()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path_arg</strong> (<em>str</em><em> | </em><em>None</em>) – The file path of the YAML template as passed via the CLI. <code class="docutils literal notranslate"><span class="pre">None</span></code>
+derives a name from the current git branch.</p></li>
+<li><p><strong>console</strong> (<em>Any</em>) – A Rich console used for status messages.</p></li>
+<li><p><strong>working_dir</strong> (<em>str</em>) – The working directory path. Defaults to the current directory “.”.</p></li>
+<li><p><strong>open_editor</strong> (<em>bool</em>) – Whether to launch the editor on the created file. <code class="docutils literal notranslate"><span class="pre">False</span></code> (the
+default) preserves the historical behaviour of <code class="docutils literal notranslate"><span class="pre">-t</span></code>.</p></li>
+<li><p><strong>editor_override</strong> (<em>str</em><em> | </em><em>None</em>) – An editor command that bypasses resolution, typically sourced from the
+<code class="docutils literal notranslate"><span class="pre">--editor</span></code> CLI flag. <code class="docutils literal notranslate"><span class="pre">None</span></code> resolves the editor normally.</p></li>
+<li><p><strong>error_console</strong> (<em>Any</em>) – A Rich console used for error messages. Defaults to <code class="docutils literal notranslate"><span class="pre">console</span></code> when
+None.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Whether to overwrite an existing template file. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The editor is launched in the foreground so that interactive editors
+(<code class="docutils literal notranslate"><span class="pre">vim</span></code>, <code class="docutils literal notranslate"><span class="pre">nano</span></code>, etc.) work correctly. A nonzero editor exit code is
+reported as a warning rather than propagated, since the file creation
+itself succeeded.</p>
+</dd></dl>
+
+</section>
 </section>
 <section id="templates">
 <h3>Templates<a class="headerlink" href="#templates" title="Link to this heading">¶</a></h3>
@@ -310,6 +363,18 @@ a project configuration file based on user input.</p>
 <p>A model representing a change “item”, or an atomic change.</p>
 <p>This class provides a structured way to represent changes with associated metadata
 such as title, description, affected files, related issues, and date range.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_config" title="Link to this definition">¶</a></dt>
+<dd><p>Pydantic configuration. Forbids unknown fields so that misspelled keys
+(e.g. <code class="docutils literal notranslate"><span class="pre">titel</span></code>) are reported rather than silently ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ConfigDict</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.title">
 <span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.title" title="Link to this definition">¶</a></dt>
@@ -384,16 +449,21 @@ during validation.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none">
-<span class="sig-name descname"><span class="pre">empty_str_to_none</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#brassy.templates.release_yaml_template.ChangeItem" title="brassy.templates.release_yaml_template.ChangeItem"><span class="pre">ChangeItem</span></a></span></span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ChangeItem.empty_str_to_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none" title="Link to this definition">¶</a></dt>
-<dd><p>Convert empty strings to None for ‘title’ and ‘description’ attributes.</p>
-<p>This method checks if the ‘title’ or ‘description’ attributes of the object
-are empty strings and converts them to None if they are.</p>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">empty_str_to_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ChangeItem.empty_str_to_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.empty_str_to_none" title="Link to this definition">¶</a></dt>
+<dd><p>Convert empty ‘title’/’description’ strings to None, mutating in place.</p>
+<p>The in-place mutation is load-bearing, not an accident: callers keep
+using the same parsed mapping after validation, and the blank-entry
+filter in <code class="docutils literal notranslate"><span class="pre">read_yaml_files</span></code> treats <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> (drop the entry) and
+<code class="docutils literal notranslate"><span class="pre">None</span></code> (keep it, render with defaults) differently.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The instance itself to allow for method chaining.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Any</em>) – The raw input for the change item, typically a mapping.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#brassy.templates.release_yaml_template.ChangeItem" title="brassy.templates.release_yaml_template.ChangeItem">ChangeItem</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The input with empty ‘title’/’description’ strings converted to None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>
@@ -404,19 +474,25 @@ are empty strings and converts them to None if they are.</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.model_config" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ConfigDict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'extra':</span> <span class="pre">'forbid'}</span></span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-name descname"><span class="pre">related_issue</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><span class="pre">RelatedIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><span class="pre">RelatedInternalIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">related_issue</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedIssue" title="brassy.templates.release_yaml_template.RelatedIssue"><span class="pre">RelatedIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#brassy.templates.release_yaml_template.RelatedInternalIssue" title="brassy.templates.release_yaml_template.RelatedInternalIssue"><span class="pre">RelatedInternalIssue</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="brassy.templates.release_yaml_template.ChangeItem.strip_whitespace_to_none">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">strip_whitespace_to_none</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/brassy/templates/release_yaml_template.html#ChangeItem.strip_whitespace_to_none"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.release_yaml_template.ChangeItem.strip_whitespace_to_none" title="Link to this definition">¶</a></dt>
+<dd><p>Strip whitespace from strings and convert empty results to None.</p>
+</dd></dl>
+
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-name descname"><span class="pre">title</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">title</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -615,9 +691,19 @@ Date objects, and None values.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">brassy.templates.settings_template.</span></span><span class="sig-name descname"><span class="pre">SettingsTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_yaml_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['bug</span> <span class="pre">fix',</span> <span class="pre">'enhancement',</span> <span class="pre">'deprecation',</span> <span class="pre">'removal',</span> <span class="pre">'performance',</span> <span class="pre">'documentation',</span> <span class="pre">'continuous</span> <span class="pre">integration']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">TITLE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">DESCRIPTION'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_empty_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_populates_with_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['title',</span> <span class="pre">'description',</span> <span class="pre">'files',</span> <span class="pre">'related-issue']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_changes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['deleted',</span> <span class="pre">'moved',</span> <span class="pre">'added',</span> <span class="pre">'modified']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_experimental_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.settings_template.ReleaseTemplate" title="brassy.templates.settings_template.ReleaseTemplate"><span class="pre">ReleaseTemplate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ReleaseTemplate(release_template=[{'header':</span> <span class="pre">['{prefix_file}',</span> <span class="pre">'']},</span> <span class="pre">{'title':</span> <span class="pre">['',</span> <span class="pre">'Version</span> <span class="pre">{release_version}</span> <span class="pre">({release_date})',</span> <span class="pre">'**************************',</span> <span class="pre">'']},</span> <span class="pre">{'summary':</span> <span class="pre">['</span> <span class="pre">*</span> <span class="pre">*{change_type}*:</span> <span class="pre">{title}']},</span> <span class="pre">{'entry':</span> <span class="pre">['',</span> <span class="pre">'{change_type}',</span> <span class="pre">'===========',</span> <span class="pre">'',</span> <span class="pre">'{title}',</span> <span class="pre">'-------------------------',</span> <span class="pre">'',</span> <span class="pre">'{description}',</span> <span class="pre">'',</span> <span class="pre">'::',</span> <span class="pre">'',</span> <span class="pre">'</span>&#160;&#160;&#160;&#160; <span class="pre">{file_change}:</span> <span class="pre">{file}']},</span> <span class="pre">{'footer':</span> <span class="pre">['',</span> <span class="pre">'{suffix_file}']}])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#SettingsTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">brassy.templates.settings_template.</span></span><span class="sig-name descname"><span class="pre">SettingsTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_yaml_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_categories</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['bug</span> <span class="pre">fix',</span> <span class="pre">'enhancement',</span> <span class="pre">'deprecation',</span> <span class="pre">'removal',</span> <span class="pre">'performance',</span> <span class="pre">'documentation',</span> <span class="pre">'continuous</span> <span class="pre">integration']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">TITLE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'NO</span> <span class="pre">DESCRIPTION'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_empty_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description_populates_with_pipe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_fields</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['title',</span> <span class="pre">'description',</span> <span class="pre">'files',</span> <span class="pre">'related-issue']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_changes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['deleted',</span> <span class="pre">'moved',</span> <span class="pre">'added',</span> <span class="pre">'modified']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_experimental_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">templates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#brassy.templates.settings_template.ReleaseTemplate" title="brassy.templates.settings_template.ReleaseTemplate"><span class="pre">ReleaseTemplate</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ReleaseTemplate(release_template=[{'header':</span> <span class="pre">['{prefix_file}',</span> <span class="pre">'']},</span> <span class="pre">{'title':</span> <span class="pre">['',</span> <span class="pre">'Version</span> <span class="pre">{release_version}</span> <span class="pre">({release_date})',</span> <span class="pre">'**************************',</span> <span class="pre">'']},</span> <span class="pre">{'summary':</span> <span class="pre">['</span> <span class="pre">*</span> <span class="pre">*{change_type}*:</span> <span class="pre">{title}']},</span> <span class="pre">{'entry':</span> <span class="pre">['',</span> <span class="pre">'{change_type}',</span> <span class="pre">'===========',</span> <span class="pre">'',</span> <span class="pre">'{title}',</span> <span class="pre">'-------------------------',</span> <span class="pre">'',</span> <span class="pre">'{description}',</span> <span class="pre">'',</span> <span class="pre">'{issue}',</span> <span class="pre">'',</span> <span class="pre">'::',</span> <span class="pre">'',</span> <span class="pre">'</span>&#160;&#160;&#160;&#160; <span class="pre">{file_change}:</span> <span class="pre">{file}']},</span> <span class="pre">{'footer':</span> <span class="pre">['',</span> <span class="pre">'{suffix_file}']}])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_editor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_open_editor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/templates/settings_template.html#SettingsTemplate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Pydantic model for settings file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.auto_open_editor">
+<span class="sig-name descname"><span class="pre">auto_open_editor</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.auto_open_editor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.base_branch">
+<span class="sig-name descname"><span class="pre">base_branch</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.base_branch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.change_categories">
 <span class="sig-name descname"><span class="pre">change_categories</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.change_categories" title="Link to this definition">¶</a></dt>
@@ -626,6 +712,11 @@ Date objects, and None values.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.default_description">
 <span class="sig-name descname"><span class="pre">default_description</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.default_description" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="brassy.templates.settings_template.SettingsTemplate.default_editor">
+<span class="sig-name descname"><span class="pre">default_editor</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#brassy.templates.settings_template.SettingsTemplate.default_editor" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -702,7 +793,7 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>args</strong> (<em>argparse.Namespace</em>) – Parsed arguments.</p></li>
 <li><p><strong>parser</strong> (<em>argparse.ArgumentParser</em>) – The ArgumentParser object used to parse the command-line arguments.</p></li>
-<li><p><strong>console</strong> (<em>Console</em>) – The rich console instance for output.</p></li>
+<li><p><strong>console</strong> (<em>Console</em>) – The rich console errors are reported on.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -716,8 +807,26 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.CLI.get_file_list_from_cli_input">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">get_file_list_from_cli_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/CLI.html#get_file_list_from_cli_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.get_file_list_from_cli_input" title="Link to this definition">¶</a></dt>
-<dd><p>Parse CLI input string into full file paths.</p>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.CLI.</span></span><span class="sig-name descname"><span class="pre">get_file_list_from_cli_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_files_or_folders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Console</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Console</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/CLI.html#get_file_list_from_cli_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.CLI.get_file_list_from_cli_input" title="Link to this definition">¶</a></dt>
+<dd><p>Parse CLI input strings into full file paths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_files_or_folders</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Paths to input files or folders provided on the command line.</p></li>
+<li><p><strong>console</strong> (<em>Console</em>) – The rich console non-error output (such as the <code class="docutils literal notranslate"><span class="pre">fail_on_empty_dir</span></code>
+warning) is written to.</p></li>
+<li><p><strong>working_dir</strong> (<em>str</em>) – The working directory used to resolve relative paths. Defaults to “.”.</p></li>
+<li><p><strong>error_console</strong> (<em>Console</em><em> | </em><em>None</em>) – The rich console errors are written to. Defaults to <code class="docutils literal notranslate"><span class="pre">console</span></code> when
+None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Resolved paths to the YAML files found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[Path]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -808,11 +917,15 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.git_handler.get_git_status">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">get_git_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#get_git_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.get_git_status" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">get_git_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#get_git_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.get_git_status" title="Link to this definition">¶</a></dt>
 <dd><p>Retrieve the status of files in the specified Git repository.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>repo_path</strong> (<em>str</em>) – The path to the Git repository. Defaults to the current directory.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_path</strong> (<em>str</em>) – The path to the Git repository. Defaults to the current directory.</p></li>
+<li><p><strong>base_branch</strong> (<em>str</em><em> | </em><em>None</em>) – The branch to diff the current branch against. When None, brassy tries
+<code class="docutils literal notranslate"><span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">master</span></code>, then <code class="docutils literal notranslate"><span class="pre">trunk</span></code>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><p>A dictionary with the following keys:</p>
@@ -844,20 +957,23 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 <dd class="field-odd"><p>dict[str, list[Any]]</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>pygit2.GitError</strong> – If the repository path is not a git repository or does not have a HEAD.</p>
+<dd class="field-even"><p><strong>pygit2.GitError</strong> – If the repository path is not a git repository, has no HEAD, or no
+    base branch could be resolved.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.git_handler.print_out_git_changed_files">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">print_out_git_changed_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#print_out_git_changed_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.print_out_git_changed_files" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.git_handler.</span></span><span class="sig-name descname"><span class="pre">print_out_git_changed_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">print_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_branch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/utils/git_handler.html#print_out_git_changed_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.git_handler.print_out_git_changed_files" title="Link to this definition">¶</a></dt>
 <dd><p>Print out changes as detected by Git in format Brassy expects in changlogs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>print_function</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>]</em><em>, </em><em>None</em><em>]</em>) – A callable that takes a string and prints it.</p></li>
 <li><p><strong>repo_path</strong> (<em>str</em>) – The path to the Git repository. Defaults to the current directory.</p></li>
+<li><p><strong>base_branch</strong> (<em>str</em><em> | </em><em>None</em>) – The branch to diff against. When None, brassy tries <code class="docutils literal notranslate"><span class="pre">main</span></code>,
+<code class="docutils literal notranslate"><span class="pre">master</span></code>, then <code class="docutils literal notranslate"><span class="pre">trunk</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -867,6 +983,16 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 <section id="module-brassy.utils.messages">
 <span id="messages"></span><h4>Messages<a class="headerlink" href="#module-brassy.utils.messages" title="Link to this heading">¶</a></h4>
 <p>Handle outputs/inputs to the CLI.</p>
+<p>The CLI writes through three channels, set up by <a class="reference internal" href="#brassy.utils.messages.setup_messages" title="brassy.utils.messages.setup_messages"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_messages()</span></code></a>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RichConsole</span></code> – ordinary status and warnings, on stdout. Silenced by
+<code class="docutils literal notranslate"><span class="pre">--quiet</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error_console</span></code> – errors, on stderr. Never silenced, so failures remain
+visible under <code class="docutils literal notranslate"><span class="pre">--quiet</span></code>.</p></li>
+<li><p><a class="reference internal" href="#brassy.utils.messages.payload_print" title="brassy.utils.messages.payload_print"><code class="xref py py-func docutils literal notranslate"><span class="pre">payload_print()</span></code></a> – data the user explicitly asked for
+(<code class="docutils literal notranslate"><span class="pre">--output-to-console</span></code>, <code class="docutils literal notranslate"><span class="pre">-c</span></code>, <code class="docutils literal notranslate"><span class="pre">--version</span></code>), on stdout, unformatted and
+never silenced.</p></li>
+</ul>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.get_boolean_prompt_function">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">get_boolean_prompt_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#get_boolean_prompt_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.get_boolean_prompt_function" title="Link to this definition">¶</a></dt>
@@ -886,15 +1012,20 @@ If arguments are invalid, it prints an error message and exits the program.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.get_rich_opener">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">get_rich_opener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#get_rich_opener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.get_rich_opener" title="Link to this definition">¶</a></dt>
-<dd><p>Return opener function with or without a rich progress bar.</p>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">get_rich_opener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">rich.console.Console</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#get_rich_opener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.get_rich_opener" title="Link to this definition">¶</a></dt>
+<dd><p>Return a file opener that renders a rich progress bar on <code class="docutils literal notranslate"><span class="pre">console</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>no_format</strong> (<em>bool</em>) – If True, returns the opener function without any formatting.
-If False, returns the opener function with formatting. Defaults to False.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>console</strong> (<em>rich.console.Console</em><em> | </em><em>None</em>) – Console the progress bar is rendered on. <code class="docutils literal notranslate"><span class="pre">None</span></code> lets rich fall back
+to its global console, which is unaware of brassy’s output settings.
+Defaults to None.</p></li>
+<li><p><strong>disable</strong> (<em>bool</em>) – Whether to suppress the progress display entirely. Defaults to False.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The opener function for rich progress bar.</p>
+<dd class="field-even"><p>A context-manager factory with the call signature of
+<code class="xref py py-func docutils literal notranslate"><span class="pre">rich.progress.open()</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Callable[…, Any]</p>
@@ -920,14 +1051,31 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="brassy.utils.messages.payload_print">
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">payload_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#payload_print"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.payload_print" title="Link to this definition">¶</a></dt>
+<dd><p>Write requested program data to stdout, unformatted and never suppressed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>content</strong> (<em>str</em>) – Text to write verbatim.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.setup_console">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">setup_console</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Console</span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#setup_console"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.setup_console" title="Link to this definition">¶</a></dt>
-<dd><p>Set up and return the console for printing messages.</p>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">setup_console</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">no_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stderr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Console</span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#setup_console"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.setup_console" title="Link to this definition">¶</a></dt>
+<dd><p>Set up and return a console for printing messages.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>no_format</strong> (<em>bool</em>) – Whether to disable formatting. Defaults to False.</p></li>
-<li><p><strong>quiet</strong> (<em>bool</em>) – Whether to suppress console output. Defaults to False.</p></li>
+<li><p><strong>no_format</strong> (<em>bool</em>) – Whether to disable rich formatting (markup rendering stays on so that
+markup tags are not printed literally). Defaults to False.</p></li>
+<li><p><strong>quiet</strong> (<em>bool</em>) – Whether to suppress this console’s output. Defaults to False.</p></li>
+<li><p><strong>color</strong> (<em>bool</em>) – Whether to allow ANSI colour and styling. When False, or when
+<code class="docutils literal notranslate"><span class="pre">no_format</span></code> is True, the console emits no escape sequences at all.
+Defaults to True.</p></li>
+<li><p><strong>stderr</strong> (<em>bool</em>) – Whether the console writes to stderr instead of stdout. Defaults to
+False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -941,13 +1089,14 @@ If False, returns the opener function with formatting. Defaults to False.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.messages.setup_messages">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">setup_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#setup_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.setup_messages" title="Link to this definition">¶</a></dt>
-<dd><p>Set up global objects for outputting messages to the CLI.</p>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.messages.</span></span><span class="sig-name descname"><span class="pre">setup_messages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/utils/messages.html#setup_messages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.messages.setup_messages" title="Link to this definition">¶</a></dt>
+<dd><p>Set up the module-level output channels used by the CLI.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>enable_format</strong> (<em>bool</em>) – Whether to enable rich formatting for output.</p></li>
-<li><p><strong>quiet</strong> (<em>bool</em>) – Whether to suppress console output.</p></li>
+<li><p><strong>quiet</strong> (<em>bool</em>) – Whether to suppress ordinary (non-error) output.</p></li>
+<li><p><strong>color</strong> (<em>bool</em>) – Whether to allow ANSI colour and styling. Defaults to True.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1114,6 +1263,9 @@ root when possible.</p>
 <dt class="sig sig-object py" id="brassy.utils.settings_manager.override_dict_with_environmental_variables">
 <span class="sig-prename descclassname"><span class="pre">brassy.utils.settings_manager.</span></span><span class="sig-name descname"><span class="pre">override_dict_with_environmental_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/settings_manager.html#override_dict_with_environmental_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.settings_manager.override_dict_with_environmental_variables" title="Link to this definition">¶</a></dt>
 <dd><p>Override dict values with case insensitive environment variables when available.</p>
+<p>Every field of <code class="xref py py-class docutils literal notranslate"><span class="pre">SettingsTemplate</span></code> is considered, so an environment
+variable applies even when the setting is absent from the input dictionary
+(for example when no configuration file exists).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Original settings dictionary.</p>
@@ -1139,10 +1291,14 @@ root when possible.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Parsed configuration settings as a dictionary.</p>
+<dd class="field-even"><p>Parsed configuration settings as a dictionary. A missing or empty
+file contributes an empty dictionary.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict[str, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the file exists but does not contain a YAML mapping.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1153,7 +1309,7 @@ root when possible.</p>
 <p>Handle file system I/O.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="brassy.utils.file_handler.create_blank_template_yaml_file">
-<span class="sig-prename descclassname"><span class="pre">brassy.utils.file_handler.</span></span><span class="sig-name descname"><span class="pre">create_blank_template_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/brassy/utils/file_handler.html#create_blank_template_yaml_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.file_handler.create_blank_template_yaml_file" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.file_handler.</span></span><span class="sig-name descname"><span class="pre">create_blank_template_yaml_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path_arg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/brassy/utils/file_handler.html#create_blank_template_yaml_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.file_handler.create_blank_template_yaml_file" title="Link to this definition">¶</a></dt>
 <dd><p>Create a blank YAML template file with a predefined structure.</p>
 <p>This function generates a YAML file at the specified path with a default
 template. It handles special characters required for YAML compatibility and
@@ -1161,11 +1317,21 @@ writes the file to disk.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path_arg</strong> (<em>str</em><em> | </em><em>None</em>) – The file path of the YAML template as passed via the CLI.</p></li>
-<li><p><strong>console</strong> (<em>Any</em>) – A Rich Console object used for displaying messages and errors to the
-user.</p></li>
-<li><p><strong>working_dir</strong> (<em>str</em>) – The working directory path. Defaults to the current directory “..</p></li>
+<li><p><strong>file_path_arg</strong> (<em>str</em><em> | </em><em>None</em>) – The file path of the YAML template as passed via the CLI. An existing
+directory places a template named after the current git branch inside
+that directory.</p></li>
+<li><p><strong>error_console</strong> (<em>Any</em>) – A Rich Console object used for displaying errors to the user.</p></li>
+<li><p><strong>working_dir</strong> (<em>str</em>) – The working directory path. Defaults to the current directory “.”.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – Whether to overwrite an existing file at the target path. When False
+(the default), an existing file is left untouched and the program
+exits with an error.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path of the YAML template file that was created.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -1253,6 +1419,164 @@ current working directory.</p></li>
 <li><p><strong>output_file</strong> (<em>str</em>) – Path to the output .rst file.</p></li>
 <li><p><strong>content</strong> (<em>str</em>) – Formatted release notes.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-brassy.utils.editor_handler">
+<span id="editor-handler"></span><h4>Editor Handler<a class="headerlink" href="#module-brassy.utils.editor_handler" title="Link to this heading">¶</a></h4>
+<p>Resolve and launch the user’s preferred text editor (git-style).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.utils.editor_handler.launch_editor">
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.editor_handler.</span></span><span class="sig-name descname"><span class="pre">launch_editor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/brassy/utils/editor_handler.html#launch_editor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.editor_handler.launch_editor" title="Link to this definition">¶</a></dt>
+<dd><p>Launch <code class="docutils literal notranslate"><span class="pre">editor</span></code> on <code class="docutils literal notranslate"><span class="pre">path</span></code> in the foreground and return its exit code.</p>
+<p>The editor runs attached to the controlling terminal so that interactive
+editors such as <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">nano</span></code> function correctly. The <code class="docutils literal notranslate"><span class="pre">editor</span></code>
+string is split with <code class="xref py py-func docutils literal notranslate"><span class="pre">shlex.split()</span></code> so that flags (e.g.
+<code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">--wait</span></code>) are honoured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em>) – Path to the file the editor should open.</p></li>
+<li><p><strong>editor</strong> (<em>str</em>) – The editor command (possibly with arguments) resolved by
+<a class="reference internal" href="#brassy.utils.editor_handler.resolve_editor" title="brassy.utils.editor_handler.resolve_editor"><code class="xref py py-func docutils literal notranslate"><span class="pre">resolve_editor()</span></code></a>.</p></li>
+<li><p><strong>error_console</strong> (<em>Any</em>) – A Rich console used to report errors when the editor command cannot be
+executed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The exit code returned by the editor process. <code class="docutils literal notranslate"><span class="pre">1</span></code> is returned when
+the editor binary itself could not be found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.utils.editor_handler.open_file_in_editor">
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.editor_handler.</span></span><span class="sig-name descname"><span class="pre">open_file_in_editor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_console</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">editor_override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/brassy/utils/editor_handler.html#open_file_in_editor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.editor_handler.open_file_in_editor" title="Link to this definition">¶</a></dt>
+<dd><p>Resolve an editor and launch it on <code class="docutils literal notranslate"><span class="pre">path</span></code>, returning the exit code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em>) – Path to the file to open.</p></li>
+<li><p><strong>error_console</strong> (<em>Any</em>) – A Rich console used for error reporting.</p></li>
+<li><p><strong>editor_override</strong> (<em>str</em><em> | </em><em>None</em>) – Optional editor command that bypasses resolution. <code class="docutils literal notranslate"><span class="pre">None</span></code> ignores the
+argument and resolves the editor normally.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The editor process exit code (<code class="docutils literal notranslate"><span class="pre">1</span></code> if the editor could not launch).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.utils.editor_handler.resolve_editor">
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.editor_handler.</span></span><span class="sig-name descname"><span class="pre">resolve_editor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/brassy/utils/editor_handler.html#resolve_editor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.editor_handler.resolve_editor" title="Link to this definition">¶</a></dt>
+<dd><p>Resolve which editor command to launch, in git-like priority order.</p>
+<p>The lookup order is:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">override</span></code> argument (typically from the <code class="docutils literal notranslate"><span class="pre">--editor</span></code> CLI flag).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">default_editor</span></code> setting in the brassy configuration file.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">VISUAL</span></code> environment variable.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">EDITOR</span></code> environment variable.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">core.editor</span></code> setting from the git configuration.</p></li>
+<li><p>A platform default: <code class="docutils literal notranslate"><span class="pre">notepad</span></code> on Windows, <code class="docutils literal notranslate"><span class="pre">vi</span></code> elsewhere.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>override</strong> (<em>str</em><em> | </em><em>None</em>) – An editor command supplied by the caller. When provided and non-empty,
+it takes precedence over every other source. <code class="docutils literal notranslate"><span class="pre">None</span></code> or an empty
+string is ignored.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The editor command to launch, never empty.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-brassy.utils.yaml_handler">
+<span id="yaml-handler"></span><h4>YAML Handler<a class="headerlink" href="#module-brassy.utils.yaml_handler" title="Link to this heading">¶</a></h4>
+<p>Load YAML safely, rejecting duplicate keys.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="brassy.utils.yaml_handler.DuplicateKeyError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">brassy.utils.yaml_handler.</span></span><span class="sig-name descname"><span class="pre">DuplicateKeyError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_mark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mark</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_mark</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mark</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/yaml_handler.html#DuplicateKeyError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.yaml_handler.DuplicateKeyError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ConstructorError</span></code></p>
+<p>Raised when a mapping declares the same key more than once.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>Any</em>) – The key that was declared more than once.</p></li>
+<li><p><strong>first_mark</strong> (<em>yaml.Mark</em>) – Position of the first occurrence.</p></li>
+<li><p><strong>second_mark</strong> (<em>yaml.Mark</em>) – Position of the offending repeat occurrence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="brassy.utils.yaml_handler.UniqueKeySafeLoader">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">brassy.utils.yaml_handler.</span></span><span class="sig-name descname"><span class="pre">UniqueKeySafeLoader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/brassy/utils/yaml_handler.html#UniqueKeySafeLoader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.yaml_handler.UniqueKeySafeLoader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SafeLoader</span></code></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">yaml.SafeLoader</span></code> that rejects mappings containing duplicate keys.</p>
+<p>PyYAML follows the permissive reading of the spec and keeps only the last
+of a set of duplicate keys, so a release note declaring <code class="docutils literal notranslate"><span class="pre">bug</span> <span class="pre">fix:</span></code> twice
+silently loses the first block of entries. This loader raises instead.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="brassy.utils.yaml_handler.UniqueKeySafeLoader.construct_mapping">
+<span class="sig-name descname"><span class="pre">construct_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MappingNode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/brassy/utils/yaml_handler.html#UniqueKeySafeLoader.construct_mapping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.yaml_handler.UniqueKeySafeLoader.construct_mapping" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a mapping, raising if any key appears more than once.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> (<em>yaml.MappingNode</em>) – The mapping node being constructed.</p></li>
+<li><p><strong>deep</strong> (<em>bool</em>) – Whether to construct child nodes eagerly.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The constructed mapping.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[Any, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#brassy.utils.yaml_handler.DuplicateKeyError" title="brassy.utils.yaml_handler.DuplicateKeyError"><strong>DuplicateKeyError</strong></a> – If a key appears more than once in the mapping.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="brassy.utils.yaml_handler.load_yaml">
+<span class="sig-prename descclassname"><span class="pre">brassy.utils.yaml_handler.</span></span><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/brassy/utils/yaml_handler.html#load_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#brassy.utils.yaml_handler.load_yaml" title="Link to this definition">¶</a></dt>
+<dd><p>Parse a YAML document, rejecting duplicate keys and malformed syntax.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stream</strong> (<em>Any</em>) – An open file object or string containing YAML.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em><em> | </em><em>Path</em>) – Path to the source file, used in the error message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The parsed YAML content.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the document contains duplicate keys or is not valid YAML.</p>
 </dd>
 </dl>
 </dd></dl>

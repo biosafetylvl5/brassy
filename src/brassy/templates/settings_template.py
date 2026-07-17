@@ -40,6 +40,8 @@ release-template:
     - ""
     - "{description}"
     - ""
+    - "{issue}"
+    - ""
     - "::"
     - ""
     - "     {file_change}: {file}"
@@ -72,6 +74,8 @@ DefaultTemplate = ReleaseTemplate(
                     "",
                     "{description}",
                     "",
+                    "{issue}",
+                    "",
                     "::",
                     "",
                     "     {file_change}: {file}",
@@ -87,6 +91,7 @@ class SettingsTemplate(BaseModel):
     """Pydantic model for settings file."""
 
     use_color: bool = True
+    base_branch: str | None = None
     default_yaml_path: pathlib.Path | None = None
     change_categories: list[str] = [
         "bug fix",
@@ -106,3 +111,5 @@ class SettingsTemplate(BaseModel):
     valid_changes: list[str] = ["deleted", "moved", "added", "modified"]
     enable_experimental_features: bool = False
     templates: ReleaseTemplate | None = DefaultTemplate
+    default_editor: str | None = None
+    auto_open_editor: bool = False

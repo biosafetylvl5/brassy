@@ -39,6 +39,14 @@ Initialize
    :undoc-members:
    :show-inheritance:
 
+Create Note
+"""""""""""
+
+.. automodule:: brassy.actions.create_note
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Templates
 ^^^^^^^^^
 
@@ -97,6 +105,22 @@ File Handler
 """"""""""""
 
 .. automodule:: brassy.utils.file_handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Editor Handler
+""""""""""""""
+
+.. automodule:: brassy.utils.editor_handler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+YAML Handler
+""""""""""""
+
+.. automodule:: brassy.utils.yaml_handler
    :members:
    :undoc-members:
    :show-inheritance:

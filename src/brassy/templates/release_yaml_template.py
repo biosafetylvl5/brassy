@@ -8,6 +8,7 @@ from typing import Any, Dict, List  # noqa: UP035
 import dateparser
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
     HttpUrl,
     RootModel,
@@ -138,6 +139,9 @@ class ChangeItem(BaseModel):
 
     Attributes
     ----------
+    model_config : ConfigDict
+        Pydantic configuration. Forbids unknown fields so that misspelled keys
+        are reported rather than silently ignored.
     title : str | None
         The title of the change item. Must be at least 1 character long if provided.
         Whitespace is stripped.
@@ -159,33 +163,52 @@ class ChangeItem(BaseModel):
     during validation.
     """
 
-    title: str | None = Field(min_length=1, strip_whitespace=True)
-    description: str | None = Field(min_length=1, strip_whitespace=True)
+    model_config: ConfigDict = ConfigDict(extra="forbid")
+
+    title: str | None = Field(min_length=1)
+    description: str | None = Field(min_length=1)
     files: Files
     related_issue: RelatedIssue | RelatedInternalIssue | None = Field(
         alias="related-issue",
-        exclude_unset=True,
         default=None,
     )
     date: DateRange | None = None
 
-    @model_validator(mode="before")
-    def empty_str_to_none(self) -> ChangeItem:
-        """
-        Convert empty strings to None for 'title' and 'description' attributes.
+    @field_validator("title", "description", mode="before")
+    @classmethod
+    def strip_whitespace_to_none(cls, value: Any) -> Any:
+        """Strip whitespace from strings and convert empty results to None."""
+        if isinstance(value, str):
+            stripped = value.strip()
+            return stripped or None
+        return value
 
-        This method checks if the 'title' or 'description' attributes of the object
-        are empty strings and converts them to None if they are.
+    @model_validator(mode="before")
+    @classmethod
+    def empty_str_to_none(cls, data: Any) -> Any:
+        """
+        Convert empty 'title'/'description' strings to None, mutating in place.
+
+        The in-place mutation is load-bearing, not an accident: callers keep
+        using the same parsed mapping after validation, and the blank-entry
+        filter in ``read_yaml_files`` treats ``""`` (drop the entry) and
+        ``None`` (keep it, render with defaults) differently.
+
+        Parameters
+        ----------
+        data : Any
+            The raw input for the change item, typically a mapping.
 
         Returns
         -------
-        ChangeItem
-            The instance itself to allow for method chaining.
+        Any
+            The input with empty 'title'/'description' strings converted to None.
         """
-        for value in ["title", "description"]:
-            if self[value] == "":
-                self[value] = None
-        return self
+        if isinstance(data, dict):
+            for key in ["title", "description"]:
+                if data.get(key) == "":
+                    data[key] = None
+        return data
 
 
 class ReleaseNote(RootModel[Dict[str, List[ChangeItem]]]):  # noqa: UP006

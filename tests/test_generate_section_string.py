@@ -1,6 +1,7 @@
 """Unit tests for _split_template_lines and generate_section_string."""
 
 from brassy.actions.build_release_notes import (
+    _extract_issue_info,
     _split_template_lines,
     generate_section_string,
 )
@@ -249,3 +250,107 @@ class TestGenerateSectionString:
         assert "footer_text" in result
         assert "2.0" in result
         assert "2025-06-01" in result
+
+
+class TestExtractIssueInfo:
+    """Tests for _extract_issue_info."""
+
+    def test_no_related_issue_key(self):
+        """Entry without related-issue key returns empty strings."""
+        assert _extract_issue_info({}) == ("", "", "")
+
+    def test_related_issue_none(self):
+        """Entry with related-issue set to None returns empty strings."""
+        assert _extract_issue_info({"related-issue": None}) == ("", "", "")
+
+    def test_public_issue(self):
+        """Public issue with number and URL returns formatted RST link."""
+        number, url, rst = _extract_issue_info({
+            "related-issue": {
+                "number": 1001,
+                "repo_url": "https://github.com/foo/bar/issues/1001",
+            },
+        })
+        assert number == "#1001"
+        assert url == "https://github.com/foo/bar/issues/1001"
+        assert rst == "`#1001 <https://github.com/foo/bar/issues/1001>`_"
+
+    def test_internal_issue(self):
+        """Internal issue renders the internal string as-is."""
+        number, url, rst = _extract_issue_info({
+            "related-issue": {"internal": "JIRA#1234 - Summary of fix"},
+        })
+        assert number == "JIRA#1234 - Summary of fix"
+        assert url == ""
+        assert rst == "JIRA#1234 - Summary of fix"
+
+    def test_empty_number_and_url(self):
+        """Entry with null number and empty URL returns empty strings."""
+        assert _extract_issue_info({
+            "related-issue": {"number": None, "repo_url": ""},
+        }) == ("", "", "")
+
+    def test_list_of_numbers(self):
+        """Multiple issue numbers are comma-joined in the formatted output."""
+        number, url, rst = _extract_issue_info({
+            "related-issue": {
+                "number": [1, 2],
+                "repo_url": "https://github.com/foo/bar/issues",
+            },
+        })
+        assert number == "#1, #2"
+        assert url == "https://github.com/foo/bar/issues"
+        assert rst == "`#1, #2 <https://github.com/foo/bar/issues>`_"
+
+    def test_number_zero_not_falsy(self):
+        """Issue number 0 should not be treated as falsy/empty."""
+        number, _url, rst = _extract_issue_info({
+            "related-issue": {
+                "number": 0,
+                "repo_url": "https://github.com/foo/bar/issues/0",
+            },
+        })
+        assert number == "#0"
+        assert rst == "`#0 <https://github.com/foo/bar/issues/0>`_"
+
+
+class TestGenerateSectionStringWithIssue:
+    """Tests for generate_section_string with issue data."""
+
+    def test_entry_with_issue_renders_rst_link(self):
+        """Entry with related-issue data includes an RST hyperlink in output."""
+        lines = _get_entry_template_lines()
+        entries = {
+            "bug fix": [
+                {
+                    "title": "fix",
+                    "description": "desc",
+                    "files": _make_files(),
+                    "related-issue": {
+                        "number": 42,
+                        "repo_url": "https://github.com/foo/bar/issues/42",
+                    },
+                },
+            ],
+        }
+        result = generate_section_string(
+            lines, entries, "2024-01-01", "1.0", "ftr", "hdr",
+        )
+        assert "`#42 <https://github.com/foo/bar/issues/42>`_" in result
+
+    def test_entry_without_issue_no_rst_link(self):
+        """Entry without related-issue produces no RST hyperlink."""
+        lines = _get_entry_template_lines()
+        entries = {
+            "bug fix": [
+                {
+                    "title": "fix",
+                    "description": "desc",
+                    "files": _make_files(),
+                },
+            ],
+        }
+        result = generate_section_string(
+            lines, entries, "2024-01-01", "1.0", "ftr", "hdr",
+        )
+        assert "`#" not in result

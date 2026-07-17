@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any
 
 import brassy
 from brassy.brassy import Settings
-from brassy.utils.messages import RichConsole as console  # noqa: N813
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -123,6 +122,12 @@ def generate_file_change_section_list_of_strings(
         Section lines formatted per file change.
     """
     lines = []
+    issue_number, issue_url, issue_rst = _extract_issue_info(entry)
+    title = _escape_braces(title)
+    description = _escape_braces(description)
+    issue_number = _escape_braces(issue_number)
+    issue_url = _escape_braces(issue_url)
+    issue_rst = _escape_braces(issue_rst)
     for change_type in entry["files"]:
         if "{file}" in line:
             for file in filter(lambda x: x != "", entry["files"][change_type]):
@@ -136,6 +141,9 @@ def generate_file_change_section_list_of_strings(
                         change_type=category.capitalize(),
                         title=title,
                         description=description,
+                        issue_number=issue_number,
+                        issue_url=issue_url,
+                        issue=issue_rst,
                         file_change=change_type,
                         file=filename,
                     ),
@@ -146,14 +154,76 @@ def generate_file_change_section_list_of_strings(
                     change_type=category.capitalize(),
                     title=title,
                     description=description,
+                    issue_number=issue_number,
+                    issue_url=issue_url,
+                    issue=issue_rst,
                     file_change=change_type,
                 ),
             )
     return lines
 
 
-_ENTRY_BODY_KEYWORDS = ("{title}", "{description}", "{file_change}")
+_ENTRY_BODY_KEYWORDS = (
+    "{title}",
+    "{description}",
+    "{file_change}",
+    "{issue}",
+    "{issue_number}",
+    "{issue_url}",
+)
 _ENTRY_KEYWORDS = (*_ENTRY_BODY_KEYWORDS, "{file}", "{change_type}")
+
+
+def _extract_issue_info(entry: dict[str, Any]) -> tuple[str, str, str]:
+    """Extract and format issue information from a changelog entry.
+
+    Parameters
+    ----------
+    entry : dict[str, Any]
+        Changelog entry dict possibly containing a "related-issue" key.
+
+    Returns
+    -------
+    str
+        Formatted issue number (e.g. "#1001") or empty string.
+    str
+        Issue URL string or empty string.
+    str
+        Fully formatted RST hyperlink (e.g. "`#1001 <url>`_")
+        or empty string.
+    """
+    related = entry.get("related-issue") or {}
+    internal = related.get("internal")
+    if internal:
+        return (internal, "", internal)
+
+    number = related.get("number")
+    url = str(related.get("repo_url") or "")
+    if number is None or not url:
+        return ("", "", "")
+
+    formatted = (
+        ", ".join(f"#{n}" for n in number)
+        if isinstance(number, list)
+        else f"#{number}"
+    )
+    return (formatted, url, f"`{formatted} <{url}>`_")
+
+
+def _escape_braces(s: str) -> str:
+    """Escape ``{`` and ``}`` so they pass through a format() call.
+
+    Parameters
+    ----------
+    s : str
+        A string that may contain curly braces.
+
+    Returns
+    -------
+    str
+        The string with ``{`` replaced by ``{{`` and ``}`` by ``}}``.
+    """
+    return s.replace("{", "{{").replace("}", "}}")
 
 
 def _split_template_lines(
@@ -234,6 +304,12 @@ def generate_section_string(  # noqa: PLR0913,PLR0912 TODO: Fix complexity of th
                     description = entry["description"]
                 else:
                     description = Settings.default_description
+                issue_number, issue_url, issue_rst = _extract_issue_info(entry)
+                title = _escape_braces(title)
+                description = _escape_braces(description)
+                issue_number = _escape_braces(issue_number)
+                issue_url = _escape_braces(issue_url)
+                issue_rst = _escape_braces(issue_rst)
                 for line in entry_lines:
                     if "{file_change}" in line:
                         lines.extend(
@@ -251,6 +327,9 @@ def generate_section_string(  # noqa: PLR0913,PLR0912 TODO: Fix complexity of th
                                 change_type=category.capitalize(),
                                 title=title,
                                 description=description,
+                                issue_number=issue_number,
+                                issue_url=issue_url,
+                                issue=issue_rst,
                             ),
                         )
     else:
@@ -315,20 +394,32 @@ def format_release_notes(
                 )
                 + "\n"
             )
-    if Settings.default_title in formatted_string:
+    return formatted_string.strip()
+
+
+def warn_on_missing_entry_fields(content: str, console: Any) -> None:
+    """Warn when rendered notes still contain placeholder titles or descriptions.
+
+    Parameters
+    ----------
+    content : str
+        Rendered release notes to inspect.
+    console : Any
+        Console for user feedback.
+    """
+    if Settings.default_title in content:
         console.print(
             "Warning: Build completed, but at least one title is missing.",
             style="yellow",
         )
-    if Settings.default_description in formatted_string:
+    if Settings.default_description in content:
         console.print(
             "Warning: Build completed, but at least one description is missing.",
             style="yellow",
         )
-    return formatted_string.strip()
 
 
-def build_release_notes(  # noqa PLR0913
+def build_release_notes(  # noqa: PLR0913
     input_files_or_folders: list[str],
     console: Any,
     rich_open: Callable[..., Any],
@@ -337,6 +428,7 @@ def build_release_notes(  # noqa PLR0913
     header_file: str | None = None,
     footer_file: str | None = None,
     working_dir: str = ".",
+    error_console: Any = None,
 ) -> str:
     """Build release notes by reading YAML files and templates.
 
@@ -345,7 +437,7 @@ def build_release_notes(  # noqa PLR0913
     input_files_or_folders : list[str]
         CLI-supplied file or directory paths.
     console : Any
-        Console for user feedback.
+        Console for status and warning output.
     rich_open : Callable[..., Any]
         Context manager factory for reading files.
     version : str | None
@@ -358,21 +450,26 @@ def build_release_notes(  # noqa PLR0913
         Path to an optional footer file.
     working_dir : str
         Base directory for relative paths.
+    error_console : Any
+        Console for error output. Defaults to ``console`` when None.
 
     Returns
     -------
     str
         Rendered release notes in RST.
     """
+    if error_console is None:
+        error_console = console
     yaml_files = brassy.utils.CLI.get_file_list_from_cli_input(
         input_files_or_folders,
         console,
         working_dir=working_dir,
+        error_console=error_console,
     )
     try:
         data = brassy.utils.file_handler.read_yaml_files(yaml_files, rich_open)
     except (ValueError, TypeError) as e:
-        console.print(f"[red]{e}")
+        error_console.print(f"[red]{e}")
         sys.exit(1)
     header, footer = get_header_footer(
         rich_open,
@@ -386,4 +483,5 @@ def build_release_notes(  # noqa PLR0913
         header=header,
         footer=footer,
     )
+    warn_on_missing_entry_fields(content, console)
     return content
