@@ -164,6 +164,13 @@ jobs:
           brassy sphinx/source/releases/latest \
             -o "sphinx/source/releases/${VERSION}.rst" -r "${VERSION}"
 
+      # Tidy brassy's raw RST before it is built into docs and committed: pinkrst
+      # fixes section-underline lengths (brassy emits fixed-width underlines that
+      # otherwise trip doc8) and adds a trailing newline. Smart-wrap is disabled
+      # so long file paths in the "::" literal blocks are not split across lines.
+      - name: Format the release notes with pinkrst
+        run: pink --disable-smart-wrap "sphinx/source/releases/${VERSION}.rst"
+
       - name: Archive the consumed YAML notes
         run: |
           mkdir -p "sphinx/source/releases/archive-${VERSION}"
