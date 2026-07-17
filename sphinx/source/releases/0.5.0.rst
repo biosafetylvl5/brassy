@@ -1,0 +1,388 @@
+Version 0.5.0 (2026-07-17)
+**************************
+
+ * *Enhancement*: Render issue information and number in exported rst
+ * *Enhancement*: Add file name to validation error.
+ * *Enhancement*: Group entries under a single category heading
+ * *Enhancement*: Open created release-note templates in an editor
+ * *Bug fix*: Keep errors visible under --quiet and stop the progress bar leaking
+ * *Bug fix*: Make --no-color actually disable ansi formatting
+ * *Bug fix*: Refuse to overwrite an existing release note without --force
+ * *Bug fix*: Reject unrecognized fields and report the offending one
+ * *Bug fix*: Resolve the base branch instead of assuming main
+ * *Bug fix*: Fix config file creation and settings precedence
+ * *Bug fix*: Survive empty config files and support directories for -t
+ * *Bug fix*: Tidy internal apis from code review
+ * *Bug fix*: Fix path.cwd fallback and correct a malformed test fixture
+ * *Bug fix*: Reject duplicate keys in yaml files instead of silently dropping data
+ * *Documentation*: Fix versioning number scheme
+ * *Continuous integration*: Add a manually-dispatched release workflow
+
+Enhancement
+===========
+
+Render issue information and number in exported rst
+-------------------------
+
+The related-issue field from release note YAML files is now rendered
+in the generated RST output. Three new template variables are
+available: {issue}, {issue_number}, and {issue_url}. The default
+template includes the issue reference between the description and
+the file-change listing.
+
+
+`#13 <https://github.com/biosafetylvl5/brassy/issues/13>`_
+
+::
+
+     modified: src/brassy/actions/build_release_notes.py
+     modified: src/brassy/templates/settings_template.py
+     modified: sphinx/source/using-brassy.rst
+     modified: tests/test_generate_section_string.py
+     modified: tests/outputs/barebones.rst
+     modified: tests/outputs/fully-featured.rst
+     modified: tests/outputs/mostly-featured.rst
+     modified: tests/outputs/multi-entry.rst
+     modified: tests/outputs/real-world.rst
+     added: sphinx/source/releases/latest/13-render-issue-info.yaml
+
+Add file name to validation error.
+-------------------------
+
+This adds the filename of the file failing validation to the error upon failed validation.
+
+
+
+::
+
+     modified: src/brassy/utils/file_handler.py
+     modified: tests/test_integ.py
+     modified: tests/inputs/real-world.yaml
+     modified: tests/outputs/real-world.rst
+
+Group entries under a single category heading
+-------------------------
+
+When a category contains multiple change entries, the category heading
+(e.g., "Bug fix") is now rendered once with all entries grouped
+beneath it, instead of repeating the heading per entry.
+The output template now distinguishes between category-level lines
+(rendered once per category) and entry-level lines (rendered per
+entry) based on which template variables each line contains.
+
+
+`#64 <https://github.com/biosafetylvl5/brassy/issues/64>`_
+
+::
+
+     modified: src/brassy/actions/build_release_notes.py
+     modified: tests/test_integ.py
+     modified: sphinx/source/using-brassy.rst
+     added: tests/inputs/multi-entry.yaml
+     added: tests/outputs/multi-entry.rst
+     added: tests/test_generate_section_string.py
+
+Open created release-note templates in an editor
+-------------------------
+
+Brassy can now open a newly created YAML template in the user's text
+editor, similar to how ``git commit`` opens the commit message editor.
+Enable the new ``auto_open_editor`` setting (``false`` by default) in
+the ``.brassy`` file, and ``brassy -t`` will launch the resolved editor
+on the created template.
+The editor is resolved in git-like priority order: the ``--editor``
+CLI flag, the ``default_editor`` setting, ``$VISUAL``, ``$EDITOR``, git's
+``core.editor``, then a platform default (``notepad`` on Windows,
+``vi`` elsewhere).
+Use ``--no-open`` to suppress the editor for a single invocation.
+
+
+`#51 <https://github.com/biosafetylvl5/brassy/issues/51>`_
+
+::
+
+     modified: src/brassy/utils/CLI.py
+     modified: src/brassy/utils/file_handler.py
+     modified: src/brassy/templates/settings_template.py
+     modified: sphinx/source/using-brassy.rst
+     modified: sphinx/source/api.rst
+     modified: tests/test_integ.py
+     added: src/brassy/utils/editor_handler.py
+     added: src/brassy/actions/create_note.py
+
+Bug fix
+===========
+
+Keep errors visible under --quiet and stop the progress bar leaking
+-------------------------
+
+Errors are now written to standard error on a console that --quiet never
+silences, so a failing command is no longer silent in scripts and CI.
+The reading progress bar is bound to the quiet-aware console, so --quiet
+suppresses it instead of letting it through. Output explicitly requested
+with --output-to-console, --get-changed-files and --version is written to
+standard output and survives --quiet, which makes piping it reliable.
+
+
+
+
+::
+
+     modified: src/brassy/utils/messages.py
+     modified: src/brassy/utils/CLI.py
+     modified: src/brassy/actions/build_release_notes.py
+     modified: sphinx/source/using-brassy.rst
+
+Make --no-color actually disable ansi formatting
+-------------------------
+
+The --no-color/-nc flag was parsed but never applied, and its default was
+inverted so it read as enabled even when absent. It now defaults to off,
+is honoured, and strips every ANSI escape (colour and bold) rather than
+colour alone.
+
+
+
+
+::
+
+     modified: src/brassy/utils/CLI.py
+     modified: src/brassy/utils/messages.py
+
+Refuse to overwrite an existing release note without --force
+-------------------------
+
+Writing a YAML template with -t no longer silently overwrites a file that
+already exists; brassy exits with an error instead. Pass --force to
+overwrite on purpose. This protects notes derived from the current branch
+name, which land on the same path on every run.
+
+
+
+
+::
+
+     modified: src/brassy/utils/file_handler.py
+     modified: src/brassy/actions/create_note.py
+     modified: src/brassy/utils/CLI.py
+
+Reject unrecognized fields and report the offending one
+-------------------------
+
+Release-note entries now reject unknown keys, so a misspelled field
+is reported by name instead of being silently ignored while its
+value is dropped. The underlying validation error is included in the
+message rather than discarded. A dict-safe validator no longer raises a
+bare KeyError when a required key is absent.
+
+
+
+
+::
+
+     modified: src/brassy/templates/release_yaml_template.py
+     modified: src/brassy/utils/file_handler.py
+
+Resolve the base branch instead of assuming main
+-------------------------
+
+--get-changed-files no longer crashes with a raw traceback on repositories
+whose base branch is not called main. Brassy tries main, master then trunk,
+and accepts a --base-branch flag or a base_branch setting to override the
+choice. When no base branch can be found it exits with a clear message.
+
+
+
+
+::
+
+     modified: src/brassy/utils/git_handler.py
+     modified: src/brassy/utils/CLI.py
+     modified: src/brassy/templates/settings_template.py
+     modified: sphinx/source/using-brassy.rst
+
+Fix config file creation and settings precedence
+-------------------------
+
+Creating a config file no longer raises AttributeError when the parent
+directory is missing, so init works again. A missing configuration file no
+longer contributes a full set of defaults that reset settings from
+higher-precedence files, and environment variable overrides now apply even
+when no config file exists.
+
+
+
+
+::
+
+     modified: src/brassy/utils/settings_manager.py
+
+Survive empty config files and support directories for -t
+-------------------------
+
+An empty or comments-only configuration file no longer crashes every
+brassy command with a TypeError; it now contributes no settings, exactly
+like a missing file, and a config file that is not a YAML mapping produces
+an error naming the offending file. Passing an existing directory to -t
+now places a branch-named template inside it, as the help text has always
+promised, instead of refusing with a misleading suggestion to use --force.
+The documentation now also notes that flags such as --force must come
+after the file name given to -t.
+
+
+
+
+::
+
+     modified: src/brassy/utils/settings_manager.py
+     modified: src/brassy/utils/file_handler.py
+     modified: sphinx/source/using-brassy.rst
+     modified: tests/brassy/utils/test_settings_manager.py
+     modified: tests/test_cli_ux.py
+     modified: .gitignore
+
+Tidy internal apis from code review
+-------------------------
+
+create_note no longer returns a meaningless 0; it returns None, since no
+caller consumed the value. load_yaml now accepts a Path as well as a str
+for its file_path argument, and the redundant str() casts at its call
+sites in settings_manager and prune_yaml were removed.
+
+
+
+
+::
+
+     modified: src/brassy/actions/create_note.py
+     modified: src/brassy/utils/yaml_handler.py
+     modified: src/brassy/utils/settings_manager.py
+     modified: src/brassy/actions/prune_yaml.py
+
+Fix path.cwd fallback and correct a malformed test fixture
+-------------------------
+
+Resolving a template path with no working directory used a non-existent
+Path.getcwd method; it now uses Path.cwd. The fully-featured test fixture
+had mis-indented file keys that silently dropped changed files, now
+corrected along with its golden output.
+
+
+
+
+::
+
+     modified: src/brassy/utils/file_handler.py
+     modified: tests/inputs/fully-featured.yaml
+     modified: tests/outputs/fully-featured.rst
+     added: tests/test_cli_ux.py
+     added: tests/brassy/utils/test_CLI.py
+     added: tests/brassy/utils/test_file_handler.py
+     added: tests/brassy/utils/test_settings_manager.py
+     added: sphinx/source/releases/latest/fix-cli-output-and-safety.yaml
+
+Reject duplicate keys in yaml files instead of silently dropping data
+-------------------------
+
+Brassy now fails with a clear error when a YAML file declares the same key
+twice, rather than silently keeping only the last occurrence.
+Previously a release note that declared a category such as ``bug fix:``
+twice would build successfully while quietly discarding every entry in the
+first block, because PyYAML keeps only the last of a set of duplicate keys.
+``--prune`` was affected the same way, and rewrites files in place, so the
+discarded entries were destroyed on disk.
+The error names the file, the duplicated key, and the line of both
+occurrences. It applies at every nesting level and to every YAML file
+brassy reads, including ``.brassy`` configuration files.
+As part of the same change, malformed YAML now reports a readable error
+instead of an unhandled traceback.
+
+
+`#2 <https://github.com/biosafetylvl5/brassy/issues/2>`_
+
+::
+
+     modified: src/brassy/utils/file_handler.py
+     modified: src/brassy/utils/settings_manager.py
+     modified: src/brassy/actions/prune_yaml.py
+     modified: sphinx/source/api.rst
+     modified: tests/test_integ.py
+     added: src/brassy/utils/yaml_handler.py
+     added: tests/brassy/utils/test_yaml_handler.py
+
+Documentation
+===========
+
+Fix versioning number scheme
+-------------------------
+
+This updates the numbering scheme to use standard semantic versioning.
+
+
+
+::
+
+     modified: docs/_modules/brassy/utils/file_handler.html
+     modified: docs/_sources/releases/index.rst.txt
+     modified: docs/index.html
+     modified: docs/objects.inv
+     modified: docs/releases/index.html
+     modified: docs/searchindex.js
+     modified: pyproject.toml
+     modified: sphinx/source/releases/index.rst
+     modified: tests/inputs/mostly-featured.yaml
+     moved: docs/_sources/releases/0.0.2.rst.txt
+     moved: docs/_sources/releases/0.0.3.rst.txt
+     moved: docs/_sources/releases/0.0.4.rst.txt
+     moved: docs/releases/0.0.2.html
+     moved: docs/releases/0.0.3.html
+     moved: docs/releases/0.0.4.html
+     moved: sphinx/source/releases/0.0.2.rst
+     moved: sphinx/source/releases/0.0.3.rst
+     moved: sphinx/source/releases/0.0.4.rst
+     moved: sphinx/source/releases/archive-0.0.2/build-without-write.yaml
+     moved: sphinx/source/releases/archive-0.0.2/fix-blank-line-bug.yaml
+     moved: sphinx/source/releases/archive-0.0.2/fix-quiet.yaml
+     moved: sphinx/source/releases/archive-0.0.2/get-changed-files.yaml
+     moved: sphinx/source/releases/archive-0.0.2/output-to-console.yaml
+     moved: sphinx/source/releases/archive-0.0.3/1-brassy-fails-if-run-on-blank-file.yaml
+     moved: sphinx/source/releases/archive-0.0.3/30-accept-strings-in-related-issue-for-compatibility-with-internal-repos-with-inaccessible-urls.yaml
+     moved: sphinx/source/releases/archive-0.0.3/39-release-v003.yaml
+     moved: sphinx/source/releases/archive-0.0.3/6-add-date-field.yaml
+     moved: sphinx/source/releases/archive-0.0.3/9-add-default-template-write-path.yaml
+     moved: sphinx/source/releases/archive-0.0.3/add-init.yaml
+     moved: sphinx/source/releases/archive-0.0.3/fix-docs-yaml.yaml
+     moved: sphinx/source/releases/archive-0.0.3/fix-no-build-no-title.yaml
+     moved: sphinx/source/releases/archive-0.0.3/fix-template-arg-error.yaml
+     moved: sphinx/source/releases/archive-0.0.3/int-tests.yaml
+     moved: sphinx/source/releases/archive-0.0.3/put-title-above-desc-in-temp.yaml
+     moved: sphinx/source/releases/archive-0.0.4/49-support-yyyy-mm-dd-date-format.yaml
+     moved: sphinx/source/releases/archive-0.0.4/59-brassy-cant-generate-documentation-for-branches-with-a-in-their-name.yaml
+     moved: sphinx/source/releases/archive-0.0.4/add-dev-container.yaml
+     moved: sphinx/source/releases/archive-0.0.4/add-linting-ci.yaml
+     moved: sphinx/source/releases/archive-0.0.4/add-release-note-checking-ci.yaml
+     moved: sphinx/source/releases/archive-0.0.4/issue-documentation.yaml
+     moved: sphinx/source/releases/latest/58-brassy-misinterprets-files-moves-with-brace-expansion-as-invalid-substitution-causing-release-note-generation-failure.yaml
+
+Continuous integration
+===========
+
+Add a manually-dispatched release workflow
+-------------------------
+
+A new GitHub Actions workflow ("Release") automates cutting a release. On
+manual dispatch with a version number it builds the release notes for that
+version from the accumulated YAML in sphinx/source/releases/latest/, moves
+those notes into archive-<version>/, bumps the package version, rebuilds the
+committed docs, commits the result to a release/v<version> branch, publishes
+the package to PyPI with a token, tags v<version>, and opens a pull request
+into main. The releases index now uses a globbed toctree so each new
+version page is listed automatically without editing the index.
+
+
+
+
+::
+
+     added: .github/workflows/release.yaml
+     modified: sphinx/source/releases/index.rst
