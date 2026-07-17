@@ -54,8 +54,8 @@ bug fix:
     finish: null
 - title: 'Reject unrecognized fields and report the offending one'
   description: |
-    Release-note entries now reject unknown keys, so a misspelled field such
-    as "titel" is reported by name instead of being silently ignored while its
+    Release-note entries now reject unknown keys, so a misspelled field
+    is reported by name instead of being silently ignored while its
     value is dropped. The underlying validation error is included in the
     message rather than discarded. A dict-safe validator no longer raises a
     bare KeyError when a required key is absent.
