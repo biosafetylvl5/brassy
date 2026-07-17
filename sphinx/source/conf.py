@@ -27,6 +27,12 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = []
 
+# Render docstring "Attributes" sections as :ivar: field-list entries instead
+# of separate autodoc directives -- autodoc's :members: already documents each
+# attribute from the class body, and generating both causes Sphinx to warn
+# about duplicate object descriptions.
+napoleon_use_ivar = True
+
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

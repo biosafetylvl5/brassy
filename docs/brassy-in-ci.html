@@ -52,8 +52,8 @@ modifications to existing rst release notes.</p>
 
 <span class="nt">jobs</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">check-release-notes</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biosafetylvl5/brassy/.github/workflows/reusable-check-release-notes.yaml@main</span><span class="w"> </span><span class="c1"># you should specify a</span>
-<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">commit here</span>
+<span class="w">    </span><span class="c1"># you should specify a commit here instead of a branch</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">biosafetylvl5/brassy/.github/workflows/reusable-check-release-notes.yaml@main</span>
 <span class="w">    </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">      </span><span class="nt">release_notes_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sphinx/source/releases&#39;</span>
 <span class="w">      </span><span class="nt">latest_notes_dir</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sphinx/source/releases/latest&#39;</span>
@@ -176,14 +176,18 @@ you can disable the rst edit check:</p>
 <section id="no-yaml-changes-detected">
 <h3>No YAML Changes Detected<a class="headerlink" href="#no-yaml-changes-detected" title="Link to this heading">¶</a></h3>
 <p>If the action fails with “No YAML release note changes detected”:</p>
-<p>1. Add a new release note file in the <code class="docutils literal notranslate"><span class="pre">latest_notes_dir</span></code> directory using brassy
-3. Ensure the file has the correct extension (<code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code>)</p>
+<ol class="arabic simple">
+<li><p>Add a new release note file in the <code class="docutils literal notranslate"><span class="pre">latest_notes_dir</span></code> directory using brassy</p></li>
+<li><p>Ensure the file has the correct extension (<code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code>)</p></li>
+</ol>
 </section>
 <section id="rst-changes-detected">
 <h3>RST Changes Detected<a class="headerlink" href="#rst-changes-detected" title="Link to this heading">¶</a></h3>
 <p>If the action fails with “Release note RST changes detected”:</p>
-<p>1. Check that you have not accidentally modified RST release files directly in a branch that isn’t a release branch
-3. If you need to edit RST files directly, set <code class="docutils literal notranslate"><span class="pre">allow_rst_edits:</span> <span class="pre">true</span></code></p>
+<ol class="arabic simple">
+<li><p>Check that you have not accidentally modified RST release files directly in a branch that isn’t a release branch</p></li>
+<li><p>If you need to edit RST files directly, set <code class="docutils literal notranslate"><span class="pre">allow_rst_edits:</span> <span class="pre">true</span></code></p></li>
+</ol>
 </section>
 </section>
 <section id="contributing">
@@ -257,7 +261,7 @@ you can disable the rst edit check:</p>
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |

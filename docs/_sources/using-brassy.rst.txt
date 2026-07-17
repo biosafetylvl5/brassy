@@ -71,8 +71,7 @@ For example:
     bug fix:
     - title: 'Fix elephant related crash'
       description: |
-            - Fixed a bug where the program would crash when the user thought of elephants.
-      description: |
+        Fixed a bug where the program would crash when the user thought of elephants.
       files:
         deleted:
         - 'die-on-thoughts.py'
@@ -412,7 +411,7 @@ For example:
 .. code-block:: bash
 
     brassy --yaml-dir ./docs/release-notes/v1.0.0 \
-           --write-template "updating-gpu-code"
+           --write-yaml-template "updating-gpu-code"
 
 would write a template file ``updating-gpu-code.yaml``
 to ``./docs/release-notes/v1.0.0``.
