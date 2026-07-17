@@ -11,6 +11,7 @@ that they pass once the defect is addressed, whichever way it is addressed.
 
 import os
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -329,6 +330,14 @@ def test_no_color_flag_suppresses_ansi_escapes():
 
 
 @pytest.mark.integration
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "On Windows rich colours via the Win32 console API (SetConsoleTextAttribute) "
+        "rather than ANSI escape sequences, so no \\x1b[ bytes reach captured output "
+        "even with colour on. The escape-byte contract only holds on POSIX."
+    ),
+)
 def test_color_is_on_by_default():
     """Without ``-nc``, colour stays on.
 

@@ -76,9 +76,9 @@ def test_build_on_test_files(input_file):
             ],
         ):
             raise OSError("Brassy command failed")
-        assert list(output_file.open()) == list(
-            (valid_outputs_path / f"{input_file}.rst").open(),
-        )
+        assert output_file.read_text(encoding="utf-8") == (
+            valid_outputs_path / f"{input_file}.rst"
+        ).read_text(encoding="utf-8")
 
 
 def test_create_template_build_template():
@@ -111,9 +111,9 @@ def test_pruning():
         run_cli_command_return_true_if_command_returns_zero(
             ["brassy", "--prune", to_prune],
         )
-        assert list(to_prune.open()) == list(
-            (valid_outputs_path / "pruned.yaml").open(),
-        )
+        assert to_prune.read_text(encoding="utf-8") == (
+            valid_outputs_path / "pruned.yaml"
+        ).read_text(encoding="utf-8")
 
 
 DUPLICATE_KEY_YAML = """\
@@ -179,9 +179,9 @@ def test_template_output():
         run_cli_command_return_true_if_command_returns_zero(
             ["brassy", "--write-yaml-template", str(output_file)],
         )
-        assert list(output_file.open()) == list(
-            (valid_outputs_path / "template-output.yaml").open(),
-        )
+        assert output_file.read_text(encoding="utf-8") == (
+            valid_outputs_path / "template-output.yaml"
+        ).read_text(encoding="utf-8")
 
 
 def _run_with_env(command, env_overrides):

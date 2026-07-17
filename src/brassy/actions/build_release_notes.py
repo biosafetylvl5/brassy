@@ -40,7 +40,12 @@ def get_header_footer(
     def get_file(file: str | None) -> str | None:
         if not file:
             return None
-        with rich_open(file, "r", description=f"Reading {file}") as open_file:
+        with rich_open(
+            file,
+            "r",
+            encoding="utf-8",
+            description=f"Reading {file}",
+        ) as open_file:
             return open_file.read()
 
     return get_file(header_file), get_file(footer_file)

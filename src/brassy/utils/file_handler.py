@@ -124,7 +124,7 @@ def create_blank_template_yaml_file(
             + "Pass --force to overwrite it.",
         )
         sys.exit(1)
-    with Path(yaml_template_path).open("w") as file:
+    with Path(yaml_template_path).open("w", encoding="utf-8") as file:
         yaml_text = yaml.safe_dump(
             default_yaml,
             sort_keys=False,
@@ -193,7 +193,12 @@ def read_yaml_files(
     """
     data: dict[str, Any] = {}
     for file_path in input_files:
-        with rich_open(file_path, "r", description=f"Reading {file_path}") as file:
+        with rich_open(
+            file_path,
+            "r",
+            encoding="utf-8",
+            description=f"Reading {file_path}",
+        ) as file:
             content = yaml_handler.load_yaml(file, file_path)
             value_error_on_invalid_yaml(content, file_path)
             for category, entries in content.items():
@@ -220,5 +225,5 @@ def write_output_file(output_file: str, content: str) -> None:
     content : str
         Formatted release notes.
     """
-    with Path(output_file).open("w") as file:
+    with Path(output_file).open("w", encoding="utf-8") as file:
         file.write(content)

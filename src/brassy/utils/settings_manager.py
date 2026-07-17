@@ -128,7 +128,7 @@ def create_config_file(config_file: Path) -> None:
     config_file = Path(config_file)
     default_settings = SettingsTemplate()
     config_file.parent.mkdir(parents=True, exist_ok=True)
-    with config_file.open("w") as f:
+    with config_file.open("w", encoding="utf-8") as f:
         yaml.dump(default_settings.model_dump(), f)
 
 
@@ -159,7 +159,7 @@ def read_config_file(
     """
     config_file = Path(config_file)
     try:
-        with config_file.open() as f:
+        with config_file.open(encoding="utf-8") as f:
             content = load_yaml(f, config_file)
     except FileNotFoundError:
         if not create_file_if_not_exist:

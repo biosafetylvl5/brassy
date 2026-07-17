@@ -67,8 +67,12 @@ def create_note(  # noqa: PLR0913
     if not open_editor:
         return
     editor = editor_handler.resolve_editor(editor_override)
+    # soft_wrap keeps this status line intact: without it rich wraps to the
+    # console width (80 cols when output is captured), which splits the message
+    # mid-phrase whenever the path is long — e.g. on Windows temp paths.
     console.print(
         f"[green]Created [bold]{yaml_path}[/], opening in '{editor}'...",
+        soft_wrap=True,
     )
     exit_code = editor_handler.launch_editor(yaml_path, editor, error_console)
     if exit_code != 0 and exit_code is not None:
