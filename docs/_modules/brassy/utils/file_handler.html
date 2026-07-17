@@ -162,7 +162,7 @@
             <span class="o">+</span> <span class="s2">&quot;Pass --force to overwrite it.&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">yaml_template_path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">yaml_text</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span>
             <span class="n">default_yaml</span><span class="p">,</span>
             <span class="n">sort_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -237,7 +237,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">input_files</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">rich_open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Reading </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">rich_open</span><span class="p">(</span>
+            <span class="n">file_path</span><span class="p">,</span>
+            <span class="s2">&quot;r&quot;</span><span class="p">,</span>
+            <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Reading </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">yaml_handler</span><span class="o">.</span><span class="n">load_yaml</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
             <span class="n">value_error_on_invalid_yaml</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">file_path</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -267,7 +272,7 @@
 <span class="sd">    content : str</span>
 <span class="sd">        Formatted release notes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
 
 </pre></div>
@@ -329,7 +334,7 @@
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
