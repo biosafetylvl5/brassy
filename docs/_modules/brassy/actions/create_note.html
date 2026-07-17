@@ -102,8 +102,12 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">open_editor</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="n">editor</span> <span class="o">=</span> <span class="n">editor_handler</span><span class="o">.</span><span class="n">resolve_editor</span><span class="p">(</span><span class="n">editor_override</span><span class="p">)</span>
+    <span class="c1"># soft_wrap keeps this status line intact: without it rich wraps to the</span>
+    <span class="c1"># console width (80 cols when output is captured), which splits the message</span>
+    <span class="c1"># mid-phrase whenever the path is long — e.g. on Windows temp paths.</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;[green]Created [bold]</span><span class="si">{</span><span class="n">yaml_path</span><span class="si">}</span><span class="s2">[/], opening in &#39;</span><span class="si">{</span><span class="n">editor</span><span class="si">}</span><span class="s2">&#39;...&quot;</span><span class="p">,</span>
+        <span class="n">soft_wrap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">exit_code</span> <span class="o">=</span> <span class="n">editor_handler</span><span class="o">.</span><span class="n">launch_editor</span><span class="p">(</span><span class="n">yaml_path</span><span class="p">,</span> <span class="n">editor</span><span class="p">,</span> <span class="n">error_console</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">exit_code</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">exit_code</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -171,7 +175,7 @@
       &#169;.
       
       |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.1.0</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
       &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>

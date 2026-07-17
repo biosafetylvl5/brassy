@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Version 0.5.1 (2026-07-17) &#8212; brassy 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Version 0.0.4 (2025-10-27)" href="0.4.0.html" />
+    <link rel="prev" title="Release Notes" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="version-0-5-1-2026-07-17">
+<h1>Version 0.5.1 (2026-07-17)<a class="headerlink" href="#version-0-5-1-2026-07-17" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li><p><em>Enhancement</em>: Render issue information and number in exported rst</p></li>
+<li><p><em>Enhancement</em>: Add file name to validation error.</p></li>
+<li><p><em>Enhancement</em>: Group entries under a single category heading</p></li>
+<li><p><em>Enhancement</em>: Open created release-note templates in an editor</p></li>
+<li><p><em>Bug fix</em>: Keep errors visible under –quiet and stop the progress bar leaking</p></li>
+<li><p><em>Bug fix</em>: Make –no-color actually disable ansi formatting</p></li>
+<li><p><em>Bug fix</em>: Refuse to overwrite an existing release note without –force</p></li>
+<li><p><em>Bug fix</em>: Reject unrecognized fields and report the offending one</p></li>
+<li><p><em>Bug fix</em>: Resolve the base branch instead of assuming main</p></li>
+<li><p><em>Bug fix</em>: Fix config file creation and settings precedence</p></li>
+<li><p><em>Bug fix</em>: Survive empty config files and support directories for -t</p></li>
+<li><p><em>Bug fix</em>: Tidy internal apis from code review</p></li>
+<li><p><em>Bug fix</em>: Fix path.cwd fallback and correct a malformed test fixture</p></li>
+<li><p><em>Bug fix</em>: Reject duplicate keys in yaml files instead of silently dropping data</p></li>
+<li><p><em>Documentation</em>: Fix versioning number scheme</p></li>
+<li><p><em>Continuous integration</em>: Add a manually-dispatched release workflow</p></li>
+</ul>
+</div></blockquote>
+<section id="enhancement">
+<h2>Enhancement<a class="headerlink" href="#enhancement" title="Link to this heading">¶</a></h2>
+<section id="render-issue-information-and-number-in-exported-rst">
+<h3>Render issue information and number in exported rst<a class="headerlink" href="#render-issue-information-and-number-in-exported-rst" title="Link to this heading">¶</a></h3>
+<p>The related-issue field from release note YAML files is now rendered
+in the generated RST output. Three new template variables are
+available: {issue}, {issue_number}, and {issue_url}. The default
+template includes the issue reference between the description and
+the file-change listing.</p>
+<p><a class="reference external" href="https://github.com/biosafetylvl5/brassy/issues/13">#13</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">build_release_notes</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">settings_template</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">using</span><span class="o">-</span><span class="n">brassy</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_generate_section_string</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">barebones</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">fully</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">mostly</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">multi</span><span class="o">-</span><span class="n">entry</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">real</span><span class="o">-</span><span class="n">world</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="mi">13</span><span class="o">-</span><span class="n">render</span><span class="o">-</span><span class="n">issue</span><span class="o">-</span><span class="n">info</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+<section id="add-file-name-to-validation-error">
+<h3>Add file name to validation error.<a class="headerlink" href="#add-file-name-to-validation-error" title="Link to this heading">¶</a></h3>
+<p>This adds the filename of the file failing validation to the error upon failed validation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_integ</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">real</span><span class="o">-</span><span class="n">world</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">real</span><span class="o">-</span><span class="n">world</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+</section>
+<section id="group-entries-under-a-single-category-heading">
+<h3>Group entries under a single category heading<a class="headerlink" href="#group-entries-under-a-single-category-heading" title="Link to this heading">¶</a></h3>
+<p>When a category contains multiple change entries, the category heading
+(e.g., “Bug fix”) is now rendered once with all entries grouped
+beneath it, instead of repeating the heading per entry.
+The output template now distinguishes between category-level lines
+(rendered once per category) and entry-level lines (rendered per
+entry) based on which template variables each line contains.</p>
+<p><a class="reference external" href="https://github.com/biosafetylvl5/brassy/issues/64">#64</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">build_release_notes</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_integ</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">using</span><span class="o">-</span><span class="n">brassy</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">multi</span><span class="o">-</span><span class="n">entry</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">multi</span><span class="o">-</span><span class="n">entry</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_generate_section_string</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="open-created-release-note-templates-in-an-editor">
+<h3>Open created release-note templates in an editor<a class="headerlink" href="#open-created-release-note-templates-in-an-editor" title="Link to this heading">¶</a></h3>
+<p>Brassy can now open a newly created YAML template in the user’s text
+editor, similar to how <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> opens the commit message editor.
+Enable the new <code class="docutils literal notranslate"><span class="pre">auto_open_editor</span></code> setting (<code class="docutils literal notranslate"><span class="pre">false</span></code> by default) in
+the <code class="docutils literal notranslate"><span class="pre">.brassy</span></code> file, and <code class="docutils literal notranslate"><span class="pre">brassy</span> <span class="pre">-t</span></code> will launch the resolved editor
+on the created template.
+The editor is resolved in git-like priority order: the <code class="docutils literal notranslate"><span class="pre">--editor</span></code>
+CLI flag, the <code class="docutils literal notranslate"><span class="pre">default_editor</span></code> setting, <code class="docutils literal notranslate"><span class="pre">$VISUAL</span></code>, <code class="docutils literal notranslate"><span class="pre">$EDITOR</span></code>, git’s
+<code class="docutils literal notranslate"><span class="pre">core.editor</span></code>, then a platform default (<code class="docutils literal notranslate"><span class="pre">notepad</span></code> on Windows,
+<code class="docutils literal notranslate"><span class="pre">vi</span></code> elsewhere).
+Use <code class="docutils literal notranslate"><span class="pre">--no-open</span></code> to suppress the editor for a single invocation.</p>
+<p><a class="reference external" href="https://github.com/biosafetylvl5/brassy/issues/51">#51</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">CLI</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">settings_template</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">using</span><span class="o">-</span><span class="n">brassy</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_integ</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">editor_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">create_note</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="bug-fix">
+<h2>Bug fix<a class="headerlink" href="#bug-fix" title="Link to this heading">¶</a></h2>
+<section id="keep-errors-visible-under-quiet-and-stop-the-progress-bar-leaking">
+<h3>Keep errors visible under –quiet and stop the progress bar leaking<a class="headerlink" href="#keep-errors-visible-under-quiet-and-stop-the-progress-bar-leaking" title="Link to this heading">¶</a></h3>
+<p>Errors are now written to standard error on a console that –quiet never
+silences, so a failing command is no longer silent in scripts and CI.
+The reading progress bar is bound to the quiet-aware console, so –quiet
+suppresses it instead of letting it through. Output explicitly requested
+with –output-to-console, –get-changed-files and –version is written to
+standard output and survives –quiet, which makes piping it reliable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">messages</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">CLI</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">build_release_notes</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">using</span><span class="o">-</span><span class="n">brassy</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+</section>
+<section id="make-no-color-actually-disable-ansi-formatting">
+<h3>Make –no-color actually disable ansi formatting<a class="headerlink" href="#make-no-color-actually-disable-ansi-formatting" title="Link to this heading">¶</a></h3>
+<p>The –no-color/-nc flag was parsed but never applied, and its default was
+inverted so it read as enabled even when absent. It now defaults to off,
+is honoured, and strips every ANSI escape (colour and bold) rather than
+colour alone.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">CLI</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">messages</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="refuse-to-overwrite-an-existing-release-note-without-force">
+<h3>Refuse to overwrite an existing release note without –force<a class="headerlink" href="#refuse-to-overwrite-an-existing-release-note-without-force" title="Link to this heading">¶</a></h3>
+<p>Writing a YAML template with -t no longer silently overwrites a file that
+already exists; brassy exits with an error instead. Pass –force to
+overwrite on purpose. This protects notes derived from the current branch
+name, which land on the same path on every run.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">create_note</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">CLI</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="reject-unrecognized-fields-and-report-the-offending-one">
+<h3>Reject unrecognized fields and report the offending one<a class="headerlink" href="#reject-unrecognized-fields-and-report-the-offending-one" title="Link to this heading">¶</a></h3>
+<p>Release-note entries now reject unknown keys, so a misspelled field
+is reported by name instead of being silently ignored while its
+value is dropped. The underlying validation error is included in the
+message rather than discarded. A dict-safe validator no longer raises a
+bare KeyError when a required key is absent.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">release_yaml_template</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="resolve-the-base-branch-instead-of-assuming-main">
+<h3>Resolve the base branch instead of assuming main<a class="headerlink" href="#resolve-the-base-branch-instead-of-assuming-main" title="Link to this heading">¶</a></h3>
+<p>–get-changed-files no longer crashes with a raw traceback on repositories
+whose base branch is not called main. Brassy tries main, master then trunk,
+and accepts a –base-branch flag or a base_branch setting to override the
+choice. When no base branch can be found it exits with a clear message.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">git_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">CLI</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">templates</span><span class="o">/</span><span class="n">settings_template</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">using</span><span class="o">-</span><span class="n">brassy</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+</section>
+<section id="fix-config-file-creation-and-settings-precedence">
+<h3>Fix config file creation and settings precedence<a class="headerlink" href="#fix-config-file-creation-and-settings-precedence" title="Link to this heading">¶</a></h3>
+<p>Creating a config file no longer raises AttributeError when the parent
+directory is missing, so init works again. A missing configuration file no
+longer contributes a full set of defaults that reset settings from
+higher-precedence files, and environment variable overrides now apply even
+when no config file exists.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="survive-empty-config-files-and-support-directories-for-t">
+<h3>Survive empty config files and support directories for -t<a class="headerlink" href="#survive-empty-config-files-and-support-directories-for-t" title="Link to this heading">¶</a></h3>
+<p>An empty or comments-only configuration file no longer crashes every
+brassy command with a TypeError; it now contributes no settings, exactly
+like a missing file, and a config file that is not a YAML mapping produces
+an error naming the offending file. Passing an existing directory to -t
+now places a branch-named template inside it, as the help text has always
+promised, instead of refusing with a misleading suggestion to use –force.
+The documentation now also notes that flags such as –force must come
+after the file name given to -t.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">using</span><span class="o">-</span><span class="n">brassy</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">test_settings_manager</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_cli_ux</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="o">.</span><span class="n">gitignore</span>
+</pre></div>
+</div>
+</section>
+<section id="tidy-internal-apis-from-code-review">
+<h3>Tidy internal apis from code review<a class="headerlink" href="#tidy-internal-apis-from-code-review" title="Link to this heading">¶</a></h3>
+<p>create_note no longer returns a meaningless 0; it returns None, since no
+caller consumed the value. load_yaml now accepts a Path as well as a str
+for its file_path argument, and the redundant str() casts at its call
+sites in settings_manager and prune_yaml were removed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">create_note</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">yaml_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">prune_yaml</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+<section id="fix-path-cwd-fallback-and-correct-a-malformed-test-fixture">
+<h3>Fix path.cwd fallback and correct a malformed test fixture<a class="headerlink" href="#fix-path-cwd-fallback-and-correct-a-malformed-test-fixture" title="Link to this heading">¶</a></h3>
+<p>Resolving a template path with no working directory used a non-existent
+Path.getcwd method; it now uses Path.cwd. The fully-featured test fixture
+had mis-indented file keys that silently dropped changed files, now
+corrected along with its golden output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">fully</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">outputs</span><span class="o">/</span><span class="n">fully</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_cli_ux</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">test_CLI</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">test_file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">test_settings_manager</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="n">fix</span><span class="o">-</span><span class="n">cli</span><span class="o">-</span><span class="n">output</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">safety</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+<section id="reject-duplicate-keys-in-yaml-files-instead-of-silently-dropping-data">
+<h3>Reject duplicate keys in yaml files instead of silently dropping data<a class="headerlink" href="#reject-duplicate-keys-in-yaml-files-instead-of-silently-dropping-data" title="Link to this heading">¶</a></h3>
+<p>Brassy now fails with a clear error when a YAML file declares the same key
+twice, rather than silently keeping only the last occurrence.
+Previously a release note that declared a category such as <code class="docutils literal notranslate"><span class="pre">bug</span> <span class="pre">fix:</span></code>
+twice would build successfully while quietly discarding every entry in the
+first block, because PyYAML keeps only the last of a set of duplicate keys.
+<code class="docutils literal notranslate"><span class="pre">--prune</span></code> was affected the same way, and rewrites files in place, so the
+discarded entries were destroyed on disk.
+The error names the file, the duplicated key, and the line of both
+occurrences. It applies at every nesting level and to every YAML file
+brassy reads, including <code class="docutils literal notranslate"><span class="pre">.brassy</span></code> configuration files.
+As part of the same change, malformed YAML now reports a readable error
+instead of an unhandled traceback.</p>
+<p><a class="reference external" href="https://github.com/biosafetylvl5/brassy/issues/2">#2</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">prune_yaml</span><span class="o">.</span><span class="n">py</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">api</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">test_integ</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">src</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">yaml_handler</span><span class="o">.</span><span class="n">py</span>
+<span class="n">added</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">test_yaml_handler</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<section id="fix-versioning-number-scheme">
+<h3>Fix versioning number scheme<a class="headerlink" href="#fix-versioning-number-scheme" title="Link to this heading">¶</a></h3>
+<p>This updates the numbering scheme to use standard semantic versioning.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">_modules</span><span class="o">/</span><span class="n">brassy</span><span class="o">/</span><span class="n">utils</span><span class="o">/</span><span class="n">file_handler</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">_sources</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">objects</span><span class="o">.</span><span class="n">inv</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">html</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">searchindex</span><span class="o">.</span><span class="n">js</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">pyproject</span><span class="o">.</span><span class="n">toml</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">tests</span><span class="o">/</span><span class="n">inputs</span><span class="o">/</span><span class="n">mostly</span><span class="o">-</span><span class="n">featured</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">_sources</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.2</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">_sources</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.3</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">_sources</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.4</span><span class="o">.</span><span class="n">rst</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.2</span><span class="o">.</span><span class="n">html</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.3</span><span class="o">.</span><span class="n">html</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">docs</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.4</span><span class="o">.</span><span class="n">html</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.2</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.3</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="mf">0.0.4</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.2</span><span class="o">/</span><span class="n">build</span><span class="o">-</span><span class="n">without</span><span class="o">-</span><span class="n">write</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.2</span><span class="o">/</span><span class="n">fix</span><span class="o">-</span><span class="n">blank</span><span class="o">-</span><span class="n">line</span><span class="o">-</span><span class="n">bug</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.2</span><span class="o">/</span><span class="n">fix</span><span class="o">-</span><span class="n">quiet</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.2</span><span class="o">/</span><span class="n">get</span><span class="o">-</span><span class="n">changed</span><span class="o">-</span><span class="n">files</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.2</span><span class="o">/</span><span class="n">output</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">console</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="mi">1</span><span class="o">-</span><span class="n">brassy</span><span class="o">-</span><span class="n">fails</span><span class="o">-</span><span class="k">if</span><span class="o">-</span><span class="n">run</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">blank</span><span class="o">-</span><span class="n">file</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="mi">30</span><span class="o">-</span><span class="n">accept</span><span class="o">-</span><span class="n">strings</span><span class="o">-</span><span class="ow">in</span><span class="o">-</span><span class="n">related</span><span class="o">-</span><span class="n">issue</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">compatibility</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">internal</span><span class="o">-</span><span class="n">repos</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">inaccessible</span><span class="o">-</span><span class="n">urls</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="mi">39</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">v003</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="mi">6</span><span class="o">-</span><span class="n">add</span><span class="o">-</span><span class="n">date</span><span class="o">-</span><span class="n">field</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="mi">9</span><span class="o">-</span><span class="n">add</span><span class="o">-</span><span class="n">default</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">write</span><span class="o">-</span><span class="n">path</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="n">add</span><span class="o">-</span><span class="n">init</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="n">fix</span><span class="o">-</span><span class="n">docs</span><span class="o">-</span><span class="n">yaml</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="n">fix</span><span class="o">-</span><span class="n">no</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">no</span><span class="o">-</span><span class="n">title</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="n">fix</span><span class="o">-</span><span class="n">template</span><span class="o">-</span><span class="n">arg</span><span class="o">-</span><span class="n">error</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="nb">int</span><span class="o">-</span><span class="n">tests</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.3</span><span class="o">/</span><span class="n">put</span><span class="o">-</span><span class="n">title</span><span class="o">-</span><span class="n">above</span><span class="o">-</span><span class="n">desc</span><span class="o">-</span><span class="ow">in</span><span class="o">-</span><span class="n">temp</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.4</span><span class="o">/</span><span class="mi">49</span><span class="o">-</span><span class="n">support</span><span class="o">-</span><span class="n">yyyy</span><span class="o">-</span><span class="n">mm</span><span class="o">-</span><span class="n">dd</span><span class="o">-</span><span class="n">date</span><span class="o">-</span><span class="nb">format</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.4</span><span class="o">/</span><span class="mi">59</span><span class="o">-</span><span class="n">brassy</span><span class="o">-</span><span class="n">cant</span><span class="o">-</span><span class="n">generate</span><span class="o">-</span><span class="n">documentation</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">branches</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">a</span><span class="o">-</span><span class="ow">in</span><span class="o">-</span><span class="n">their</span><span class="o">-</span><span class="n">name</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.4</span><span class="o">/</span><span class="n">add</span><span class="o">-</span><span class="n">dev</span><span class="o">-</span><span class="n">container</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.4</span><span class="o">/</span><span class="n">add</span><span class="o">-</span><span class="n">linting</span><span class="o">-</span><span class="n">ci</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.4</span><span class="o">/</span><span class="n">add</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">note</span><span class="o">-</span><span class="n">checking</span><span class="o">-</span><span class="n">ci</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">archive</span><span class="o">-</span><span class="mf">0.0.4</span><span class="o">/</span><span class="n">issue</span><span class="o">-</span><span class="n">documentation</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">moved</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">latest</span><span class="o">/</span><span class="mi">58</span><span class="o">-</span><span class="n">brassy</span><span class="o">-</span><span class="n">misinterprets</span><span class="o">-</span><span class="n">files</span><span class="o">-</span><span class="n">moves</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">brace</span><span class="o">-</span><span class="n">expansion</span><span class="o">-</span><span class="k">as</span><span class="o">-</span><span class="n">invalid</span><span class="o">-</span><span class="n">substitution</span><span class="o">-</span><span class="n">causing</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">note</span><span class="o">-</span><span class="n">generation</span><span class="o">-</span><span class="n">failure</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="continuous-integration">
+<h2>Continuous integration<a class="headerlink" href="#continuous-integration" title="Link to this heading">¶</a></h2>
+<section id="add-a-manually-dispatched-release-workflow">
+<h3>Add a manually-dispatched release workflow<a class="headerlink" href="#add-a-manually-dispatched-release-workflow" title="Link to this heading">¶</a></h3>
+<p>A new GitHub Actions workflow (“Release”) automates cutting a release. On
+manual dispatch with a version number it builds the release notes for that
+version from the accumulated YAML in sphinx/source/releases/latest/, moves
+those notes into archive-&lt;version&gt;/, bumps the package version, rebuilds the
+committed docs, commits the result to a release/v&lt;version&gt; branch, publishes
+the package to PyPI with a token, tags v&lt;version&gt;, and opens a pull request
+into main. The releases index now uses a globbed toctree so each new
+version page is listed automatically without editing the index. The release
+is gated on a test matrix covering every supported Python (3.8-3.14) across
+Linux, Windows and macOS, and on a compatibility check that runs brassy over
+the NRLMMD-GEOIPS/geoips release notes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">added</span><span class="p">:</span> <span class="o">.</span><span class="n">github</span><span class="o">/</span><span class="n">workflows</span><span class="o">/</span><span class="n">release</span><span class="o">.</span><span class="n">yaml</span>
+<span class="n">modified</span><span class="p">:</span> <span class="n">sphinx</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">brassy</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../using-brassy.html">Using Brassy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../brassy-in-ci.html">Release Notes Checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Release Notes</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Version 0.5.1 (2026-07-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.4.0.html">Version 0.0.4 (2025-10-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.3.0.html">Version 0.0.3 (October 23, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0.2.0.html">Version 0.0.2 (2024-08-09)</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Release Notes</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Release Notes</a></li>
+      <li>Next: <a href="0.4.0.html" title="next chapter">Version 0.0.4 (2025-10-27)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="../_sources/releases/0.5.1.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
