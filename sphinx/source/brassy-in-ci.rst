@@ -42,24 +42,24 @@ Configuration Options
 Paths and Directories
 ^^^^^^^^^^^^^^^^^^^^^
 
-- **``release_notes_dir``**: Directory containing all release notes (default: ``docs/source/releases``)
-- **``latest_notes_dir``**: Directory containing release notes for the current development cycle (default:
+- ``release_notes_dir``: Directory containing all release notes (default: ``docs/source/releases``)
+- ``latest_notes_dir``: Directory containing release notes for the current development cycle (default:
   ``docs/source/releases/latest``)
 
 File Type Controls
 ^^^^^^^^^^^^^^^^^^
 
-- **``check_rst_files``**: Whether to check for changes to RST files (default: ``true``)
-- **``check_yaml_files``**: Whether to check for changes to YAML files (default: ``true``)
-- **``file_extensions``**: Comma-separated list of file extensions to check (default: ``rst,yaml``)
+- ``check_rst_files``: Whether to check for changes to RST files (default: ``true``)
+- ``check_yaml_files``: Whether to check for changes to YAML files (default: ``true``)
+- ``file_extensions``: Comma-separated list of file extensions to check (default: ``rst,yaml``)
 
 Behavior Controls
 ^^^^^^^^^^^^^^^^^
 
-- **``allow_rst_edits``**: Whether to allow direct edits to RST files (default: ``false``)
-- **``require_yaml_changes``**: Whether to require new/modified YAML release notes (default: ``true``)
-- **``skip_on_release_branch``**: Whether to skip checks on release branches (default: ``true``)
-- **``release_branch_pattern``**: Regex pattern to identify release branches (default:
+- ``allow_rst_edits``: Whether to allow direct edits to RST files (default: ``false``)
+- ``require_yaml_changes``: Whether to require new/modified YAML release notes (default: ``true``)
+- ``skip_on_release_branch``: Whether to skip checks on release branches (default: ``true``)
+- ``release_branch_pattern``: Regex pattern to identify release branches (default:
   ``^release/v[0-9]+\.[0-9]+\.[0-9]+$``)
 
 Outputs
@@ -67,9 +67,9 @@ Outputs
 
 The action provides the following outputs that can be used in subsequent workflow steps:
 
-- **``rst_changes_detected``**: ``true`` if RST file changes were detected
-- **``yaml_changes_detected``**: ``true`` if YAML file changes were detected
-- **``is_release_branch``**: ``true`` if the current branch matches the release branch pattern
+- ``rst_changes_detected``: ``true`` if RST file changes were detected
+- ``yaml_changes_detected``: ``true`` if YAML file changes were detected
+- ``is_release_branch``: ``true`` if the current branch matches the release branch pattern
 
 Use Cases
 ---------

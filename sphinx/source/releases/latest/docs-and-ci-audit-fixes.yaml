@@ -1,0 +1,47 @@
+bug fix:
+- title: 'Fix a broken release-note-checking CI ref and other CI/docs defects'
+  description: |
+    The "PR Checks" workflow (check-release-notes.yaml) called the reusable
+    release-notes-check workflow on a branch (ci-add-release-note-check) that
+    no longer exists, so the check has been failing on every push and PR. It
+    now points at @main. The docs-required check (check-if-docs-added.yaml)
+    installed the wrong `yq` (the apt package is a jq wrapper with an
+    incompatible CLI) and silently never enforced anything; it now installs
+    the real mikefarah/yq binary that its `yq e` syntax expects. All other
+    workflows were bumped off deprecated actions/checkout@v3 and
+    actions/setup-python@v4/setup-node@v3 to v4/v5/v4.
+
+    On the docs side: the homepage rendered only the internal
+    `__init__.py` docstring and has been replaced with a real description and
+    quickstart; a documented CLI example used a nonexistent
+    `--write-template` flag (the real flag is `--write-yaml-template`); an
+    example YAML note in using-brassy.rst had a duplicate `description` key
+    that brassy's duplicate-key check would now reject; a code block in
+    brassy-in-ci.rst rendered broken because a trailing comment wrapped onto
+    its own line; two numbered lists skipped from 1 to 3; twelve option/output
+    entries used unsupported nested RST markup (`**` around double
+    backticks), which rendered literal asterisks and backticks instead of
+    styled text; and six Sphinx "duplicate object description" warnings for
+    `ChangeItem`'s fields were fixed by rendering docstring Attributes
+    sections as `:ivar:` entries instead of separate autodoc directives.
+  files:
+    modified:
+    - '.github/workflows/check-release-notes.yaml'
+    - '.github/workflows/check-if-docs-added.yaml'
+    - '.github/workflows/build_docs.yaml'
+    - '.github/workflows/doc8.yaml'
+    - '.github/workflows/install.yaml'
+    - '.github/workflows/pydoclint.yaml'
+    - '.github/workflows/pytest.yaml'
+    - '.github/workflows/ruff.yaml'
+    - '.github/workflows/spellcheck-with-cspell.yaml'
+    - 'sphinx/source/index.rst'
+    - 'sphinx/source/using-brassy.rst'
+    - 'sphinx/source/brassy-in-ci.rst'
+    - 'sphinx/source/conf.py'
+  related-issue:
+    number: null
+    repo_url: ''
+  date:
+    start: null
+    finish: null

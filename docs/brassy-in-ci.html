@@ -72,26 +72,26 @@ modifications to existing rst release notes.</p>
 <section id="paths-and-directories">
 <h3>Paths and Directories<a class="headerlink" href="#paths-and-directories" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p><strong>``release_notes_dir``</strong>: Directory containing all release notes (default: <code class="docutils literal notranslate"><span class="pre">docs/source/releases</span></code>)</p></li>
-<li><p><strong>``latest_notes_dir``</strong>: Directory containing release notes for the current development cycle (default:
+<li><p><code class="docutils literal notranslate"><span class="pre">release_notes_dir</span></code>: Directory containing all release notes (default: <code class="docutils literal notranslate"><span class="pre">docs/source/releases</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">latest_notes_dir</span></code>: Directory containing release notes for the current development cycle (default:
 <code class="docutils literal notranslate"><span class="pre">docs/source/releases/latest</span></code>)</p></li>
 </ul>
 </section>
 <section id="file-type-controls">
 <h3>File Type Controls<a class="headerlink" href="#file-type-controls" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p><strong>``check_rst_files``</strong>: Whether to check for changes to RST files (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
-<li><p><strong>``check_yaml_files``</strong>: Whether to check for changes to YAML files (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
-<li><p><strong>``file_extensions``</strong>: Comma-separated list of file extensions to check (default: <code class="docutils literal notranslate"><span class="pre">rst,yaml</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check_rst_files</span></code>: Whether to check for changes to RST files (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check_yaml_files</span></code>: Whether to check for changes to YAML files (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file_extensions</span></code>: Comma-separated list of file extensions to check (default: <code class="docutils literal notranslate"><span class="pre">rst,yaml</span></code>)</p></li>
 </ul>
 </section>
 <section id="behavior-controls">
 <h3>Behavior Controls<a class="headerlink" href="#behavior-controls" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p><strong>``allow_rst_edits``</strong>: Whether to allow direct edits to RST files (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>)</p></li>
-<li><p><strong>``require_yaml_changes``</strong>: Whether to require new/modified YAML release notes (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
-<li><p><strong>``skip_on_release_branch``</strong>: Whether to skip checks on release branches (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
-<li><p><strong>``release_branch_pattern``</strong>: Regex pattern to identify release branches (default:
+<li><p><code class="docutils literal notranslate"><span class="pre">allow_rst_edits</span></code>: Whether to allow direct edits to RST files (default: <code class="docutils literal notranslate"><span class="pre">false</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">require_yaml_changes</span></code>: Whether to require new/modified YAML release notes (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">skip_on_release_branch</span></code>: Whether to skip checks on release branches (default: <code class="docutils literal notranslate"><span class="pre">true</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">release_branch_pattern</span></code>: Regex pattern to identify release branches (default:
 <code class="docutils literal notranslate"><span class="pre">^release/v[0-9]+\.[0-9]+\.[0-9]+$</span></code>)</p></li>
 </ul>
 </section>
@@ -99,9 +99,9 @@ modifications to existing rst release notes.</p>
 <h3>Outputs<a class="headerlink" href="#outputs" title="Link to this heading">¶</a></h3>
 <p>The action provides the following outputs that can be used in subsequent workflow steps:</p>
 <ul class="simple">
-<li><p><strong>``rst_changes_detected``</strong>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if RST file changes were detected</p></li>
-<li><p><strong>``yaml_changes_detected``</strong>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if YAML file changes were detected</p></li>
-<li><p><strong>``is_release_branch``</strong>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the current branch matches the release branch pattern</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rst_changes_detected</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if RST file changes were detected</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yaml_changes_detected</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if YAML file changes were detected</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_release_branch</span></code>: <code class="docutils literal notranslate"><span class="pre">true</span></code> if the current branch matches the release branch pattern</p></li>
 </ul>
 </section>
 </section>
