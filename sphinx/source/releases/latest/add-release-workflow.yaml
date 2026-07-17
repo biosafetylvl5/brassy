@@ -8,7 +8,10 @@ continuous integration:
     committed docs, commits the result to a release/v<version> branch, publishes
     the package to PyPI with a token, tags v<version>, and opens a pull request
     into main. The releases index now uses a globbed toctree so each new
-    version page is listed automatically without editing the index.
+    version page is listed automatically without editing the index. The release
+    is gated on a test matrix covering every supported Python (3.8-3.14) across
+    Linux, Windows and macOS, and on a compatibility check that runs brassy over
+    the NRLMMD-GEOIPS/geoips release notes.
   files:
     added:
     - '.github/workflows/release.yaml'

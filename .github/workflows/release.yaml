@@ -8,17 +8,107 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write        # push the release branch + tag
-  pull-requests: write   # open the PR into main
-
 concurrency:
   group: release
   cancel-in-progress: false
 
 jobs:
-  release:
+  # (a) + (b) Full support matrix: every supported Python on Linux, Windows, macOS.
+  test:
+    name: Test (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.8", "3.10", "3.12", "3.13", "3.14"]
+        exclude:
+          # Python 3.8 has no build for the Apple-silicon macos-latest runner.
+          - os: macos-latest
+            python-version: "3.8"
+        include:
+          # ...so cover 3.8 on macOS via the Intel macos-15-intel runner instead.
+          - os: macos-15-intel
+            python-version: "3.8"
+    steps:
+      - name: Check out the repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install brassy and pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install pytest
+
+      - name: Run pytest
+        run: python -m pytest
+
+  # (c) Compatibility check against a real-world consumer's release notes.
+  # brassy must build every well-formed geoips note; the only tolerated
+  # failures are notes with duplicate category headings, which brassy is
+  # designed to reject. Any OTHER failure fails the job (a brassy regression).
+  # The per-version "*-release-note.yaml" rollups and "version_summaries.yaml"
+  # are geoips's own aggregate files, not brassy notes, so they are excluded.
+  geoips-smoke:
+    name: Smoke-test brassy against NRLMMD-GEOIPS/geoips notes
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out brassy
+        uses: actions/checkout@v4
+
+      - name: Check out geoips release notes
+        uses: actions/checkout@v4
+        with:
+          repository: NRLMMD-GEOIPS/geoips
+          path: geoips-src
+          sparse-checkout: docs/source/releases
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install brassy
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Build every geoips note with brassy
+        run: |
+          set -uo pipefail
+          notes_dir="geoips-src/docs/source/releases"
+          built=0; rejected=0; unexpected=0
+          while IFS= read -r f; do
+            if err=$(brassy "$f" -o /dev/null -r 0.0.0-smoke 2>&1); then
+              built=$((built + 1))
+            elif printf '%s' "$err" | grep -qi 'duplicate key'; then
+              rejected=$((rejected + 1))
+              echo "::notice file=$f::brassy correctly rejected a duplicate-key note"
+            else
+              unexpected=$((unexpected + 1))
+              echo "::error file=$f::brassy failed unexpectedly:"
+              printf '%s\n' "$err" | tail -20
+            fi
+          done < <(find "$notes_dir" -type f \( -name '*.yaml' -o -name '*.yml' \) \
+                     ! -name '*-release-note.yaml' ! -name 'version_summaries.yaml')
+          echo "geoips notes → built=$built  duplicate-key rejections=$rejected  unexpected failures=$unexpected"
+          if [ "$unexpected" -ne 0 ]; then
+            echo "::error::$unexpected geoips note(s) failed for a reason other than duplicate keys — brassy may have regressed."
+            exit 1
+          fi
+
+  # The release only runs once the whole matrix and the geoips smoke test pass.
+  release:
+    needs: [test, geoips-smoke]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # push the release branch + tag
+      pull-requests: write   # open the PR into main
     env:
       VERSION: ${{ inputs.version }}
     steps:
@@ -64,10 +154,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e .[doc]
-          python -m pip install poetry pytest
-
-      - name: Run tests before releasing
-        run: python -m pytest
+          python -m pip install poetry
 
       - name: Create release branch
         run: git switch -c "release/v${VERSION}"
@@ -112,10 +199,17 @@ jobs:
           git tag "v${VERSION}"
           git push origin "v${VERSION}"
 
+      # The release (publish + branch + tag) is already complete above, so a
+      # failure to auto-open the PR must NOT fail the job. Opening a PR with
+      # GITHUB_TOKEN also requires "Allow GitHub Actions to create and approve
+      # pull requests" (Settings → Actions → General → Workflow permissions).
       - name: Open PR into main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --base main --head "release/v${VERSION}" \
-            --title "Release v${VERSION}" \
-            --body "Automated release of v${VERSION}: built release notes, archived YAMLs, bumped version, rebuilt docs, published to PyPI."
+          if ! gh pr create --base main --head "release/v${VERSION}" \
+              --title "Release v${VERSION}" \
+              --body "Automated release of v${VERSION}: built release notes, archived YAMLs, bumped version, rebuilt docs, published to PyPI."; then
+            echo "::warning::Could not open the PR automatically; the release itself succeeded. Open it manually:"
+            echo "  https://github.com/${GITHUB_REPOSITORY}/compare/main...release/v${VERSION}?expand=1"
+          fi
